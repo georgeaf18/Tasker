@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__linear-server__list_teams",
+      "mcp__linear-server__list_projects",
+      "mcp__linear-server__list_issue_statuses",
+      "mcp__linear-server__create_issue_label",
+      "WebFetch(domain:code.claude.com)",
+      "WebSearch",
+      "WebFetch(domain:www.anthropic.com)",
+      "mcp__linear-server__create_project",
+      "mcp__linear-server__create_issue",
+      "mcp__linear-server__list_issues",
+      "mcp__linear-server__list_issue_labels",
+      "WebFetch(domain:angular.dev)",
+      "WebFetch(domain:blog.angular.dev)",
+      "WebFetch(domain:linear.app)",
+      "mcp__linear-server__get_team",
+      "mcp__linear-server__get_project",
+      "mcp__linear-server__update_issue",
+      "Bash(npx nx serve:*)",
+      "Bash(export PATH=\"/opt/homebrew/opt/node@22/bin:$PATH\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
