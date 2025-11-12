@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+# Only run for normal commits (not merge, squash, etc.)
+if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
+  # Extract TASK-xxx from branch name
+  BRANCH_NAME=$(git symbolic-ref --short HEAD 2>/dev/null)
+  TICKET=$(echo "$BRANCH_NAME" | grep -o "TASK-[0-9]*" | head -1)
+
+  if [ -n "$TICKET" ]; then
+    # Check if commit message already contains the ticket
+    if ! grep -q "$TICKET" "$COMMIT_MSG_FILE"; then
+      # Get first line of commit message
+      FIRST_LINE=$(head -n 1 "$COMMIT_MSG_FILE")
+
+      # Check if it starts with a conventional commit type
+      if echo "$FIRST_LINE" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)"; then
+        # Extract type and rest of message
+        TYPE=$(echo "$FIRST_LINE" | sed -E 's/^([a-z]+).*/\1/')
+        REST=$(echo "$FIRST_LINE" | sed -E 's/^[a-z]+[(:]*[ ]*//')
+
+        # Insert ticket in scope format: type(TASK-123): message
+        sed -i.bak "1s|^$TYPE.*|$TYPE($TICKET): $REST|" "$COMMIT_MSG_FILE"
+        rm "${COMMIT_MSG_FILE}.bak"
+      fi
+    fi
+  fi
+fi
