@@ -1,51 +1,72 @@
 # AI Implementation Guide - Tasker v0.1
 
 **Purpose:** Step-by-step implementation guide optimized for AI coding agents
-**Timeline:** 4-6 hours with parallel execution
+**Timeline:** 6-8 hours with micro-task parallelization
 **Prerequisites:** Read CLAUDE.md for orchestration strategy
+
+---
+
+## How to Use This Guide
+
+### For Orchestrator (You - Claude Code)
+
+1. **Read Linear ticket** for acceptance criteria
+2. **Use strategic-planner agent** to break ticket into micro-tasks
+3. **Launch 5-7 code-implementer agents in parallel** (one per micro-task)
+4. **Use integration agent** to wire components together
+5. **Use code-reviewer agent** to validate quality
+6. **Commit with Linear reference**
+
+### For Individual Agents
+
+**REQUIRED READING before starting ANY task:**
+
+1. `CLAUDE.md` - Code quality standards and patterns
+2. `AI_IMPLEMENTATION_GUIDE.md` - This file (templates and examples)
+3. Linear issue TASK-XX - Acceptance criteria
+
+Each agent task below includes:
+
+- Context size estimate (~300-500 lines)
+- Required reading
+- Specific files to create
+- Verification steps
 
 ---
 
 ## Phase 0: Environment Setup (5 minutes)
 
-### Verify Nx Workspace
+**Orchestrator Task:** Verify workspace before launching agents
 
 ```bash
 # Verify Nx is installed and workspace is valid
 npx nx --version
 npx nx show projects
 
-# Expected output:
-# - tasker-frontend
-# - tasker-backend
-```
-
-### Install Dependencies
-
-```bash
+# Install dependencies
 npm install
-```
 
-### Verify Git Configuration
-
-```bash
+# Verify Git
 git remote -v
-# Should show: git@github.com:georgeaf18/Tasker.git
-
 git status
-# Should be on main branch, clean working tree
 ```
 
 ---
 
-## Phase 1: Backend Foundation (1-1.5 hours)
+## Phase 1: Backend Foundation
 
-**Agent:** code-implementer (backend specialist)
-**Issues:** TASK-30 → TASK-35 (sequential due to dependencies)
+### TASK-30: Setup PostgreSQL with Docker Compose (15 min)
+
+**Strategic Breakdown:** 3 micro-tasks (all can run in parallel)
+
+#### Agent 1: Create docker-compose.yml
+
+**Context:** ~40 lines
 
 ### TASK-30: Setup PostgreSQL with Docker Compose (15 min)
 
 **Acceptance Criteria:**
+
 - [ ] docker-compose.yml created with postgres:16-alpine
 - [ ] Environment variables configured
 - [ ] Volume mapping for data persistence
@@ -125,6 +146,7 @@ Linear: TASK-30"
 ### TASK-31: Initialize Prisma and Create Database Schema (20 min)
 
 **Acceptance Criteria:**
+
 - [ ] Prisma installed and initialized
 - [ ] Schema defines Task, Channel, TaskStatus, Workspace enums
 - [ ] Proper indexes on frequently queried fields
@@ -236,6 +258,7 @@ Linear: TASK-31"
 ### TASK-32: Create Prisma Service and Module in NestJS (10 min)
 
 **Acceptance Criteria:**
+
 - [ ] PrismaService extends PrismaClient
 - [ ] Implements OnModuleInit for connection
 - [ ] Implements enableShutdownHooks for cleanup
@@ -324,6 +347,7 @@ Linear: TASK-32"
 ### TASK-33: Implement Tasks REST API Endpoints (25 min)
 
 **Acceptance Criteria:**
+
 - [ ] CRUD endpoints: GET /api/tasks, POST, PUT, DELETE
 - [ ] Filter by status, workspace, channelId
 - [ ] DTOs with class-validator decorators
@@ -492,7 +516,7 @@ export class TasksController {
   findAll(
     @Query('status') status?: TaskStatus,
     @Query('workspace') workspace?: Workspace,
-    @Query('channelId', new ParseIntPipe({ optional: true })) channelId?: number,
+    @Query('channelId', new ParseIntPipe({ optional: true })) channelId?: number
   ) {
     return this.tasksService.findAll({ status, workspace, channelId });
   }
@@ -509,18 +533,12 @@ export class TasksController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateTaskDto: UpdateTaskDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
   }
 
   @Patch(':id/status')
-  updateStatus(
-    @Param('id', ParseIntPipe) id: number,
-    @Body('status') status: TaskStatus,
-  ) {
+  updateStatus(@Param('id', ParseIntPipe) id: number, @Body('status') status: TaskStatus) {
     return this.tasksService.updateStatus(id, status);
   }
 
@@ -613,6 +631,7 @@ Linear: TASK-33"
 ### TASK-34: Implement Channels REST API Endpoints (15 min)
 
 **Acceptance Criteria:**
+
 - [ ] CRUD endpoints: GET /api/channels, POST, PUT, DELETE
 - [ ] Include task count in response
 - [ ] Unique constraint on channel name
@@ -704,7 +723,9 @@ export class ChannelsService {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ConflictException(`Channel with name "${createChannelDto.name}" already exists`);
+          throw new ConflictException(
+            `Channel with name "${createChannelDto.name}" already exists`
+          );
         }
       }
       throw error;
@@ -727,7 +748,9 @@ export class ChannelsService {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ConflictException(`Channel with name "${updateChannelDto.name}" already exists`);
+          throw new ConflictException(
+            `Channel with name "${updateChannelDto.name}" already exists`
+          );
         }
       }
       throw error;
@@ -783,10 +806,7 @@ export class ChannelsController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateChannelDto: UpdateChannelDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateChannelDto: UpdateChannelDto) {
     return this.channelsService.update(id, updateChannelDto);
   }
 
@@ -870,6 +890,7 @@ Linear: TASK-34"
 ### TASK-35: Create Database Seed Script with Test Data (15 min)
 
 **Acceptance Criteria:**
+
 - [ ] Seed script creates 3-5 channels
 - [ ] Creates 20+ tasks across different statuses
 - [ ] Tasks distributed across channels
@@ -1184,6 +1205,7 @@ Linear: TASK-35"
 ### TASK-36: Configure Angular 20 with Zoneless and Tailwind CSS (30 min)
 
 **Acceptance Criteria:**
+
 - [ ] Angular 20 configured with zoneless change detection
 - [ ] Tailwind CSS integrated and working
 - [ ] PrimeNG installed and theme configured
@@ -1206,9 +1228,7 @@ npm install primeng primeicons
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './apps/tasker-frontend/src/**/*.{html,ts}',
-  ],
+  content: ['./apps/tasker-frontend/src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
@@ -1325,12 +1345,8 @@ import { ButtonModule } from 'primeng/button';
   template: `
     <div class="min-h-screen bg-gray-50 flex items-center justify-center">
       <div class="bg-white p-8 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold text-primary-600 mb-4">
-          Tasker v0.1
-        </h1>
-        <p class="text-gray-600 mb-6">
-          Angular 20 + Zoneless + Tailwind CSS + PrimeNG
-        </p>
+        <h1 class="text-3xl font-bold text-primary-600 mb-4">Tasker v0.1</h1>
+        <p class="text-gray-600 mb-6">Angular 20 + Zoneless + Tailwind CSS + PrimeNG</p>
         <p-button label="Test Button" icon="pi pi-check" />
       </div>
     </div>
@@ -1377,6 +1393,7 @@ Linear: TASK-36"
 ### TASK-37: Create Task API Service with HttpClient (20 min)
 
 **Acceptance Criteria:**
+
 - [ ] TaskApiService with full CRUD methods
 - [ ] Type-safe interfaces matching backend DTOs
 - [ ] Observable-based API
@@ -1619,6 +1636,7 @@ Linear: TASK-37"
 ### TASK-38: Create Signal-Based Task State Service (25 min)
 
 **Acceptance Criteria:**
+
 - [ ] TaskStateService uses signals for state management
 - [ ] Computed signals for filtered views (by status, workspace)
 - [ ] CRUD operations update signals reactively
@@ -1633,7 +1651,14 @@ import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TaskApiService } from './task-api.service';
 import { ChannelApiService } from './channel-api.service';
-import { Task, TaskStatus, Workspace, CreateTaskDto, UpdateTaskDto, Channel } from '../models/task.model';
+import {
+  Task,
+  TaskStatus,
+  Workspace,
+  CreateTaskDto,
+  UpdateTaskDto,
+  Channel,
+} from '../models/task.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskStateService {
@@ -1911,6 +1936,7 @@ This guide continues with detailed implementation for each remaining task follow
 ## Quality Standards (Apply to ALL Tasks)
 
 ### TypeScript
+
 ```typescript
 // ✅ Always fully typed, never 'any'
 getTasks(filters?: TaskFilters): Observable<Task[]>
@@ -1920,6 +1946,7 @@ getTasks(filters: any): Observable<any>
 ```
 
 ### Signals
+
 ```typescript
 // ✅ Use signals for component state
 private tasksSignal = signal<Task[]>([]);
@@ -1930,10 +1957,11 @@ readonly taskCount = computed(() => this.tasks().length);
 ```
 
 ### Prisma
+
 ```typescript
 // ✅ Include relations to prevent N+1
 await prisma.task.findMany({
-  include: { channel: true }
+  include: { channel: true },
 });
 
 // ❌ Don't fetch separately
@@ -1942,11 +1970,12 @@ const channels = await prisma.channel.findMany(); // N+1 problem
 ```
 
 ### Testing
+
 ```typescript
 // ✅ Test services with realistic data
 it('should update task status', () => {
   service.updateTaskStatus(1, TaskStatus.DONE);
-  expect(service.tasks().find(t => t.id === 1)?.status).toBe(TaskStatus.DONE);
+  expect(service.tasks().find((t) => t.id === 1)?.status).toBe(TaskStatus.DONE);
 });
 ```
 
@@ -1955,6 +1984,7 @@ it('should update task status', () => {
 ## Troubleshooting
 
 ### Database Connection Issues
+
 ```bash
 # Check PostgreSQL is running
 docker-compose ps
@@ -1967,6 +1997,7 @@ docker-compose restart postgres
 ```
 
 ### Prisma Migration Issues
+
 ```bash
 # Reset database (dev only)
 npx prisma migrate reset
@@ -1976,6 +2007,7 @@ npx prisma migrate dev
 ```
 
 ### Frontend Build Issues
+
 ```bash
 # Clear cache
 rm -rf .angular
@@ -1986,6 +2018,7 @@ npm run build:frontend
 ```
 
 ### CORS Issues
+
 ```typescript
 // Add CORS in main.ts (backend)
 import { NestFactory } from '@nestjs/core';
