@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+# Get the current branch name
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+# Check if pushing to main or develop
+if [ "$current_branch" = "main" ] || [ "$current_branch" = "develop" ]; then
+  echo ""
+  echo "❌ ERROR: Direct pushes to '$current_branch' branch are not allowed!"
+  echo ""
+  echo "📋 Required workflow:"
+  echo "  1. Create a feature branch: git checkout -b feature/TASK-xxx-description"
+  echo "  2. Make your changes and commit"
+  echo "  3. Push the feature branch: git push origin feature/TASK-xxx-description"
+  echo "  4. Create a Pull Request to merge into $current_branch"
+  echo ""
+  echo "💡 To push this branch anyway (for emergencies only):"
+  echo "   git push --no-verify"
+  echo ""
+  exit 1
+fi
+
+# Allow pushes from all other branches
+exit 0
