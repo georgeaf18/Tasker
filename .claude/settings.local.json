@@ -53,7 +53,8 @@
       "Bash(/Users/george/side-projects/tasker/scripts/toggle-db-access.sh:*)",
       "Bash(docker-compose:*)",
       "Bash(./scripts/toggle-db-access.sh:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(bash scripts/update-adr-index.sh:*)"
     ],
     "deny": [],
     "ask": []
