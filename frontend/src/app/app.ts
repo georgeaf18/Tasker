@@ -1,5 +1,5 @@
 import { Component, signal, ViewChild, effect, inject, computed } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Workspace } from './models';
 import { KanbanBoardComponent } from './components/kanban-board/kanban-board.component';
@@ -18,6 +18,7 @@ export class App {
 
   private readonly taskState = inject(TaskStateService);
   private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
 
   protected readonly title = 'Tasker';
   protected readonly currentWorkspace = signal<Workspace>(Workspace.WORK);
@@ -30,6 +31,10 @@ export class App {
     effect(() => {
       this.taskState.setSelectedWorkspace(this.currentWorkspace());
     });
+  }
+
+  protected isMainView(): boolean {
+    return this.router.url === '/' || this.router.url === '';
   }
 
   protected toggleWorkspace(): void {

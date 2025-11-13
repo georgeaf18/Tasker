@@ -1,0 +1,220 @@
+<div class="settings-container">
+    <!-- Toast notifications -->
+    <p-toast />
+
+    <!-- Confirmation dialog -->
+    <p-confirmDialog />
+
+    <!-- Vertical tab navigation -->
+    <p-tabView styleClass="settings-tabs" [activeIndex]="activeTab()" (activeIndexChange)="activeTab.set($event)">
+        <!-- Contexts & Channels Tab -->
+        <p-tabPanel header="Contexts & Channels">
+            <div class="settings-content">
+                <!-- Work Context Section -->
+                <section class="context-section">
+                    <div class="context-header">
+                        <h2>Work Context</h2>
+                        <p-button
+                            label="Add Channel"
+                            icon="pi pi-plus"
+                            size="small"
+                            (onClick)="openCreateDialog('WORK')"
+                            [loading]="isLoading()"
+                        />
+                    </div>
+
+                    @if (workChannels().length === 0) {
+                        <p-message
+                            severity="info"
+                            text="No work channels yet. Create one to get started!"
+                            styleClass="empty-state-message"
+                        />
+                    } @else {
+                        <div class="channels-grid">
+                            @for (channel of workChannels(); track channel.id) {
+                                <div class="channel-item">
+                                    <div class="channel-content">
+                                        <span
+                                            class="channel-color"
+                                            [style.background-color]="channel.color || '#8B7BB8'"
+                                        ></span>
+                                        <span class="channel-name">{{ channel.name }}</span>
+                                    </div>
+                                    <div class="channel-actions">
+                                        <p-button
+                                            icon="pi pi-pencil"
+                                            [text]="true"
+                                            [rounded]="true"
+                                            size="small"
+                                            severity="secondary"
+                                            (onClick)="openEditDialog(channel)"
+                                            [attr.aria-label]="'Edit ' + channel.name"
+                                        />
+                                        <p-button
+                                            icon="pi pi-trash"
+                                            [text]="true"
+                                            [rounded]="true"
+                                            size="small"
+                                            severity="danger"
+                                            (onClick)="deleteChannel(channel)"
+                                            [attr.aria-label]="'Delete ' + channel.name"
+                                        />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </section>
+
+                <!-- Personal Context Section -->
+                <section class="context-section">
+                    <div class="context-header">
+                        <h2>Personal Context</h2>
+                        <p-button
+                            label="Add Channel"
+                            icon="pi pi-plus"
+                            size="small"
+                            (onClick)="openCreateDialog('PERSONAL')"
+                            [loading]="isLoading()"
+                        />
+                    </div>
+
+                    @if (personalChannels().length === 0) {
+                        <p-message
+                            severity="info"
+                            text="No personal channels yet. Create one to get started!"
+                            styleClass="empty-state-message"
+                        />
+                    } @else {
+                        <div class="channels-grid">
+                            @for (channel of personalChannels(); track channel.id) {
+                                <div class="channel-item">
+                                    <div class="channel-content">
+                                        <span
+                                            class="channel-color"
+                                            [style.background-color]="channel.color || '#8B7BB8'"
+                                        ></span>
+                                        <span class="channel-name">{{ channel.name }}</span>
+                                    </div>
+                                    <div class="channel-actions">
+                                        <p-button
+                                            icon="pi pi-pencil"
+                                            [text]="true"
+                                            [rounded]="true"
+                                            size="small"
+                                            severity="secondary"
+                                            (onClick)="openEditDialog(channel)"
+                                            [attr.aria-label]="'Edit ' + channel.name"
+                                        />
+                                        <p-button
+                                            icon="pi pi-trash"
+                                            [text]="true"
+                                            [rounded]="true"
+                                            size="small"
+                                            severity="danger"
+                                            (onClick)="deleteChannel(channel)"
+                                            [attr.aria-label]="'Delete ' + channel.name"
+                                        />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </section>
+            </div>
+        </p-tabPanel>
+
+        <!-- General Settings Tab (Placeholder) -->
+        <p-tabPanel header="General">
+            <div class="settings-content">
+                <p-message
+                    severity="info"
+                    text="General settings will be available in a future release."
+                />
+            </div>
+        </p-tabPanel>
+
+        <!-- Appearance Settings Tab (Placeholder) -->
+        <p-tabPanel header="Appearance">
+            <div class="settings-content">
+                <p-message
+                    severity="info"
+                    text="Appearance customization will be available in a future release."
+                />
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+
+    <!-- Channel Create/Edit Dialog -->
+    <p-dialog
+        [header]="dialogHeader"
+        [(visible)]="showCreateChannelDialog"
+        [modal]="true"
+        [closable]="true"
+        [draggable]="false"
+        [resizable]="false"
+        styleClass="channel-dialog"
+        (onHide)="closeDialog()"
+    >
+        <form [formGroup]="channelForm" (ngSubmit)="saveChannel()">
+            <!-- Channel Name -->
+            <div class="form-field">
+                <label for="channel-name">Channel Name *</label>
+                <input
+                    pInputText
+                    id="channel-name"
+                    formControlName="name"
+                    placeholder="e.g., Frontend, Home, Learning"
+                    [class.error]="channelForm.get('name')?.invalid && channelForm.get('name')?.touched"
+                />
+                @if (getErrorMessage('name')) {
+                    <small class="error-message">{{ getErrorMessage('name') }}</small>
+                }
+            </div>
+
+            <!-- Workspace Selection -->
+            <div class="form-field">
+                <label for="workspace">Context *</label>
+                <p-selectButton
+                    formControlName="workspace"
+                    [options]="workspaceOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    styleClass="workspace-select"
+                />
+            </div>
+
+            <!-- Color Picker -->
+            <div class="form-field">
+                <label for="channel-color">Color *</label>
+                <div class="color-picker-container">
+                    <p-colorPicker
+                        formControlName="color"
+                        [inline]="false"
+                        format="hex"
+                    />
+                    <span class="color-preview" [style.background-color]="channelForm.get('color')?.value"></span>
+                    <span class="color-value">{{ channelForm.get('color')?.value }}</span>
+                </div>
+            </div>
+
+            <!-- Dialog Footer Actions -->
+            <div class="dialog-footer">
+                <p-button
+                    label="Cancel"
+                    severity="secondary"
+                    [text]="true"
+                    (onClick)="closeDialog()"
+                    type="button"
+                />
+                <p-button
+                    [label]="saveButtonLabel"
+                    icon="pi pi-check"
+                    type="submit"
+                    [loading]="isLoading()"
+                    [disabled]="channelForm.invalid"
+                />
+            </div>
+        </form>
+    </p-dialog>
+</div>
