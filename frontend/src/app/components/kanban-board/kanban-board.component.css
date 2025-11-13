@@ -38,24 +38,26 @@
   background-clip: text;
 }
 
-/* Kanban Board Grid */
+/* Kanban Board - Flexbox Layout */
 .kanban-board {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 0;
   flex: 1;
   overflow: hidden;
   padding: 0;
   height: 100%;
+  width: 100%;
 }
 
-/* Column Styles */
+/* Column Styles - Equal width with flexbox */
 .kanban-column {
   display: flex;
   flex-direction: column;
+  flex: 1 1 0; /* Equal flex basis for all columns */
   height: 100%;
   overflow: hidden;
   min-height: 0;
+  min-width: 0; /* Allow flex shrinking */
 }
 
 ::ng-deep .kanban-panel {
@@ -350,31 +352,35 @@
 /* Responsive Design */
 @media (max-width: 1200px) {
   .kanban-board {
-    grid-template-columns: repeat(2, 1fr);
+    flex-wrap: wrap;
   }
-  
+
+  .kanban-column {
+    flex: 1 1 calc(50% - 1px);
+  }
+
   .done-column {
-    grid-column: span 2;
+    flex: 1 1 100%;
   }
 }
 
 @media (max-width: 768px) {
   .kanban-board {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
-  
-  .done-column {
-    grid-column: 1;
+
+  .kanban-column {
+    flex: 1 1 auto;
   }
-  
+
   .metadata-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .status-buttons {
     flex-direction: column;
   }
-  
+
   ::ng-deep .status-buttons .p-button {
     width: 100%;
   }
