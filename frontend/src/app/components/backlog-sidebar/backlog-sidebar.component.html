@@ -220,114 +220,128 @@
     </form>
 </p-dialog>
 
-<!-- Task Details/Edit Dialog -->
-<p-dialog 
-    [(visible)]="taskDetailsDialogVisible" 
-    [header]="'Task Details'" 
+<!-- Task Details/Edit Dialog - Sleek Design -->
+<p-dialog
+    [(visible)]="taskDetailsDialogVisible"
     [modal]="true"
-    [style]="{width: '450px'}"
+    [style]="{width: '700px'}"
     [draggable]="false"
     [resizable]="false"
+    [showHeader]="false"
+    [dismissableMask]="true"
+    styleClass="sleek-task-dialog"
 >
     @if (selectedTask()) {
-        <form [formGroup]="editTaskForm" (ngSubmit)="submitEditTask()">
-            <div class="form-field">
-                <label for="edit-title">Title *</label>
-                <input 
-                    id="edit-title"
-                    type="text" 
-                    pInputText 
-                    formControlName="title"
-                    placeholder="Enter task title"
-                    class="w-full"
-                />
-                @if (editTaskForm.get('title')?.invalid && editTaskForm.get('title')?.touched) {
-                    <small class="error-message">Title is required</small>
-                }
+        <form [formGroup]="editTaskForm" (ngSubmit)="submitEditTask()" class="sleek-form">
+            <!-- Action Buttons Row -->
+            <div class="dialog-actions-row">
+                <button type="button" class="delete-task-btn" (click)="confirmDeleteTask()">
+                    <i class="pi pi-trash"></i>
+                    <span>Delete</span>
+                </button>
+
+                <div class="right-actions">
+                    <button type="button" class="save-task-btn" (click)="submitEditTask()" [disabled]="editTaskForm.invalid">
+                        <i class="pi pi-check"></i>
+                        <span>Save</span>
+                    </button>
+                </div>
             </div>
-            
-            <div class="form-field">
-                <label for="edit-description">Description</label>
-                <textarea 
+
+            <!-- Title Input -->
+            <div class="task-input-container">
+                <input
+                    id="edit-title"
+                    type="text"
+                    formControlName="title"
+                    placeholder="Task description..."
+                    class="sleek-task-input"
+                    autocomplete="off"
+                />
+            </div>
+
+            <!-- Description Textarea -->
+            <div class="description-container">
+                <textarea
                     id="edit-description"
-                    pTextarea
                     formControlName="description"
-                    placeholder="Enter task description"
-                    [rows]="3"
-                    class="w-full"
+                    placeholder="Add more details..."
+                    class="sleek-description-textarea"
+                    rows="4"
                 ></textarea>
             </div>
-            
-            <div class="form-field">
-                <label for="edit-workspace">Context *</label>
-                <p-select
-                    id="edit-workspace"
-                    formControlName="workspace"
-                    [options]="workspaceOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                    placeholder="Select context"
-                    class="w-full"
-                />
-            </div>
-            
-            <div class="form-field">
-                <label for="edit-channel">Channel</label>
-                <p-select
-                    id="edit-channel"
-                    formControlName="channelId"
-                    [options]="filteredChannels()"
-                    optionLabel="name"
-                    optionValue="id"
-                    placeholder="Select channel (optional)"
-                    class="w-full"
-                    [showClear]="true"
-                />
-            </div>
-            
-            <div class="form-field">
-                <label for="edit-dueDate">Due Date</label>
-                <p-datepicker
-                    id="edit-dueDate"
-                    formControlName="dueDate"
-                    [showIcon]="true"
-                    placeholder="Select due date (optional)"
-                    class="w-full"
-                    dateFormat="mm/dd/yy"
-                    [showTime]="true"
-                />
-            </div>
-            
-            <div class="form-field-checkbox">
-                <p-checkbox 
-                    formControlName="isRoutine"
-                    [binary]="true"
-                    inputId="edit-isRoutine"
-                />
-                <label for="edit-isRoutine">Is this a routine task?</label>
+
+            <!-- Metadata Row -->
+            <div class="metadata-row">
+                <!-- Channel Button -->
+                <button type="button" class="metadata-btn" (click)="opEditChannel.toggle($event)">
+                    <i class="pi pi-hashtag"></i>
+                    <span>{{ getChannelName(editTaskForm.get('channelId')?.value) || 'No channel' }}</span>
+                </button>
+                <p-popover #opEditChannel>
+                    <div class="metadata-popover">
+                        <div class="popover-option" (click)="editTaskForm.patchValue({channelId: null}); opEditChannel.hide()">
+                            <i class="pi pi-times"></i>
+                            <span>No channel</span>
+                        </div>
+                        @for (channel of filteredChannels(); track channel.id) {
+                            <div class="popover-option" (click)="editTaskForm.patchValue({channelId: channel.id}); opEditChannel.hide()">
+                                <i class="pi pi-hashtag"></i>
+                                <span>{{ channel.name }}</span>
+                            </div>
+                        }
+                    </div>
+                </p-popover>
+
+                <!-- Workspace Button -->
+                <button type="button" class="metadata-btn" (click)="opEditWorkspace.toggle($event)">
+                    <i class="pi pi-{{ editTaskForm.get('workspace')?.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+                    <span>{{ editTaskForm.get('workspace')?.value === 'WORK' ? 'Work' : 'Personal' }}</span>
+                </button>
+                <p-popover #opEditWorkspace>
+                    <div class="metadata-popover">
+                        @for (workspace of workspaceOptions; track workspace.value) {
+                            <div class="popover-option" (click)="editTaskForm.patchValue({workspace: workspace.value}); opEditWorkspace.hide()">
+                                <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+                                <span>{{ workspace.label }}</span>
+                            </div>
+                        }
+                    </div>
+                </p-popover>
+
+                <!-- Due Date Button -->
+                <button type="button" class="metadata-btn" (click)="opEditDueDate.toggle($event)">
+                    <i class="pi pi-calendar"></i>
+                    <span>{{ editTaskForm.get('dueDate')?.value ? (editTaskForm.get('dueDate')?.value | date:'MMM d, y') : 'No due date' }}</span>
+                </button>
+                <p-popover #opEditDueDate>
+                    <div class="metadata-popover date-popover">
+                        <p-datepicker
+                            formControlName="dueDate"
+                            [showIcon]="false"
+                            [inline]="true"
+                            dateFormat="mm/dd/yy"
+                            (onSelect)="opEditDueDate.hide()"
+                        />
+                        @if (editTaskForm.get('dueDate')?.value) {
+                            <button type="button" class="clear-date-btn" (click)="editTaskForm.patchValue({dueDate: null}); opEditDueDate.hide()">
+                                Clear date
+                            </button>
+                        }
+                    </div>
+                </p-popover>
+
+                <!-- Routine Toggle -->
+                <button type="button"
+                    class="metadata-btn routine-btn"
+                    [class.active]="editTaskForm.get('isRoutine')?.value"
+                    (click)="editTaskForm.patchValue({isRoutine: !editTaskForm.get('isRoutine')?.value})">
+                    <i class="pi pi-sync"></i>
+                    <span>{{ editTaskForm.get('isRoutine')?.value ? 'Routine' : 'One-time' }}</span>
+                </button>
             </div>
         </form>
     }
-    
-    <ng-template pTemplate="footer">
-        <p-button 
-            label="Delete" 
-            severity="danger"
-            icon="pi pi-trash"
-            (onClick)="confirmDeleteTask()"
-        />
-        <p-button 
-            label="Cancel" 
-            severity="secondary"
-            (onClick)="hideTaskDetailsDialog()"
-        />
-        <p-button 
-            label="Save" 
-            severity="primary"
-            (onClick)="submitEditTask()"
-            [disabled]="editTaskForm.invalid"
-        />
-    </ng-template>
 </p-dialog>
 
 <!-- Confirmation Dialog -->
