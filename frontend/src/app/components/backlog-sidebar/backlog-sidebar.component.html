@@ -1,0 +1,283 @@
+<div class="backlog-sidebar-container">
+    <p-panel header="Backlog" [toggleable]="false">
+        <div class="backlog-content">
+            @if (backlogTasks().length === 0) {
+                <p-message severity="info" [text]="'No tasks in backlog'" />
+            } @else {
+                <p-accordion [multiple]="true">
+                    @for (workspaceGroup of groupedByWorkspace(); track workspaceGroup.workspace) {
+                        <p-accordion-panel [value]="workspaceGroup.workspace">
+                            <p-accordion-header>{{ workspaceGroup.workspaceName }}</p-accordion-header>
+                            <p-accordion-content>
+                                <p-accordion [multiple]="true">
+                                    @for (channelGroup of workspaceGroup.channels; track channelGroup.channelName) {
+                                        <p-accordion-panel [value]="channelGroup.channelName">
+                                            <p-accordion-header>{{ channelGroup.channelName }}</p-accordion-header>
+                                            <p-accordion-content>
+                                                <p-dataView [value]="channelGroup.tasks" layout="list">
+                                            <ng-template let-task pTemplate="listItem">
+                                                <div class="task-list-item">
+                                                    <p-card 
+                                                        [style]="{'cursor': 'pointer'}"
+                                                        (click)="showTaskDetails(task)"
+                                                        [pTooltip]="task.description || 'No description'"
+                                                        tooltipPosition="right"
+                                                    >
+                                                        <div class="task-card-content">
+                                                            <div class="task-title">{{ task.title }}</div>
+                                                            @if (task.dueDate) {
+                                                                <div class="task-meta">
+                                                                    <i class="pi pi-calendar"></i>
+                                                                    <span>{{ task.dueDate | date:'short' }}</span>
+                                                                </div>
+                                                            }
+                                                            @if (task.isRoutine) {
+                                                                <div class="task-routine-badge">
+                                                                    <i class="pi pi-sync"></i> Routine
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </p-card>
+                                                </div>
+                                            </ng-template>
+                                        </p-dataView>
+                                            </p-accordion-content>
+                                        </p-accordion-panel>
+                                    }
+                                </p-accordion>
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                    }
+                </p-accordion>
+            }
+        </div>
+    </p-panel>
+    
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+        <p-button 
+            icon="pi pi-plus" 
+            [rounded]="true" 
+            [raised]="true"
+            severity="primary"
+            (onClick)="showCreateTaskDialog()"
+            pTooltip="Create New Task"
+            tooltipPosition="left"
+        />
+    </div>
+</div>
+
+<!-- Create Task Dialog -->
+<p-dialog 
+    [(visible)]="createTaskDialogVisible" 
+    [header]="'Create New Task'" 
+    [modal]="true"
+    [style]="{width: '450px'}"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()">
+        <div class="form-field">
+            <label for="title">Title *</label>
+            <input 
+                id="title"
+                type="text" 
+                pInputText 
+                formControlName="title"
+                placeholder="Enter task title"
+                class="w-full"
+            />
+            @if (createTaskForm.get('title')?.invalid && createTaskForm.get('title')?.touched) {
+                <small class="error-message">Title is required</small>
+            }
+        </div>
+        
+        <div class="form-field">
+            <label for="description">Description</label>
+            <textarea 
+                id="description"
+                pTextarea
+                formControlName="description"
+                placeholder="Enter task description"
+                [rows]="3"
+                class="w-full"
+            ></textarea>
+        </div>
+        
+        <div class="form-field">
+            <label for="workspace">Workspace *</label>
+            <p-select
+                id="workspace"
+                formControlName="workspace"
+                [options]="workspaceOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select workspace"
+                class="w-full"
+            />
+        </div>
+        
+        <div class="form-field">
+            <label for="channel">Channel</label>
+            <p-select
+                id="channel"
+                formControlName="channelId"
+                [options]="filteredChannels()"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Select channel (optional)"
+                class="w-full"
+                [showClear]="true"
+            />
+        </div>
+        
+        <div class="form-field">
+            <label for="dueDate">Due Date</label>
+            <p-datepicker
+                id="dueDate"
+                formControlName="dueDate"
+                [showIcon]="true"
+                placeholder="Select due date (optional)"
+                class="w-full"
+                dateFormat="mm/dd/yy"
+                [showTime]="true"
+            />
+        </div>
+        
+        <div class="form-field-checkbox">
+            <p-checkbox 
+                formControlName="isRoutine"
+                [binary]="true"
+                inputId="isRoutine"
+            />
+            <label for="isRoutine">Is this a routine task?</label>
+        </div>
+    </form>
+    
+    <ng-template pTemplate="footer">
+        <p-button 
+            label="Cancel" 
+            severity="secondary"
+            (onClick)="hideCreateTaskDialog()"
+        />
+        <p-button 
+            label="Create" 
+            severity="primary"
+            (onClick)="submitCreateTask()"
+            [disabled]="createTaskForm.invalid"
+        />
+    </ng-template>
+</p-dialog>
+
+<!-- Task Details/Edit Dialog -->
+<p-dialog 
+    [(visible)]="taskDetailsDialogVisible" 
+    [header]="'Task Details'" 
+    [modal]="true"
+    [style]="{width: '450px'}"
+    [draggable]="false"
+    [resizable]="false"
+>
+    @if (selectedTask()) {
+        <form [formGroup]="editTaskForm" (ngSubmit)="submitEditTask()">
+            <div class="form-field">
+                <label for="edit-title">Title *</label>
+                <input 
+                    id="edit-title"
+                    type="text" 
+                    pInputText 
+                    formControlName="title"
+                    placeholder="Enter task title"
+                    class="w-full"
+                />
+                @if (editTaskForm.get('title')?.invalid && editTaskForm.get('title')?.touched) {
+                    <small class="error-message">Title is required</small>
+                }
+            </div>
+            
+            <div class="form-field">
+                <label for="edit-description">Description</label>
+                <textarea 
+                    id="edit-description"
+                    pTextarea
+                    formControlName="description"
+                    placeholder="Enter task description"
+                    [rows]="3"
+                    class="w-full"
+                ></textarea>
+            </div>
+            
+            <div class="form-field">
+                <label for="edit-workspace">Workspace *</label>
+                <p-select
+                    id="edit-workspace"
+                    formControlName="workspace"
+                    [options]="workspaceOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select workspace"
+                    class="w-full"
+                />
+            </div>
+            
+            <div class="form-field">
+                <label for="edit-channel">Channel</label>
+                <p-select
+                    id="edit-channel"
+                    formControlName="channelId"
+                    [options]="filteredChannels()"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Select channel (optional)"
+                    class="w-full"
+                    [showClear]="true"
+                />
+            </div>
+            
+            <div class="form-field">
+                <label for="edit-dueDate">Due Date</label>
+                <p-datepicker
+                    id="edit-dueDate"
+                    formControlName="dueDate"
+                    [showIcon]="true"
+                    placeholder="Select due date (optional)"
+                    class="w-full"
+                    dateFormat="mm/dd/yy"
+                    [showTime]="true"
+                />
+            </div>
+            
+            <div class="form-field-checkbox">
+                <p-checkbox 
+                    formControlName="isRoutine"
+                    [binary]="true"
+                    inputId="edit-isRoutine"
+                />
+                <label for="edit-isRoutine">Is this a routine task?</label>
+            </div>
+        </form>
+    }
+    
+    <ng-template pTemplate="footer">
+        <p-button 
+            label="Delete" 
+            severity="danger"
+            icon="pi pi-trash"
+            (onClick)="confirmDeleteTask()"
+        />
+        <p-button 
+            label="Cancel" 
+            severity="secondary"
+            (onClick)="hideTaskDetailsDialog()"
+        />
+        <p-button 
+            label="Save" 
+            severity="primary"
+            (onClick)="submitEditTask()"
+            [disabled]="editTaskForm.invalid"
+        />
+    </ng-template>
+</p-dialog>
+
+<!-- Confirmation Dialog -->
+<p-confirmDialog />

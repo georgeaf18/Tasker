@@ -1,0 +1,385 @@
+/* Kanban Board Component Styles */
+
+.kanban-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px;
+  background: #FAF9F7;
+  overflow: hidden;
+}
+
+/* Progress Section */
+.progress-section {
+  margin-bottom: 32px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #2B2B2B;
+  margin: 0;
+}
+
+.progress-percentage {
+  font-size: 24px;
+  font-weight: 700;
+  color: #8B5CF6;
+}
+
+/* Kanban Board Grid */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Column Styles */
+.kanban-column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+::ng-deep .kanban-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .kanban-panel .p-panel-content {
+  flex: 1;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Column Headers */
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+}
+
+.column-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.column-title i {
+  font-size: 24px;
+}
+
+/* Column-specific colors */
+.today-column ::ng-deep .p-panel-header {
+  background: #6B9AC4;
+  color: white;
+}
+
+.in-progress-column ::ng-deep .p-panel-header {
+  background: #8B7BB8;
+  color: white;
+}
+
+.done-column ::ng-deep .p-panel-header {
+  background: #7A9B76;
+  color: white;
+}
+
+/* Badge styling */
+::ng-deep .p-badge {
+  min-width: 28px;
+  height: 28px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Column Content */
+.column-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: calc(100% - 80px);
+}
+
+/* Custom scrollbar */
+.column-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.column-content::-webkit-scrollbar-track {
+  background: #F3F2EE;
+  border-radius: 4px;
+}
+
+.column-content::-webkit-scrollbar-thumb {
+  background: #A8A6A2;
+  border-radius: 4px;
+}
+
+.column-content::-webkit-scrollbar-thumb:hover {
+  background: #878787;
+}
+
+/* Task Cards */
+::ng-deep .task-card {
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  border-left: 4px solid #8B5CF6;
+  margin-bottom: 8px;
+}
+
+::ng-deep .task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(43, 43, 43, 0.12);
+}
+
+::ng-deep .task-card .p-card-body {
+  padding: 16px;
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid #F3F2EE;
+}
+
+.channel-chip {
+  font-size: 14px;
+}
+
+.routine-icon {
+  font-size: 18px;
+  color: #8B5CF6;
+}
+
+.task-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2B2B2B;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.workspace-tag {
+  font-size: 14px;
+}
+
+.due-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #5A5A5A;
+}
+
+.due-date i {
+  font-size: 16px;
+}
+
+/* Empty State */
+::ng-deep .empty-message {
+  text-align: center;
+  font-size: 18px;
+}
+
+/* Task Details Dialog */
+::ng-deep .task-dialog .p-dialog-header {
+  background: #8B5CF6;
+  color: white;
+  font-size: 24px;
+  padding: 20px;
+}
+
+::ng-deep .task-dialog .p-dialog-header .p-dialog-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+::ng-deep .task-dialog .p-dialog-content {
+  padding: 24px;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-section h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2B2B2B;
+  margin: 0;
+  border-bottom: 2px solid #F3F2EE;
+  padding-bottom: 8px;
+}
+
+.task-description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #2B2B2B;
+  margin: 0;
+}
+
+.no-description {
+  font-size: 18px;
+  color: #878787;
+  font-style: italic;
+  margin: 0;
+}
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metadata-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #5A5A5A;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #EDE9FE;
+  color: #8B5CF6;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+::ng-deep .status-buttons .p-button {
+  flex: 1;
+  min-width: 150px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .kanban-board {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .done-column {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+  
+  .done-column {
+    grid-column: 1;
+  }
+  
+  .metadata-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .status-buttons {
+    flex-direction: column;
+  }
+  
+  ::ng-deep .status-buttons .p-button {
+    width: 100%;
+  }
+}
+
+/* PrimeNG Overrides for ADHD-friendly design */
+::ng-deep .p-progressbar {
+  height: 16px;
+  border-radius: 8px;
+}
+
+::ng-deep .p-progressbar .p-progressbar-value {
+  background: linear-gradient(90deg, #8B5CF6 0%, #7A9B76 100%);
+}
+
+::ng-deep .p-card {
+  box-shadow: 0 2px 8px rgba(43, 43, 43, 0.08);
+}
+
+::ng-deep .p-panel .p-panel-header {
+  border-radius: 12px 12px 0 0;
+}
+
+::ng-deep .p-chip {
+  font-weight: 500;
+}
+
+::ng-deep .p-tag {
+  font-weight: 600;
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+::ng-deep .p-button {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+}
