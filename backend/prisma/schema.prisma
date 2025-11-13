@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Workspace {
+  WORK
+  PERSONAL
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODAY
+  IN_PROGRESS
+  DONE
+}
+
+model Channel {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(255)
+  workspace Workspace
+  color     String?   @db.VarChar(7)
+  createdAt DateTime  @default(now()) @map("created_at")
+  tasks     Task[]
+
+  @@index([workspace])
+  @@map("channels")
+}
+
+model Task {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(500)
+  description String?    @db.Text
+  workspace   Workspace  @default(PERSONAL)
+  channelId   Int?       @map("channel_id")
+  channel     Channel?   @relation(fields: [channelId], references: [id], onDelete: SetNull)
+  status      TaskStatus @default(BACKLOG)
+  dueDate     DateTime?  @map("due_date")
+  isRoutine   Boolean    @default(false) @map("is_routine")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([workspace])
+  @@index([channelId])
+  @@index([dueDate])
+  @@map("tasks")
+}
