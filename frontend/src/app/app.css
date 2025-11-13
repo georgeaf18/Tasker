@@ -122,16 +122,18 @@
 .sidebar {
   position: relative;
   width: var(--sidebar-width);
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
   background-color: var(--color-bg-secondary);
   border-right: var(--border-width) solid var(--color-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 
 .sidebar.sidebar-hidden {
   transform: translateX(calc(-1 * var(--sidebar-width)));
+  width: 0; /* Collapse width to let main content expand */
 }
 
 .sidebar-header {
@@ -182,8 +184,8 @@
 
 /* Sidebar Toggle Button */
 .sidebar-toggle-btn {
-  position: absolute;
-  right: -12px;
+  position: fixed; /* Fixed positioning to keep it visible */
+  left: calc(var(--sidebar-width) - 12px); /* Position at sidebar edge */
   top: 50%;
   transform: translateY(-50%);
   width: 24px;
@@ -198,7 +200,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .sidebar-toggle-btn:hover {
@@ -211,7 +213,7 @@
 }
 
 .sidebar-hidden .sidebar-toggle-btn {
-  right: calc(-1 * var(--sidebar-width) - 12px);
+  left: 0; /* Move to left edge when sidebar is hidden */
 }
 
 /* Main Content */
