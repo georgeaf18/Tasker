@@ -65,6 +65,19 @@
   display: flex;
   flex-direction: column;
   border-radius: 0;
+}
+
+/* Remove left border radius from Today column */
+::ng-deep .today-column .kanban-panel {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Remove right border radius from Done column */
+::ng-deep .done-column .kanban-panel {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
   overflow: hidden;
   box-shadow: none;
   background: var(--color-bg-primary);
