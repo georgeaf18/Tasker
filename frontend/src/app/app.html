@@ -1,11 +1,13 @@
+<p-toast position="top-right" />
+
 <div class="app-container">
   <!-- Header -->
   <header class="app-header">
     <h1 class="app-title">{{ title }}</h1>
-    <div class="workspace-toggle">
+    <div class="context-toggle">
       <button
         type="button"
-        class="workspace-button"
+        class="context-button"
         [class.active]="currentWorkspace() === Workspace.WORK"
         (click)="toggleWorkspace()">
         <i class="pi pi-briefcase"></i>
@@ -13,7 +15,7 @@
       </button>
       <button
         type="button"
-        class="workspace-button"
+        class="context-button"
         [class.active]="currentWorkspace() === Workspace.PERSONAL"
         (click)="toggleWorkspace()">
         <i class="pi pi-home"></i>
@@ -28,7 +30,7 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h2>Backlog</h2>
-        <button type="button" class="add-task-button" title="Add Task">
+        <button type="button" class="add-task-button" title="Add Task" (click)="openCreateTaskDialog()">
           <i class="pi pi-plus"></i>
         </button>
       </div>

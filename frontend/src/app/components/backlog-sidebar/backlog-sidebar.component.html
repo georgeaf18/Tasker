@@ -4,51 +4,31 @@
             @if (backlogTasks().length === 0) {
                 <p-message severity="info" [text]="'No tasks in backlog'" />
             } @else {
-                <p-accordion [multiple]="true">
-                    @for (workspaceGroup of groupedByWorkspace(); track workspaceGroup.workspace) {
-                        <p-accordion-panel [value]="workspaceGroup.workspace">
-                            <p-accordion-header>{{ workspaceGroup.workspaceName }}</p-accordion-header>
-                            <p-accordion-content>
-                                <p-accordion [multiple]="true">
-                                    @for (channelGroup of workspaceGroup.channels; track channelGroup.channelName) {
-                                        <p-accordion-panel [value]="channelGroup.channelName">
-                                            <p-accordion-header>{{ channelGroup.channelName }}</p-accordion-header>
-                                            <p-accordion-content>
-                                                <p-dataView [value]="channelGroup.tasks" layout="list">
-                                            <ng-template let-task pTemplate="listItem">
-                                                <div class="task-list-item">
-                                                    <p-card 
-                                                        [style]="{'cursor': 'pointer'}"
-                                                        (click)="showTaskDetails(task)"
-                                                        [pTooltip]="task.description || 'No description'"
-                                                        tooltipPosition="right"
-                                                    >
-                                                        <div class="task-card-content">
-                                                            <div class="task-title">{{ task.title }}</div>
-                                                            @if (task.dueDate) {
-                                                                <div class="task-meta">
-                                                                    <i class="pi pi-calendar"></i>
-                                                                    <span>{{ task.dueDate | date:'short' }}</span>
-                                                                </div>
-                                                            }
-                                                            @if (task.isRoutine) {
-                                                                <div class="task-routine-badge">
-                                                                    <i class="pi pi-sync"></i> Routine
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </p-card>
-                                                </div>
-                                            </ng-template>
-                                        </p-dataView>
-                                            </p-accordion-content>
-                                        </p-accordion-panel>
-                                    }
-                                </p-accordion>
-                            </p-accordion-content>
-                        </p-accordion-panel>
-                    }
-                </p-accordion>
+                @for (task of backlogTasks(); track task.id) {
+                    <div class="task-list-item">
+                        <p-card
+                            [style]="{'cursor': 'pointer'}"
+                            (click)="showTaskDetails(task)"
+                            [pTooltip]="task.description || 'No description'"
+                            tooltipPosition="right"
+                        >
+                            <div class="task-card-content">
+                                <div class="task-title">{{ task.title }}</div>
+                                @if (task.dueDate) {
+                                    <div class="task-meta">
+                                        <i class="pi pi-calendar"></i>
+                                        <span>{{ task.dueDate | date:'short' }}</span>
+                                    </div>
+                                }
+                                @if (task.isRoutine) {
+                                    <div class="task-routine-badge">
+                                        <i class="pi pi-sync"></i> Routine
+                                    </div>
+                                }
+                            </div>
+                        </p-card>
+                    </div>
+                }
             }
         </div>
     </p-panel>
@@ -79,10 +59,10 @@
     <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()">
         <div class="form-field">
             <label for="title">Title *</label>
-            <input 
+            <input
                 id="title"
-                type="text" 
-                pInputText 
+                type="text"
+                pInputText
                 formControlName="title"
                 placeholder="Enter task title"
                 class="w-full"
@@ -91,10 +71,10 @@
                 <small class="error-message">Title is required</small>
             }
         </div>
-        
+
         <div class="form-field">
             <label for="description">Description</label>
-            <textarea 
+            <textarea
                 id="description"
                 pTextarea
                 formControlName="description"
@@ -103,16 +83,29 @@
                 class="w-full"
             ></textarea>
         </div>
-        
+
         <div class="form-field">
-            <label for="workspace">Workspace *</label>
+            <label for="status">Add to *</label>
+            <p-select
+                id="status"
+                formControlName="status"
+                [options]="statusOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select column"
+                class="w-full"
+            />
+        </div>
+
+        <div class="form-field">
+            <label for="workspace">Context *</label>
             <p-select
                 id="workspace"
                 formControlName="workspace"
                 [options]="workspaceOptions"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Select workspace"
+                placeholder="Select context"
                 class="w-full"
             />
         </div>
@@ -208,14 +201,14 @@
             </div>
             
             <div class="form-field">
-                <label for="edit-workspace">Workspace *</label>
+                <label for="edit-workspace">Context *</label>
                 <p-select
                     id="edit-workspace"
                     formControlName="workspace"
                     [options]="workspaceOptions"
                     optionLabel="label"
                     optionValue="value"
-                    placeholder="Select workspace"
+                    placeholder="Select context"
                     class="w-full"
                 />
             </div>

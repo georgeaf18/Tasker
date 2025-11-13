@@ -86,7 +86,7 @@ export class TasksService {
       taskData.description = createTaskDto.description;
     }
 
-    if (createTaskDto.channelId !== undefined) {
+    if (createTaskDto.channelId !== undefined && createTaskDto.channelId !== null) {
       taskData.channelId = createTaskDto.channelId;
     }
 

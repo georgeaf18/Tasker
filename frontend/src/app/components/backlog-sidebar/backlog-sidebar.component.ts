@@ -71,6 +71,7 @@ export class BacklogSidebarComponent implements OnInit {
         this.createTaskForm = this.fb.group({
             title: ['', Validators.required],
             description: [''],
+            status: [TaskStatus.BACKLOG, Validators.required],
             workspace: [Workspace.PERSONAL, Validators.required],
             channelId: [null],
             dueDate: [null],
@@ -141,6 +142,11 @@ export class BacklogSidebarComponent implements OnInit {
         { label: 'Work', value: Workspace.WORK },
         { label: 'Personal', value: Workspace.PERSONAL }
     ];
+
+    statusOptions = [
+        { label: 'Backlog', value: TaskStatus.BACKLOG },
+        { label: 'Today', value: TaskStatus.TODAY }
+    ];
     
     readonly filteredChannels = computed(() => {
         const workspace = this.createTaskForm?.get('workspace')?.value;
@@ -162,6 +168,7 @@ export class BacklogSidebarComponent implements OnInit {
     
     showCreateTaskDialog(): void {
         this.createTaskForm.reset({
+            status: TaskStatus.BACKLOG,
             workspace: Workspace.PERSONAL,
             isRoutine: false
         });
@@ -175,10 +182,9 @@ export class BacklogSidebarComponent implements OnInit {
     submitCreateTask(): void {
         if (this.createTaskForm.valid) {
             const dto: CreateTaskDto = {
-                ...this.createTaskForm.value,
-                status: TaskStatus.BACKLOG
+                ...this.createTaskForm.value
             };
-            
+
             this.taskStateService.addTask(dto);
             this.hideCreateTaskDialog();
         }

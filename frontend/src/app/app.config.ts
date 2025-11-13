@@ -7,7 +7,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import Aura from '@primeng/themes/aura';
 import { definePreset } from '@primeng/themes';
 import { appRoutes } from './app.routes';
@@ -71,6 +71,7 @@ export const appConfig: ApplicationConfig = {
       },
       ripple: true
     }),
-    ConfirmationService
+    ConfirmationService,
+    MessageService
   ],
 };

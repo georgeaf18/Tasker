@@ -1,4 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import type { Task, CreateTaskDto, UpdateTaskDto, TaskFilters } from '../models';
 import { TaskStatus } from '../models/task-status.enum';
 import { Workspace } from '../models/workspace.enum';
@@ -20,6 +21,7 @@ import { TaskApiService } from './task-api.service';
 })
 export class TaskStateService {
     private readonly taskApiService = inject(TaskApiService);
+    private readonly messageService = inject(MessageService);
 
     // Base signals
     private readonly tasksSignal = signal<Task[]>([]);
@@ -101,11 +103,23 @@ export class TaskStateService {
             next: (task) => {
                 this.tasksSignal.update(tasks => [...tasks, task]);
                 this.loadingSignal.set(false);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Task Created',
+                    detail: 'Task has been successfully created',
+                    life: 3000
+                });
             },
             error: (error) => {
                 console.error('[TaskStateService] Error creating task:', error);
                 this.errorSignal.set(error.message || 'Failed to create task');
                 this.loadingSignal.set(false);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Create Failed',
+                    detail: error.message || 'Failed to create task',
+                    life: 5000
+                });
             }
         });
     }
@@ -127,11 +141,23 @@ export class TaskStateService {
                     tasks.map(t => t.id === id ? updatedTask : t)
                 );
                 this.loadingSignal.set(false);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Task Updated',
+                    detail: 'Task has been successfully updated',
+                    life: 3000
+                });
             },
             error: (error) => {
                 console.error('[TaskStateService] Error updating task:', error);
                 this.errorSignal.set(error.message || 'Failed to update task');
                 this.loadingSignal.set(false);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Update Failed',
+                    detail: error.message || 'Failed to update task',
+                    life: 5000
+                });
             }
         });
     }
@@ -160,11 +186,23 @@ export class TaskStateService {
             next: () => {
                 this.tasksSignal.update(tasks => tasks.filter(t => t.id !== id));
                 this.loadingSignal.set(false);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Task Deleted',
+                    detail: 'Task has been successfully deleted',
+                    life: 3000
+                });
             },
             error: (error) => {
                 console.error('[TaskStateService] Error deleting task:', error);
                 this.errorSignal.set(error.message || 'Failed to delete task');
                 this.loadingSignal.set(false);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Delete Failed',
+                    detail: error.message || 'Failed to delete task',
+                    life: 5000
+                });
             }
         });
     }
