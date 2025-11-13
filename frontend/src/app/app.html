@@ -1,2 +1,47 @@
-<app-nx-welcome></app-nx-welcome>
+<div class="app-container">
+  <!-- Header -->
+  <header class="app-header">
+    <h1 class="app-title">{{ title }}</h1>
+    <div class="workspace-toggle">
+      <button
+        type="button"
+        class="workspace-button"
+        [class.active]="currentWorkspace() === Workspace.WORK"
+        (click)="toggleWorkspace()">
+        <i class="pi pi-briefcase"></i>
+        <span>Work</span>
+      </button>
+      <button
+        type="button"
+        class="workspace-button"
+        [class.active]="currentWorkspace() === Workspace.PERSONAL"
+        (click)="toggleWorkspace()">
+        <i class="pi pi-home"></i>
+        <span>Personal</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Layout: Sidebar + Content -->
+  <div class="app-layout">
+    <!-- Backlog Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Backlog</h2>
+        <button type="button" class="add-task-button" title="Add Task">
+          <i class="pi pi-plus"></i>
+        </button>
+      </div>
+      <div class="sidebar-content">
+        <app-backlog-sidebar></app-backlog-sidebar>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <app-kanban-board></app-kanban-board>
+    </main>
+  </div>
+</div>
+
 <router-outlet></router-outlet>

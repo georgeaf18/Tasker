@@ -1,0 +1,113 @@
+import { Component, OnInit, computed, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PanelModule } from 'primeng/panel';
+import { CardModule } from 'primeng/card';
+import { BadgeModule } from 'primeng/badge';
+import { ChipModule } from 'primeng/chip';
+import { TagModule } from 'primeng/tag';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { DataViewModule } from 'primeng/dataview';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
+import { MessageModule } from 'primeng/message';
+import { TaskStateService } from '../../services/task-state.service';
+import { Task, TaskStatus, Workspace } from '../../models/task.model';
+
+/**
+ * KanbanBoardComponent
+ *
+ * Three-column kanban board (Today, In Progress, Done) with PrimeNG components.
+ * Displays tasks organized by status with drag & drop support (to be added later).
+ * Features progress tracking and task detail dialogs.
+ */
+@Component({
+  selector: 'app-kanban-board',
+  imports: [
+    CommonModule,
+    PanelModule,
+    CardModule,
+    BadgeModule,
+    ChipModule,
+    TagModule,
+    ProgressBarModule,
+    DataViewModule,
+    DialogModule,
+    ButtonModule,
+    TooltipModule,
+    MessageModule,
+  ],
+  templateUrl: './kanban-board.component.html',
+  styleUrl: './kanban-board.component.css',
+})
+export class KanbanBoardComponent implements OnInit {
+  TaskStatus = TaskStatus;
+  Workspace = Workspace;
+
+  selectedTask = signal<Task | null>(null);
+  showTaskDialog = signal<boolean>(false);
+
+  todayTasks = computed(() => this.taskState.todayTasks());
+  inProgressTasks = computed(() => this.taskState.inProgressTasks());
+  doneTasks = computed(() => this.taskState.doneTasks());
+
+  dailyProgress = computed(() => {
+    const today = this.todayTasks().length;
+    const inProgress = this.inProgressTasks().length;
+    const done = this.doneTasks().length;
+    const total = today + inProgress + done;
+    return total > 0 ? Math.round((done / total) * 100) : 0;
+  });
+
+  constructor(private taskState: TaskStateService) {}
+
+  ngOnInit(): void {
+    this.taskState.loadTasks();
+  }
+
+  openTaskDetails(task: Task): void {
+    this.selectedTask.set(task);
+    this.showTaskDialog.set(true);
+  }
+
+  closeTaskDialog(): void {
+    this.showTaskDialog.set(false);
+    this.selectedTask.set(null);
+  }
+
+  moveToStatus(taskId: number, newStatus: TaskStatus): void {
+    this.taskState.updateTask(taskId, { status: newStatus });
+    this.closeTaskDialog();
+  }
+
+  deleteTask(taskId: number): void {
+    if (confirm('Are you sure you want to delete this task?')) {
+      this.taskState.removeTask(taskId);
+      this.closeTaskDialog();
+    }
+  }
+
+  getWorkspaceColor(workspace: Workspace): string {
+    return workspace === Workspace.WORK ? '#F97316' : '#14B8A6';
+  }
+
+  getWorkspaceSeverity(workspace: Workspace): 'success' | 'info' {
+    return workspace === Workspace.WORK ? 'success' : 'info';
+  }
+
+  formatDate(dateStr: string | Date | null | undefined): string {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    } else if (date.toDateString() === tomorrow.toDateString()) {
+      return 'Tomorrow';
+    } else {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+  }
+}
