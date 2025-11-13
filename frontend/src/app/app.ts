@@ -3,9 +3,10 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Workspace } from './models';
 import { KanbanBoardComponent } from './components/kanban-board/kanban-board.component';
+import { BacklogSidebarComponent } from './components/backlog-sidebar/backlog-sidebar.component';
 
 @Component({
-  imports: [CommonModule, RouterModule, KanbanBoardComponent],
+  imports: [CommonModule, RouterModule, KanbanBoardComponent, BacklogSidebarComponent],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
