@@ -20,6 +20,7 @@ export class App {
 
   protected readonly title = 'Tasker';
   protected readonly currentWorkspace = signal<Workspace>(Workspace.WORK);
+  protected readonly sidebarVisible = signal<boolean>(true);
   protected readonly Workspace = Workspace;
 
   constructor() {
@@ -33,6 +34,10 @@ export class App {
     this.currentWorkspace.update(current =>
       current === Workspace.WORK ? Workspace.PERSONAL : Workspace.WORK
     );
+  }
+
+  protected toggleSidebar(): void {
+    this.sidebarVisible.update(visible => !visible);
   }
 
   /**

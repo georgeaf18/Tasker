@@ -27,7 +27,7 @@
   <!-- Main Layout: Sidebar + Content -->
   <div class="app-layout">
     <!-- Backlog Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" [class.sidebar-hidden]="!sidebarVisible()">
       <div class="sidebar-header">
         <h2>Backlog</h2>
         <button type="button" class="add-task-button" title="Add Task" (click)="openCreateTaskDialog()">
@@ -37,6 +37,13 @@
       <div class="sidebar-content">
         <app-backlog-sidebar></app-backlog-sidebar>
       </div>
+      <button
+        type="button"
+        class="sidebar-toggle-btn"
+        (click)="toggleSidebar()"
+        [attr.aria-label]="sidebarVisible() ? 'Hide backlog' : 'Show backlog'">
+        <i [class]="sidebarVisible() ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"></i>
+      </button>
     </aside>
 
     <!-- Main Content Area -->
