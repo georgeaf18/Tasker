@@ -1,8 +1,8 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { of, throwError, delay, Subject } from 'rxjs';
-import { MessageService } from 'primeng/api';
 import { TaskStateService } from './task-state.service';
 import { TaskApiService } from './task-api.service';
+import { NotificationService } from './notification.service';
 import { Task, CreateTaskDto, UpdateTaskDto, TaskFilters } from '../models';
 import { TaskStatus } from '../models/task-status.enum';
 import { Workspace } from '../models/workspace.enum';
@@ -10,7 +10,7 @@ import { Workspace } from '../models/workspace.enum';
 describe('TaskStateService', () => {
     let service: TaskStateService;
     let mockTaskApiService: jest.Mocked<TaskApiService>;
-    let mockMessageService: jest.Mocked<MessageService>;
+    let mockNotificationService: jest.Mocked<NotificationService>;
 
     // Mock task data factory
     const createMockTask = (overrides: Partial<Task> = {}): Task => ({
@@ -37,17 +37,18 @@ describe('TaskStateService', () => {
             getTask: jest.fn()
         } as any;
 
-        // Create mock for MessageService
-        mockMessageService = {
-            add: jest.fn(),
-            clear: jest.fn()
+        // Create mock for NotificationService
+        mockNotificationService = {
+            show: jest.fn(),
+            clear: jest.fn(),
+            notification: jest.fn()
         } as any;
 
         TestBed.configureTestingModule({
             providers: [
                 TaskStateService,
                 { provide: TaskApiService, useValue: mockTaskApiService },
-                { provide: MessageService, useValue: mockMessageService }
+                { provide: NotificationService, useValue: mockNotificationService }
             ]
         });
 
@@ -195,7 +196,7 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
-        it('should show success toast when task is added', (done) => {
+        it('should show success notification when task is added', (done) => {
             const dto: CreateTaskDto = { title: 'New Task', workspace: Workspace.PERSONAL };
             const createdTask = createMockTask({ id: 5, title: 'New Task' });
             mockTaskApiService.createTask.mockReturnValue(of(createdTask));
@@ -203,12 +204,7 @@ describe('TaskStateService', () => {
             service.addTask(dto);
 
             setTimeout(() => {
-                expect(mockMessageService.add).toHaveBeenCalledWith({
-                    severity: 'success',
-                    summary: 'Task Created',
-                    detail: 'Task has been successfully created',
-                    life: 3000
-                });
+                expect(mockNotificationService.show).toHaveBeenCalledWith('Task created', 'success');
                 done();
             }, 0);
         });
@@ -231,7 +227,7 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
-        it('should show error toast when adding task fails', (done) => {
+        it('should show error notification when adding task fails', (done) => {
             const dto: CreateTaskDto = { title: 'New Task', workspace: Workspace.PERSONAL };
             const errorMessage = 'Failed to create task';
             mockTaskApiService.createTask.mockReturnValue(
@@ -241,12 +237,7 @@ describe('TaskStateService', () => {
             service.addTask(dto);
 
             setTimeout(() => {
-                expect(mockMessageService.add).toHaveBeenCalledWith({
-                    severity: 'error',
-                    summary: 'Create Failed',
-                    detail: errorMessage,
-                    life: 5000
-                });
+                expect(mockNotificationService.show).toHaveBeenCalledWith('Failed to create task', 'error');
                 done();
             }, 0);
         });
@@ -301,7 +292,7 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
-        it('should show success toast when task is updated', (done) => {
+        it('should show success notification when task is updated', (done) => {
             const originalTask = createMockTask({ id: 1, title: 'Original Title' });
             const updatedTask = createMockTask({ id: 1, title: 'Updated Title' });
 
@@ -311,12 +302,7 @@ describe('TaskStateService', () => {
             service.updateTask(1, { title: 'Updated Title' });
 
             setTimeout(() => {
-                expect(mockMessageService.add).toHaveBeenCalledWith({
-                    severity: 'success',
-                    summary: 'Task Updated',
-                    detail: 'Task has been successfully updated',
-                    life: 3000
-                });
+                expect(mockNotificationService.show).toHaveBeenCalledWith('Task updated', 'success');
                 done();
             }, 0);
         });
@@ -355,7 +341,7 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
-        it('should show error toast when updating task fails', (done) => {
+        it('should show error notification when updating task fails', (done) => {
             const originalTask = createMockTask({ id: 1, title: 'Original' });
             service.setTasks([originalTask]);
 
@@ -367,12 +353,7 @@ describe('TaskStateService', () => {
             service.updateTask(1, { title: 'Updated' });
 
             setTimeout(() => {
-                expect(mockMessageService.add).toHaveBeenCalledWith({
-                    severity: 'error',
-                    summary: 'Update Failed',
-                    detail: errorMessage,
-                    life: 5000
-                });
+                expect(mockNotificationService.show).toHaveBeenCalledWith('Failed to update task', 'error');
                 done();
             }, 0);
         });
@@ -440,7 +421,7 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
-        it('should show success toast when task is removed', (done) => {
+        it('should show success notification when task is removed', (done) => {
             const tasks = [createMockTask({ id: 1 }), createMockTask({ id: 2 })];
             service.setTasks(tasks);
             mockTaskApiService.deleteTask.mockReturnValue(of(void 0));
@@ -448,12 +429,7 @@ describe('TaskStateService', () => {
             service.removeTask(1);
 
             setTimeout(() => {
-                expect(mockMessageService.add).toHaveBeenCalledWith({
-                    severity: 'success',
-                    summary: 'Task Deleted',
-                    detail: 'Task has been successfully deleted',
-                    life: 3000
-                });
+                expect(mockNotificationService.show).toHaveBeenCalledWith('Task deleted', 'success');
                 done();
             }, 0);
         });
@@ -477,7 +453,7 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
-        it('should show error toast when removing task fails', (done) => {
+        it('should show error notification when removing task fails', (done) => {
             const tasks = [createMockTask({ id: 1 }), createMockTask({ id: 2 })];
             service.setTasks(tasks);
 
@@ -489,12 +465,7 @@ describe('TaskStateService', () => {
             service.removeTask(1);
 
             setTimeout(() => {
-                expect(mockMessageService.add).toHaveBeenCalledWith({
-                    severity: 'error',
-                    summary: 'Delete Failed',
-                    detail: errorMessage,
-                    life: 5000
-                });
+                expect(mockNotificationService.show).toHaveBeenCalledWith('Failed to delete task', 'error');
                 done();
             }, 0);
         });

@@ -15,6 +15,7 @@
   background-color: var(--color-bg-primary);
   border-bottom: var(--border-width) solid var(--color-border);
   box-shadow: var(--shadow-sm);
+  gap: var(--spacing-lg);
 }
 
 .app-title {
@@ -26,6 +27,45 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Status Notification Indicator */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  animation: fadeIn 0.2s ease-in-out;
+  flex: 0 1 auto;
+  white-space: nowrap;
+}
+
+.status-indicator.success {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 10%, transparent);
+}
+
+.status-indicator.error {
+  color: var(--color-destructive);
+  background: color-mix(in srgb, var(--color-destructive) 10%, transparent);
+}
+
+.status-indicator i {
+  font-size: 1.2em;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .context-toggle {

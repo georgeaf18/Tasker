@@ -1,9 +1,16 @@
-<p-toast position="top-right" />
-
 <div class="app-container">
   <!-- Header -->
   <header class="app-header">
     <h1 class="app-title">{{ title }}</h1>
+
+    <!-- Status Notification Indicator -->
+    @if (notification()) {
+      <div class="status-indicator" [class.success]="notification()!.type === 'success'" [class.error]="notification()!.type === 'error'">
+        <i [class]="notification()!.type === 'success' ? 'pi pi-check-circle' : 'pi pi-times-circle'"></i>
+        <span>{{ notification()!.message }}</span>
+      </div>
+    }
+
     <div class="context-toggle">
       <button
         type="button"
