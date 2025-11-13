@@ -46,6 +46,7 @@
   flex: 1;
   overflow: hidden;
   padding: 0;
+  height: 100%;
 }
 
 /* Column Styles */
@@ -54,6 +55,7 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  min-height: 0;
 }
 
 ::ng-deep .kanban-panel {
@@ -72,6 +74,8 @@
   overflow: hidden;
   padding: 0;
   background: var(--color-bg-primary);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Column Headers */
@@ -133,7 +137,9 @@
   gap: var(--spacing-md);
   padding: var(--spacing-md);
   overflow-y: auto;
-  max-height: calc(100% - 60px);
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
 }
 
 /* Custom scrollbar - Modern thin style */
@@ -235,6 +241,8 @@
 ::ng-deep .empty-message {
   text-align: center;
   font-size: 18px;
+  margin: auto;
+  width: 100%;
 }
 
 /* Task Details Dialog */

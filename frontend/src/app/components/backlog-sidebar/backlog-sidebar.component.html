@@ -1,13 +1,21 @@
 <div class="backlog-sidebar-container">
     <p-panel [toggleable]="false">
-        <div class="backlog-content">
+        <div
+          class="backlog-content"
+          cdkDropList
+          [cdkDropListData]="backlogTasks()"
+          [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list']"
+          (cdkDropListDropped)="onDrop($event)"
+          id="backlog-list">
             @if (backlogTasks().length === 0) {
                 <p-message severity="info" [text]="'No tasks in backlog'" />
             } @else {
                 @for (task of backlogTasks(); track task.id) {
                     <div class="task-list-item">
                         <p-card
-                            [style]="{'cursor': 'pointer'}"
+                            cdkDrag
+                            [cdkDragData]="task"
+                            [style]="{'cursor': 'grab'}"
                             (click)="showTaskDetails(task)"
                             [pTooltip]="task.description || 'No description'"
                             tooltipPosition="right"

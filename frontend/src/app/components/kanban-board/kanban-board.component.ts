@@ -120,8 +120,16 @@ export class KanbanBoardComponent implements OnInit {
   onDrop(event: CdkDragDrop<Task[]>, newStatus: TaskStatus): void {
     const task = event.item.data as Task;
 
-    // Only update if the status actually changed
-    if (task.status !== newStatus) {
+    console.log('Drop event:', {
+      task: task.title,
+      fromStatus: task.status,
+      toStatus: newStatus,
+      containerId: event.container.id,
+      previousContainerId: event.previousContainer.id
+    });
+
+    // Only update if actually moving to a different container
+    if (event.previousContainer !== event.container) {
       this.taskState.updateTask(task.id, { status: newStatus });
     }
   }

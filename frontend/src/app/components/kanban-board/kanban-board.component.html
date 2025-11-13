@@ -35,7 +35,7 @@
           class="column-content"
           cdkDropList
           [cdkDropListData]="todayTasks()"
-          [cdkDropListConnectedTo]="['in-progress-list', 'done-list']"
+          [cdkDropListConnectedTo]="['backlog-list', 'in-progress-list', 'done-list']"
           (cdkDropListDropped)="onDrop($event, TaskStatus.TODAY)"
           id="today-list">
           @if (todayTasks().length === 0) {
@@ -113,7 +113,7 @@
           class="column-content"
           cdkDropList
           [cdkDropListData]="inProgressTasks()"
-          [cdkDropListConnectedTo]="['today-list', 'done-list']"
+          [cdkDropListConnectedTo]="['backlog-list', 'today-list', 'done-list']"
           (cdkDropListDropped)="onDrop($event, TaskStatus.IN_PROGRESS)"
           id="in-progress-list">
           @if (inProgressTasks().length === 0) {
@@ -191,7 +191,7 @@
           class="column-content"
           cdkDropList
           [cdkDropListData]="doneTasks()"
-          [cdkDropListConnectedTo]="['today-list', 'in-progress-list']"
+          [cdkDropListConnectedTo]="['backlog-list', 'today-list', 'in-progress-list']"
           (cdkDropListDropped)="onDrop($event, TaskStatus.DONE)"
           id="done-list">
           @if (doneTasks().length === 0) {

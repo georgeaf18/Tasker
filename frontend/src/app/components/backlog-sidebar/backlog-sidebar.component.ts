@@ -1,6 +1,7 @@
 import { Component, computed, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
 import { AccordionModule } from 'primeng/accordion';
 import { DataViewModule } from 'primeng/dataview';
@@ -38,6 +39,7 @@ interface GroupedTasks {
     imports: [
         CommonModule,
         ReactiveFormsModule,
+        DragDropModule,
         PanelModule,
         AccordionModule,
         DataViewModule,
@@ -228,6 +230,19 @@ export class BacklogSidebarComponent implements OnInit {
                     this.hideTaskDetailsDialog();
                 }
             });
+        }
+    }
+
+    /**
+     * Handles drag and drop events for tasks dropped into the backlog.
+     * Updates task status to BACKLOG when dropped.
+     */
+    onDrop(event: CdkDragDrop<Task[]>): void {
+        const task = event.item.data as Task;
+
+        // Only update if the status actually changed
+        if (task.status !== TaskStatus.BACKLOG) {
+            this.taskStateService.updateTask(task.id, { status: TaskStatus.BACKLOG });
         }
     }
 }
