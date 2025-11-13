@@ -59,6 +59,46 @@
           "buildTarget": "backend:build:production"
         }
       }
+    },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate",
+        "cwd": "backend"
+      },
+      "description": "Generate Prisma Client from schema"
+    },
+    "prisma-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev",
+        "cwd": "backend"
+      },
+      "description": "Run Prisma migrations (development)"
+    },
+    "prisma-migrate-deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate deploy",
+        "cwd": "backend"
+      },
+      "description": "Apply Prisma migrations (production)"
+    },
+    "prisma-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma studio",
+        "cwd": "backend"
+      },
+      "description": "Open Prisma Studio database GUI"
+    },
+    "prisma-push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma db push",
+        "cwd": "backend"
+      },
+      "description": "Push schema to database (development only)"
     }
   },
   "tags": []
