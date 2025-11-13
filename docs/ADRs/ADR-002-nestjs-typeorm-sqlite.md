@@ -8,6 +8,7 @@
 ## Context
 
 For v0.1-v1.0 of Tasker, we need:
+
 - A Node.js backend framework that's well-structured and maintainable
 - A database solution that's simple to set up and deploy locally
 - An ORM that provides type safety and works well with TypeScript
@@ -17,6 +18,7 @@ For v0.1-v1.0 of Tasker, we need:
 ## Decision
 
 We will use:
+
 - **NestJS** as the backend framework
 - **TypeORM** as the ORM
 - **SQLite** (via better-sqlite3) as the database for v0.1-v1.0
@@ -151,11 +153,12 @@ export class Task {
 export class TasksService {
   constructor(
     @InjectRepository(Task)
-    private tasksRepository: Repository<Task>,
+    private tasksRepository: Repository<Task>
   ) {}
 
   async findAll(filters?: TaskFilters): Promise<Task[]> {
-    const query = this.tasksRepository.createQueryBuilder('task')
+    const query = this.tasksRepository
+      .createQueryBuilder('task')
       .leftJoinAndSelect('task.channel', 'channel');
 
     if (filters?.status) {
@@ -200,39 +203,39 @@ export const databaseConfig: TypeOrmModuleOptions = {
 
 ### Backend Frameworks
 
-| Feature | NestJS | Express | Fastify | Koa |
-|---------|--------|---------|---------|-----|
-| Structure | High | Low | Medium | Low |
-| TypeScript | Native | Plugin | Good | Plugin |
-| DI System | Yes | No | Plugin | No |
-| Learning Curve | Medium | Low | Low | Low |
-| Boilerplate | Medium | Low | Low | Low |
-| Best For | Large apps | Simple APIs | Performance | Minimalism |
+| Feature        | NestJS     | Express     | Fastify     | Koa        |
+| -------------- | ---------- | ----------- | ----------- | ---------- |
+| Structure      | High       | Low         | Medium      | Low        |
+| TypeScript     | Native     | Plugin      | Good        | Plugin     |
+| DI System      | Yes        | No          | Plugin      | No         |
+| Learning Curve | Medium     | Low         | Low         | Low        |
+| Boilerplate    | Medium     | Low         | Low         | Low        |
+| Best For       | Large apps | Simple APIs | Performance | Minimalism |
 
 **Verdict:** NestJS for structure and DX
 
 ### ORMs
 
-| Feature | TypeORM | Prisma | MikroORM | Sequelize |
-|---------|---------|--------|----------|-----------|
-| TypeScript | Good | Excellent | Excellent | Plugin |
-| NestJS Support | Official | Community | Community | Community |
-| Entity Model | Decorators | Schema file | Decorators | Class-based |
-| Migrations | Yes | Yes | Yes | Yes |
-| Type Safety | Good | Excellent | Excellent | Weak |
-| SQLite Support | Yes | Yes | Yes | Yes |
+| Feature        | TypeORM    | Prisma      | MikroORM   | Sequelize   |
+| -------------- | ---------- | ----------- | ---------- | ----------- |
+| TypeScript     | Good       | Excellent   | Excellent  | Plugin      |
+| NestJS Support | Official   | Community   | Community  | Community   |
+| Entity Model   | Decorators | Schema file | Decorators | Class-based |
+| Migrations     | Yes        | Yes         | Yes        | Yes         |
+| Type Safety    | Good       | Excellent   | Excellent  | Weak        |
+| SQLite Support | Yes        | Yes         | Yes        | Yes         |
 
 **Verdict:** TypeORM for NestJS integration and familiarity
 
 ### Databases
 
-| Feature | SQLite | PostgreSQL | MySQL | MongoDB |
-|---------|--------|------------|-------|---------|
-| Setup | None | Server | Server | Server |
-| ACID | Yes | Yes | Yes | Limited |
-| Concurrent Writes | Low | High | High | High |
-| JSON Support | Limited | Excellent | Good | Native |
-| Perfect For | Local-first | Production | Production | Document-heavy |
+| Feature           | SQLite      | PostgreSQL | MySQL      | MongoDB        |
+| ----------------- | ----------- | ---------- | ---------- | -------------- |
+| Setup             | None        | Server     | Server     | Server         |
+| ACID              | Yes         | Yes        | Yes        | Limited        |
+| Concurrent Writes | Low         | High       | High       | High           |
+| JSON Support      | Limited     | Excellent  | Good       | Native         |
+| Perfect For       | Local-first | Production | Production | Document-heavy |
 
 **Verdict:** SQLite for v0.1-v1.0, PostgreSQL for v2.0+
 
@@ -258,12 +261,12 @@ export const databaseConfig: TypeOrmModuleOptions = {
 
 ### Risks & Mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| SQLite file corruption | Regular backups, export feature in v1.0 |
-| Concurrent write locks | Single-user app, not a concern for v0.1-v1.0 |
-| TypeORM breaking changes | Pin versions, test before upgrading |
-| NestJS overhead | Only concern at massive scale (not our case) |
+| Risk                     | Mitigation                                   |
+| ------------------------ | -------------------------------------------- |
+| SQLite file corruption   | Regular backups, export feature in v1.0      |
+| Concurrent write locks   | Single-user app, not a concern for v0.1-v1.0 |
+| TypeORM breaking changes | Pin versions, test before upgrading          |
+| NestJS overhead          | Only concern at massive scale (not our case) |
 
 ## Migration Path to PostgreSQL (v2.0+)
 
@@ -293,21 +296,25 @@ export const databaseConfig: TypeOrmModuleOptions = {
 ## Alternatives Considered
 
 ### Express + Sequelize + SQLite
+
 **Pros:** Lightweight, flexible, popular
 **Cons:** No structure, manual everything, weak TypeScript support
 **Verdict:** Too unstructured for maintainability
 
 ### Fastify + Prisma + SQLite
+
 **Pros:** Fast, modern, excellent TypeScript
 **Cons:** Less mature NestJS integration, different patterns
 **Verdict:** Prisma is great but NestJS + TypeORM is more cohesive
 
 ### NestJS + Prisma + SQLite
+
 **Pros:** Best TypeScript support, great DX
 **Cons:** Extra schema file to maintain, less NestJS examples
 **Verdict:** Strong alternative, but TypeORM wins for familiarity
 
 ### Serverless (Lambda + DynamoDB)
+
 **Pros:** Scalable, no server management
 **Cons:** Overkill, costs money, latency, not local-first
 **Verdict:** Wrong architecture for this use case
@@ -315,13 +322,16 @@ export const databaseConfig: TypeOrmModuleOptions = {
 ## Performance Considerations
 
 ### SQLite Performance
+
 - **Reads:** Extremely fast (local file)
 - **Writes:** Fast for single user
 - **Concurrent writes:** Limited (not a concern for solo use)
 - **File size:** Compact, < 100 MB expected for years of tasks
 
 ### When to Migrate
+
 Migrate to PostgreSQL when:
+
 - Multiple users need simultaneous write access
 - Need full-text search (FTS5 in SQLite is limited)
 - Database size > 1 GB

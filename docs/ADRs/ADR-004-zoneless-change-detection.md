@@ -8,18 +8,21 @@
 ## Context
 
 Angular traditionally uses Zone.js to automatically detect when to update the view. However, Zone.js:
+
 - Adds ~50KB to the bundle
 - Patches all async APIs (Promise, setTimeout, events)
 - Can cause performance issues with many async operations
 - Is being phased out in favor of signals
 
 Angular 20 introduces experimental zoneless mode, which:
+
 - Removes Zone.js dependency
 - Relies on signals for change detection
 - Requires explicit change detection triggers
 - Better performance
 
 For Tasker, we need:
+
 - Fast, responsive UI
 - Minimal bundle size
 - Modern Angular patterns
@@ -62,6 +65,7 @@ We will **enable experimental zoneless change detection** in Angular 20 and remo
 ### How Zoneless Works
 
 **Without Zone.js:**
+
 ```typescript
 // Zone.js detects this automatically
 setTimeout(() => {
@@ -70,6 +74,7 @@ setTimeout(() => {
 ```
 
 **With Zoneless + Signals:**
+
 ```typescript
 // Signal automatically triggers change detection
 count = signal(0);
@@ -80,12 +85,16 @@ setTimeout(() => {
 ```
 
 **With Zoneless + RxJS (when needed):**
+
 ```typescript
 // Use toSignal() to bridge RxJS → Signals
-searchResults = toSignal(this.searchTerm$.pipe(
-  debounceTime(300),
-  switchMap(term => this.api.search(term))
-), { initialValue: [] });
+searchResults = toSignal(
+  this.searchTerm$.pipe(
+    debounceTime(300),
+    switchMap((term) => this.api.search(term))
+  ),
+  { initialValue: [] }
+);
 ```
 
 ## Implementation
@@ -95,9 +104,7 @@ searchResults = toSignal(this.searchTerm$.pipe(
 ```typescript
 // main.ts
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  provideExperimentalZonelessChangeDetection
-} from '@angular/core';
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { AppComponent } from './app/app.component';
 
 bootstrapApplication(AppComponent, {
@@ -107,7 +114,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(),
     // Other providers...
   ],
-}).catch(err => console.error(err));
+}).catch((err) => console.error(err));
 ```
 
 ### Remove Zone.js Import
@@ -120,6 +127,7 @@ bootstrapApplication(AppComponent, {
 ### Component Patterns
 
 #### ✅ Good: Using Signals
+
 ```typescript
 @Component({
   selector: 'app-task-list',
@@ -139,6 +147,7 @@ export class TaskListComponent {
 ```
 
 #### ✅ Good: RxJS with toSignal()
+
 ```typescript
 @Component({
   selector: 'app-search',
@@ -157,7 +166,7 @@ export class SearchComponent {
     this.searchTerm$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap(term => this.api.search(term))
+      switchMap((term) => this.api.search(term))
     ),
     { initialValue: [] }
   );
@@ -170,9 +179,10 @@ export class SearchComponent {
 ```
 
 #### ❌ Bad: Raw async without signals
+
 ```typescript
 @Component({
-  template: `<div>{{ count }}</div>`
+  template: `<div>{{ count }}</div>`,
 })
 export class CounterComponent {
   count = 0;
@@ -187,9 +197,10 @@ export class CounterComponent {
 ```
 
 #### ✅ Fixed: Use signals
+
 ```typescript
 @Component({
-  template: `<div>{{ count() }}</div>`
+  template: `<div>{{ count() }}</div>`,
 })
 export class CounterComponent {
   count = signal(0);
@@ -197,7 +208,7 @@ export class CounterComponent {
   constructor() {
     // ✅ Will trigger change detection
     setTimeout(() => {
-      this.count.update(n => n + 1); // View updates!
+      this.count.update((n) => n + 1); // View updates!
     }, 1000);
   }
 }
@@ -231,14 +242,14 @@ export class TaskStateService {
 
     // Subscribe and update signal
     this.api.getTasks().subscribe({
-      next: tasks => {
+      next: (tasks) => {
         this.tasksSignal.set(tasks); // Triggers change detection
         this.loadingSignal.set(false);
       },
-      error: err => {
+      error: (err) => {
         console.error(err);
         this.loadingSignal.set(false);
-      }
+      },
     });
   }
 }
@@ -248,16 +259,14 @@ export class TaskStateService {
 
 ```typescript
 @Component({
-  template: `
-    <button (click)="increment()">{{ count() }}</button>
-  `,
+  template: ` <button (click)="increment()">{{ count() }}</button> `,
 })
 export class CounterComponent {
   count = signal(0);
 
   // ✅ Event handlers trigger change detection automatically
   increment() {
-    this.count.update(n => n + 1);
+    this.count.update((n) => n + 1);
   }
 }
 ```
@@ -318,18 +327,19 @@ describe('TaskComponent', () => {
 
 ### Risks & Mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| Breaking changes | Pin Angular version, test before upgrading |
+| Risk                       | Mitigation                                   |
+| -------------------------- | -------------------------------------------- |
+| Breaking changes           | Pin Angular version, test before upgrading   |
 | Third-party library issues | Test libraries, avoid Zone.js-dependent libs |
-| Missed change detection | Use signals everywhere, test thoroughly |
-| Team unfamiliarity | Solo project, not a concern |
+| Missed change detection    | Use signals everywhere, test thoroughly      |
+| Team unfamiliarity         | Solo project, not a concern                  |
 
 ## Escape Hatch (If Needed)
 
 If zoneless causes issues:
 
 1. **Re-enable Zone.js temporarily**
+
    ```typescript
    // main.ts
    import 'zone.js'; // Add back
@@ -351,16 +361,19 @@ If zoneless causes issues:
 ## Third-Party Library Compatibility
 
 ### PrimeNG
+
 - ✅ **Compatible** - Works with zoneless
 - Uses standard Angular patterns
 - No Zone.js dependency
 
 ### Angular CDK (Drag & Drop)
+
 - ✅ **Compatible** - Works with zoneless
 - Official Angular library
 - Signals-aware in Angular 20
 
 ### RxJS
+
 - ✅ **Compatible** - Use `toSignal()` bridge
 - Most operators work fine
 - Just convert to signals at component boundary
@@ -368,6 +381,7 @@ If zoneless causes issues:
 ## Performance Benchmarks
 
 Estimated improvements:
+
 - **Bundle size:** -50KB (~5-7% for typical app)
 - **Initial load:** -50-100ms (Zone.js parsing)
 - **Change detection:** 10-30% faster (no Zone patching)
@@ -376,11 +390,13 @@ Estimated improvements:
 ## Future Angular Versions
 
 ### Angular 21+ (Expected)
+
 - Zoneless likely becomes default
 - Zone.js fully optional
 - Even better signal integration
 
 ### Angular 22+ (Speculation)
+
 - Zone.js possibly deprecated
 - Signals everywhere
 - This decision will age well
@@ -388,16 +404,19 @@ Estimated improvements:
 ## Alternatives Considered
 
 ### Keep Zone.js with OnPush
+
 **Pros:** Mature, well-understood, safer
 **Cons:** Still includes Zone.js, less future-proof
 **Verdict:** Not taking advantage of Angular 20 improvements
 
 ### Zone.js with ChangeDetectorRef
+
 **Pros:** Maximum control
 **Cons:** Manual, error-prone, verbose
 **Verdict:** Worse than signals
 
 ### Wait for Angular 21 Stable Zoneless
+
 **Pros:** More stable
 **Cons:** Delay project, miss learning opportunity
 **Verdict:** Experimental is acceptable for side project

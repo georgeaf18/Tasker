@@ -1,6 +1,7 @@
 # Technical Architecture Plan
 
 ## Project Overview
+
 **Target:** v0.1 Alpha - Visual task management with backlog sidebar and kanban board
 **Stack:** Angular 20 (frontend) + NestJS REST API (backend) + PostgreSQL (database)
 **Architecture:** Nx integrated monorepo (single package.json)
@@ -11,6 +12,7 @@
 ## Frontend Architecture (Angular 20)
 
 ### Core Technologies
+
 - **Framework:** Angular 20.x (latest)
 - **Component Model:** Standalone components only (no NgModules)
 - **State Management:** Signals (built-in, reactive)
@@ -22,6 +24,7 @@
 ### Angular Configuration
 
 #### angular.json Key Settings
+
 ```json
 {
   "projects": {
@@ -45,6 +48,7 @@
 ```
 
 #### main.ts (Zoneless Bootstrap)
+
 ```typescript
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideExperimentalZonelessChangeDetection } from '@angular/core';
@@ -57,13 +61,14 @@ bootstrapApplication(AppComponent, {
     provideExperimentalZonelessChangeDetection(), // Zoneless mode
     provideRouter(routes), // Router with lazy loading
     // Other providers...
-  ]
+  ],
 });
 ```
 
 ### Signal-Based State Management
 
 #### Task State Service Example
+
 ```typescript
 import { Injectable, signal, computed } from '@angular/core';
 
@@ -77,13 +82,9 @@ export class TaskStateService {
   tasks = this.tasksSignal.asReadonly();
   loading = this.loadingSignal.asReadonly();
 
-  backlogTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === 'backlog')
-  );
+  backlogTasks = computed(() => this.tasksSignal().filter((t) => t.status === 'backlog'));
 
-  todayTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === 'today')
-  );
+  todayTasks = computed(() => this.tasksSignal().filter((t) => t.status === 'today'));
 
   // Methods to update state
   setTasks(tasks: Task[]) {
@@ -91,7 +92,7 @@ export class TaskStateService {
   }
 
   addTask(task: Task) {
-    this.tasksSignal.update(tasks => [...tasks, task]);
+    this.tasksSignal.update((tasks) => [...tasks, task]);
   }
 }
 ```
@@ -99,6 +100,7 @@ export class TaskStateService {
 ### Lazy Loading Strategy
 
 #### Route Configuration (app.routes.ts)
+
 ```typescript
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
@@ -107,41 +109,40 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: '/dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/dashboard.component')
-      .then(m => m.DashboardComponent),
-    canActivate: [authGuard] // Protected route
+    loadComponent: () =>
+      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    canActivate: [authGuard], // Protected route
   },
   {
     path: 'tasks',
-    loadChildren: () => import('./features/tasks/tasks.routes')
-      .then(m => m.TASKS_ROUTES),
-    canActivate: [authGuard]
+    loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.TASKS_ROUTES),
+    canActivate: [authGuard],
   },
   {
     path: 'settings',
-    loadComponent: () => import('./features/settings/settings.component')
-      .then(m => m.SettingsComponent),
-    canActivate: [authGuard]
+    loadComponent: () =>
+      import('./features/settings/settings.component').then((m) => m.SettingsComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/login.component')
-      .then(m => m.LoginComponent)
+    loadComponent: () => import('./features/auth/login.component').then((m) => m.LoginComponent),
   },
   {
     path: '**',
-    redirectTo: '/dashboard'
-  }
+    redirectTo: '/dashboard',
+  },
 ];
 ```
 
 ### Protected Routes (Auth Guard)
 
 #### auth.guard.ts
+
 ```typescript
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
@@ -167,21 +168,24 @@ export const authGuard: CanActivateFn = (route, state) => {
 ### View Transitions API Integration
 
 #### app.config.ts
+
 ```typescript
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes,
+    provideRouter(
+      routes,
       withViewTransitions() // Enable View Transitions API
     ),
     // Other providers...
-  ]
+  ],
 };
 ```
 
 #### CSS for View Transitions
+
 ```css
 /* global.css */
 ::view-transition-old(root),
@@ -202,11 +206,10 @@ export const appConfig: ApplicationConfig = {
 ### Tailwind CSS + PrimeNG Setup
 
 #### tailwind.config.js
+
 ```javascript
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
@@ -229,20 +232,21 @@ module.exports = {
         xl: '33px',
       },
       spacing: {
-        'xs': '8px',
-        'sm': '16px',
-        'md': '24px',
-        'lg': '32px',
-        'xl': '48px',
+        xs: '8px',
+        sm: '16px',
+        md: '24px',
+        lg: '32px',
+        xl: '48px',
         '2xl': '64px',
-      }
+      },
     },
   },
   plugins: [],
-}
+};
 ```
 
 #### PrimeNG Configuration
+
 ```typescript
 // app.config.ts
 import { providePrimeNG } from 'primeng/config';
@@ -257,13 +261,13 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '[data-theme="dark"]',
           cssLayer: {
             name: 'primeng',
-            order: 'tailwind-base, primeng, tailwind-utilities'
-          }
-        }
-      }
+            order: 'tailwind-base, primeng, tailwind-utilities',
+          },
+        },
+      },
     }),
     // Other providers...
-  ]
+  ],
 };
 ```
 
@@ -426,6 +430,7 @@ apps/frontend/
 ## Backend Architecture (NestJS REST API)
 
 ### Core Technologies
+
 - **Framework:** NestJS 10.x
 - **Runtime:** Node.js 20+ LTS
 - **Language:** TypeScript 5.x
@@ -484,6 +489,7 @@ apps/backend/
 ### Prisma + PostgreSQL Configuration
 
 #### prisma/schema.prisma
+
 ```prisma
 generator client {
   provider = "prisma-client-js"
@@ -538,6 +544,7 @@ enum Workspace {
 ```
 
 #### prisma/prisma.service.ts
+
 ```typescript
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
@@ -555,6 +562,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 ```
 
 #### prisma/prisma.module.ts
+
 ```typescript
 import { Module, Global } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -568,6 +576,7 @@ export class PrismaModule {}
 ```
 
 #### app.module.ts
+
 ```typescript
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -591,6 +600,7 @@ export class AppModule {}
 ### REST Controllers and DTOs
 
 #### tasks/tasks.controller.ts
+
 ```typescript
 import {
   Controller,
@@ -616,10 +626,7 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  findAll(
-    @Query('status') status?: TaskStatus,
-    @Query('workspace') workspace?: Workspace,
-  ) {
+  findAll(@Query('status') status?: TaskStatus, @Query('workspace') workspace?: Workspace) {
     return this.tasksService.findAll({ status, workspace });
   }
 
@@ -635,18 +642,12 @@ export class TasksController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateTaskDto: UpdateTaskDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
   }
 
   @Patch(':id/status')
-  updateStatus(
-    @Param('id', ParseIntPipe) id: number,
-    @Body('status') status: TaskStatus,
-  ) {
+  updateStatus(@Param('id', ParseIntPipe) id: number, @Body('status') status: TaskStatus) {
     return this.tasksService.updateStatus(id, status);
   }
 
@@ -659,6 +660,7 @@ export class TasksController {
 ```
 
 #### tasks/dto/create-task.dto.ts
+
 ```typescript
 import { IsString, IsEnum, IsOptional, IsBoolean, IsDateString, IsInt } from 'class-validator';
 import { TaskStatus, Workspace } from '@prisma/client';
@@ -693,6 +695,7 @@ export class CreateTaskDto {
 ```
 
 #### tasks/dto/update-task.dto.ts
+
 ```typescript
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateTaskDto } from './create-task.dto';
@@ -704,32 +707,34 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {}
 
 #### Task Endpoints
 
-| Method | Endpoint | Description | Request Body | Response |
-|--------|----------|-------------|--------------|----------|
-| GET | `/api/tasks` | Get all tasks (with optional filters) | - | `Task[]` |
-| GET | `/api/tasks/:id` | Get single task by ID | - | `Task` |
-| POST | `/api/tasks` | Create new task | `CreateTaskDto` | `Task` |
-| PUT | `/api/tasks/:id` | Update task (full update) | `UpdateTaskDto` | `Task` |
-| PATCH | `/api/tasks/:id/status` | Update task status only | `{ status: TaskStatus }` | `Task` |
-| DELETE | `/api/tasks/:id` | Delete task | - | `204 No Content` |
+| Method | Endpoint                | Description                           | Request Body             | Response         |
+| ------ | ----------------------- | ------------------------------------- | ------------------------ | ---------------- |
+| GET    | `/api/tasks`            | Get all tasks (with optional filters) | -                        | `Task[]`         |
+| GET    | `/api/tasks/:id`        | Get single task by ID                 | -                        | `Task`           |
+| POST   | `/api/tasks`            | Create new task                       | `CreateTaskDto`          | `Task`           |
+| PUT    | `/api/tasks/:id`        | Update task (full update)             | `UpdateTaskDto`          | `Task`           |
+| PATCH  | `/api/tasks/:id/status` | Update task status only               | `{ status: TaskStatus }` | `Task`           |
+| DELETE | `/api/tasks/:id`        | Delete task                           | -                        | `204 No Content` |
 
 #### Channel Endpoints
 
-| Method | Endpoint | Description | Request Body | Response |
-|--------|----------|-------------|--------------|----------|
-| GET | `/api/channels` | Get all channels | - | `Channel[]` |
-| GET | `/api/channels/:id` | Get single channel by ID | - | `Channel` |
-| POST | `/api/channels` | Create new channel | `CreateChannelDto` | `Channel` |
-| PUT | `/api/channels/:id` | Update channel | `UpdateChannelDto` | `Channel` |
-| DELETE | `/api/channels/:id` | Delete channel | - | `204 No Content` |
+| Method | Endpoint            | Description              | Request Body       | Response         |
+| ------ | ------------------- | ------------------------ | ------------------ | ---------------- |
+| GET    | `/api/channels`     | Get all channels         | -                  | `Channel[]`      |
+| GET    | `/api/channels/:id` | Get single channel by ID | -                  | `Channel`        |
+| POST   | `/api/channels`     | Create new channel       | `CreateChannelDto` | `Channel`        |
+| PUT    | `/api/channels/:id` | Update channel           | `UpdateChannelDto` | `Channel`        |
+| DELETE | `/api/channels/:id` | Delete channel           | -                  | `204 No Content` |
 
 #### Query Parameters
 
 **GET `/api/tasks`:**
+
 - `status` (optional): Filter by task status (`BACKLOG`, `TODAY`, `IN_PROGRESS`, `DONE`)
 - `workspace` (optional): Filter by workspace (`WORK`, `PERSONAL`)
 
 Example:
+
 ```
 GET /api/tasks?status=TODAY&workspace=WORK
 ```
@@ -737,6 +742,7 @@ GET /api/tasks?status=TODAY&workspace=WORK
 #### Example Responses
 
 **GET `/api/tasks`:**
+
 ```json
 [
   {
@@ -762,6 +768,7 @@ GET /api/tasks?status=TODAY&workspace=WORK
 
 **POST `/api/tasks`:**
 Request:
+
 ```json
 {
   "title": "Morning standup",
@@ -773,6 +780,7 @@ Request:
 ```
 
 Response:
+
 ```json
 {
   "id": 23,
@@ -793,6 +801,7 @@ Response:
 ## Development Workflow (Nx Monorepo)
 
 ### Root Structure
+
 ```
 tasker/
 ├── apps/
@@ -808,6 +817,7 @@ tasker/
 ```
 
 ### package.json (Single, Root Level)
+
 ```json
 {
   "name": "tasker",
@@ -864,6 +874,7 @@ tasker/
 ### Environment Configuration
 
 #### .env (Root Level)
+
 ```
 # Backend
 PORT=3000
@@ -877,6 +888,7 @@ API_URL=http://localhost:3000
 ### Nx Configuration
 
 #### nx.json
+
 ```json
 {
   "npmScope": "tasker",
@@ -906,6 +918,7 @@ API_URL=http://localhost:3000
 ### Proxy Configuration (Frontend)
 
 #### apps/frontend/proxy.conf.json
+
 ```json
 {
   "/api": {
@@ -950,12 +963,14 @@ npm run prisma:reset
 The seed command populates the database with realistic test data:
 
 **What gets created:**
+
 - 6 channels (3 work, 3 personal)
 - 22 tasks across different statuses
 - 7 routine tasks (daily habits)
 - Tasks in all states: Backlog, Today, In Progress, Done
 
 **Example output:**
+
 ```
 🌱 Seeding database...
 📂 Creating channels...
@@ -982,6 +997,7 @@ See `docs/DATABASE_SCHEMA.md` for complete seed script implementation.
 ## Key Configuration Files
 
 ### .gitignore
+
 ```
 # Dependencies
 node_modules/
@@ -1028,6 +1044,7 @@ temp/
 ```
 
 ### .editorconfig
+
 ```ini
 root = true
 
@@ -1047,6 +1064,7 @@ quote_type = single
 ```
 
 ### tsconfig.json (Frontend)
+
 ```json
 {
   "compileOnSave": false,
@@ -1067,10 +1085,7 @@ quote_type = single
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
+    "lib": ["ES2022", "dom"],
     "paths": {
       "@app/*": ["src/app/*"],
       "@core/*": ["src/app/core/*"],
@@ -1088,6 +1103,7 @@ quote_type = single
 ```
 
 ### tsconfig.json (Backend)
+
 ```json
 {
   "compilerOptions": {
@@ -1120,11 +1136,13 @@ quote_type = single
 ## Testing Strategy
 
 ### Frontend Testing
+
 - **Unit Tests:** Jasmine + Karma (Angular default)
 - **E2E Tests:** Playwright (recommended over Protractor)
 - **Test Signals:** Use TestBed with signal testing utilities
 
 ### Backend Testing
+
 - **Unit Tests:** Jest (NestJS default)
 - **E2E Tests:** Supertest + Jest
 - **Database:** PostgreSQL test database or Docker container
@@ -1134,6 +1152,7 @@ quote_type = single
 ## Performance Optimizations
 
 ### Frontend
+
 1. **Lazy Loading:** All feature routes lazy loaded
 2. **OnPush (not needed):** Zoneless + signals handle this automatically
 3. **Virtual Scrolling:** For long task lists (PrimeNG p-virtualScroller)
@@ -1141,6 +1160,7 @@ quote_type = single
 5. **Bundle Analysis:** Use webpack-bundle-analyzer
 
 ### Backend
+
 1. **Database Indexes:** On frequently queried columns (status, workspace) - defined in Prisma schema
 2. **Query Optimization:** Use Prisma's efficient query engine and select specific fields
 3. **Response Caching:** Redis (v1.0+) for frequently accessed data
@@ -1152,6 +1172,7 @@ quote_type = single
 ## Security Considerations
 
 ### v0.1 (No Auth)
+
 - Input validation with class-validator in DTOs
 - SQL injection prevention (Prisma handles parameterized queries)
 - CORS configuration for frontend origin only
@@ -1160,6 +1181,7 @@ quote_type = single
 - Helmet.js for security headers
 
 ### v0.5+ (With Auth)
+
 - JWT authentication
 - Password hashing (bcrypt)
 - CSRF protection
@@ -1171,6 +1193,7 @@ quote_type = single
 ## Deployment Strategy (Separate Servers)
 
 ### Overview
+
 - **Frontend:** Static site hosting (Vercel, Netlify, AWS S3+CloudFront)
 - **Backend:** Node.js hosting (Railway, Render, Fly.io, AWS ECS)
 - **Database:** Managed PostgreSQL (Supabase, Neon, Railway, AWS RDS)
@@ -1178,6 +1201,7 @@ quote_type = single
 ### Frontend Deployment
 
 #### Vercel (Recommended)
+
 ```bash
 # Install Vercel CLI
 npm install -g vercel
@@ -1191,6 +1215,7 @@ vercel --prod
 ```
 
 **vercel.json:**
+
 ```json
 {
   "rewrites": [
@@ -1222,6 +1247,7 @@ vercel --prod
 ```
 
 #### Environment Variables (Vercel)
+
 ```
 API_URL=https://api.yourdomain.com
 ```
@@ -1229,6 +1255,7 @@ API_URL=https://api.yourdomain.com
 ### Backend Deployment
 
 #### Railway (Recommended)
+
 ```bash
 # Install Railway CLI
 npm install -g @railway/cli
@@ -1247,6 +1274,7 @@ railway up
 ```
 
 **railway.json:**
+
 ```json
 {
   "build": {
@@ -1263,6 +1291,7 @@ railway up
 ```
 
 #### Environment Variables (Railway)
+
 ```
 PORT=3000
 NODE_ENV=production
@@ -1272,6 +1301,7 @@ JWT_SECRET=your-secret-key
 ```
 
 #### Dockerfile (Alternative)
+
 ```dockerfile
 FROM node:20-alpine
 
@@ -1294,12 +1324,14 @@ CMD ["node", "dist/apps/backend/main.js"]
 ### Database Deployment
 
 #### Neon (Serverless PostgreSQL - Recommended)
+
 1. Create account at https://neon.tech
 2. Create new project
 3. Copy connection string
 4. Set `DATABASE_URL` in backend environment
 
 #### Railway PostgreSQL
+
 ```bash
 # Add PostgreSQL to Railway project
 railway add postgresql
@@ -1314,7 +1346,9 @@ railway run npm run prisma:migrate deploy
 ### CI/CD Pipeline
 
 #### GitHub Actions
+
 **.github/workflows/deploy.yml:**
+
 ```yaml
 name: Deploy
 
@@ -1370,6 +1404,7 @@ jobs:
 ### Health Checks
 
 #### Backend Health Endpoint
+
 ```typescript
 // main.ts
 app.get('/health', (req, res) => {
@@ -1385,6 +1420,7 @@ app.get('/health', (req, res) => {
 ### Monitoring & Logging
 
 **Production Setup:**
+
 - **Application Monitoring:** Sentry for error tracking
 - **Performance:** New Relic or Datadog APM
 - **Logs:** Railway logs, AWS CloudWatch, or Papertrail
@@ -1436,6 +1472,7 @@ app.get('/health', (req, res) => {
 ## Dependencies Overview
 
 ### Core Dependencies (Single package.json)
+
 ```json
 {
   "dependencies": {
@@ -1479,57 +1516,68 @@ app.get('/health', (req, res) => {
 ## Architecture Decision Records (ADRs)
 
 ### ADR-001: Use Signals Instead of RxJS for State
+
 **Decision:** Use Angular Signals for all component and service state management
 **Rationale:**
+
 - Native to Angular 20
 - Better performance with zoneless
 - Simpler mental model
 - Automatic dependency tracking
-**Alternatives Considered:** NgRx, RxJS BehaviorSubjects, Akita
+  **Alternatives Considered:** NgRx, RxJS BehaviorSubjects, Akita
 
 ### ADR-002: Use Prisma with PostgreSQL
+
 **Decision:** Prisma as ORM with PostgreSQL database
 **Rationale:**
+
 - Type-safe database client
 - Excellent TypeScript support
 - Modern migration system
 - GraphQL integrates naturally
 - Production-ready from day 1
-**Alternatives Considered:** TypeORM, MikroORM, Sequelize
+  **Alternatives Considered:** TypeORM, MikroORM, Sequelize
 
 ### ADR-003: Use PrimeNG + Tailwind
+
 **Decision:** PrimeNG components with Tailwind utility classes
 **Rationale:**
+
 - PrimeNG provides complex components (datepicker, dropdown, drag-drop)
 - Tailwind for custom styling and layout
 - Both support theming (light/dark mode)
 - No component library lock-in for custom components
-**Alternatives Considered:** Material, Ant Design, Headless UI + Tailwind
+  **Alternatives Considered:** Material, Ant Design, Headless UI + Tailwind
 
 ### ADR-004: Zoneless Change Detection
+
 **Decision:** Enable experimental zoneless mode
 **Rationale:**
+
 - Better performance (no zone.js overhead)
 - Forces best practices (signals, OnPush equivalent)
 - Future-proof (Angular's direction)
 - Works well with signals
-**Alternatives Considered:** Keep Zone.js, OnPush strategy
+  **Alternatives Considered:** Keep Zone.js, OnPush strategy
 
 ### ADR-005: Use Nx Monorepo
+
 **Decision:** Nx integrated monorepo with single package.json
 **Rationale:**
+
 - Single node_modules (faster installs, less disk space)
 - Shared tooling configuration
 - Intelligent build caching
 - Dependency graph visualization
 - Easier deployment pipeline
-**Alternatives Considered:** npm workspaces, Turborepo, Lerna
+  **Alternatives Considered:** npm workspaces, Turborepo, Lerna
 
 ---
 
 ## Estimated Timeline
 
 ### Day 1: Nx Monorepo Setup (4-6 hours)
+
 - Initialize Nx workspace with Angular + NestJS
 - Set up Prisma + PostgreSQL connection
 - Configure REST controllers
@@ -1537,12 +1585,14 @@ app.get('/health', (req, res) => {
 - Verify dev servers run (`nx serve backend`, `nx serve frontend`)
 
 ### Day 2: Backend REST API (4-6 hours)
+
 - Implement REST controllers (tasks, channels)
 - Create Prisma service layer
 - Add input validation with DTOs
 - Test with Postman or similar
 
 ### Day 3: Frontend Foundation (4-6 hours)
+
 - Set up HttpClient service
 - Create typed API service interfaces
 - Create task state service with signals
@@ -1550,6 +1600,7 @@ app.get('/health', (req, res) => {
 - Set up routing and guards
 
 ### Day 4-7: Feature Development
+
 - Build backlog sidebar
 - Build kanban board
 - Implement drag & drop

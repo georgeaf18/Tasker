@@ -8,6 +8,7 @@
 ## Context
 
 For Tasker's UI, we need:
+
 - Pre-built complex components (datepicker, dropdown, drag-drop)
 - Dyslexia-friendly, ADHD-friendly design system
 - Light/dark mode support
@@ -19,6 +20,7 @@ For Tasker's UI, we need:
 ## Decision
 
 We will use:
+
 - **PrimeNG** for complex pre-built components
 - **Tailwind CSS** for utility-first styling and custom components
 - **PrimeNG Themes** customized to match design system
@@ -92,6 +94,7 @@ We will use:
 ### Why Not Other Options?
 
 **Angular Material**
+
 - ❌ Less flexible theming
 - ❌ Material Design aesthetic (not our design)
 - ❌ Heavier bundle size
@@ -99,18 +102,21 @@ We will use:
 - **Verdict:** Too opinionated on design
 
 **Ant Design Angular**
+
 - ❌ Less active development
 - ❌ Smaller community
 - ❌ Fewer components than PrimeNG
 - **Verdict:** Less mature
 
 **Headless UI + Tailwind**
+
 - ✅ Full control
 - ❌ Must build everything from scratch
 - ❌ No complex components (datepicker, dropdown)
 - **Verdict:** Too much work for v0.1
 
 **Bootstrap + ng-bootstrap**
+
 - ❌ jQuery-like patterns
 - ❌ Dated aesthetic
 - ❌ Less flexible
@@ -123,9 +129,7 @@ We will use:
 ```javascript
 // tailwind.config.js
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
@@ -165,7 +169,7 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};
 ```
 
 ### PrimeNG Theme Customization
@@ -245,11 +249,7 @@ export const appConfig: ApplicationConfig = {
       </p>
 
       <!-- PrimeNG Button with Tailwind classes -->
-      <p-button
-        label="Complete"
-        icon="pi pi-check"
-        class="w-full"
-        (onClick)="onComplete()" />
+      <p-button label="Complete" icon="pi pi-check" class="w-full" (onClick)="onComplete()" />
     </p-card>
   `,
 })
@@ -277,6 +277,7 @@ export class TaskCardComponent {}
 ## Component Usage Guidelines
 
 ### Use PrimeNG For:
+
 - ✅ Calendar/Datepicker
 - ✅ Dropdown/Select
 - ✅ Dialog/Modal
@@ -287,6 +288,7 @@ export class TaskCardComponent {}
 - ✅ File upload (future)
 
 ### Use Tailwind + Custom Components For:
+
 - ✅ Layout (grid, flexbox)
 - ✅ Task cards
 - ✅ Kanban columns
@@ -299,6 +301,7 @@ export class TaskCardComponent {}
 ## Dyslexia-Friendly Implementation
 
 ### Typography Classes
+
 ```css
 /* utilities.css */
 @layer utilities {
@@ -324,24 +327,24 @@ export class TaskCardComponent {}
 ```
 
 ### Usage in Templates
+
 ```html
 <div class="text-dyslexia text-text-primary reading-width">
-  <p class="leading-relaxed tracking-wide">
-    Task description with dyslexia-friendly formatting
-  </p>
+  <p class="leading-relaxed tracking-wide">Task description with dyslexia-friendly formatting</p>
 </div>
 ```
 
 ## Dark Mode Implementation
 
 ### Theme Toggle Service
+
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private isDarkMode = signal(false);
 
   toggleTheme() {
-    this.isDarkMode.update(dark => !dark);
+    this.isDarkMode.update((dark) => !dark);
     this.applyTheme();
   }
 
@@ -359,6 +362,7 @@ export class ThemeService {
 ## Consequences
 
 ### Positive
+
 - ✅ Fast development with pre-built components
 - ✅ Full control over styling with Tailwind
 - ✅ Consistent design system via configuration
@@ -368,6 +372,7 @@ export class ThemeService {
 - ✅ Dark mode support
 
 ### Negative
+
 - ⚠️ Two styling systems to learn (manageable)
 - ⚠️ CSS layer conflicts possible (mitigated with layers)
 - ⚠️ PrimeNG + Tailwind bundle slightly larger than pure Tailwind
@@ -375,31 +380,35 @@ export class ThemeService {
 
 ### Risks & Mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| Style conflicts | Use CSS layers, test thoroughly |
-| Bundle size | Tree-shake unused PrimeNG components |
-| PrimeNG breaking changes | Pin versions, test before upgrading |
-| Over-reliance on PrimeNG | Use only for complex components |
+| Risk                     | Mitigation                           |
+| ------------------------ | ------------------------------------ |
+| Style conflicts          | Use CSS layers, test thoroughly      |
+| Bundle size              | Tree-shake unused PrimeNG components |
+| PrimeNG breaking changes | Pin versions, test before upgrading  |
+| Over-reliance on PrimeNG | Use only for complex components      |
 
 ## Alternatives Considered
 
 ### Pure Tailwind + Headless UI
+
 **Pros:** Full control, tiny bundle
 **Cons:** Must build everything (datepicker, dropdown, etc.)
 **Verdict:** Too much work for v0.1
 
 ### Angular Material + Custom CSS
+
 **Pros:** Official Angular library
 **Cons:** Material Design aesthetic, less flexible theming
 **Verdict:** Design doesn't match our needs
 
 ### PrimeNG Only (No Tailwind)
+
 **Pros:** Consistent theme, one system
 **Cons:** Less flexible for custom styling, slower custom components
 **Verdict:** Not enough control for dyslexia-friendly design
 
 ### Bootstrap + ng-bootstrap
+
 **Pros:** Familiar, comprehensive
 **Cons:** jQuery patterns, dated, harder to customize
 **Verdict:** Not modern enough
@@ -407,6 +416,7 @@ export class ThemeService {
 ## Performance Optimization
 
 ### Tree-Shaking PrimeNG
+
 ```typescript
 // Only import components we use
 import { ButtonModule } from 'primeng/button';
@@ -416,13 +426,14 @@ import { CalendarModule } from 'primeng/calendar';
 ```
 
 ### Tailwind JIT Mode
+
 ```javascript
 // tailwind.config.js
 module.exports = {
   mode: 'jit', // Just-in-time mode
   purge: ['./src/**/*.{html,ts}'], // Remove unused CSS
   // ...
-}
+};
 ```
 
 ## References

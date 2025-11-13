@@ -10,25 +10,31 @@
 ## Schema Evolution Strategy
 
 ### v0.1 (Basic Task Management)
+
 - `tasks` - Core task data
 - `channels` - Task organization (like Slack channels)
 
 ### v0.2 (Routines & Streaks)
+
 - Add: `routine_completions` - Track daily routine completions
 - Add: `streaks` - Streak tracking data
 
 ### v0.3 (Subtasks)
+
 - Add: `parent_id` to `tasks` - Self-referencing for subtasks
 
 ### v0.4 (Archives)
+
 - Add: `archived_at` to `tasks` - Soft delete/archive
 
 ### v0.5 (Integrations)
+
 - Add: `integrations` - Jira, Calendar, etc.
 - Add: `external_tasks` - Synced from external sources
 - Add: `time_logs` - Time tracking data
 
 ### v1.0+ (Users & Auth)
+
 - Add: `users` - User accounts
 - Add: `user_id` foreign keys to all tables
 
@@ -61,19 +67,21 @@
 
 **Purpose:** Organize tasks into categories within workspaces (work/personal)
 
-| Column | Type | Constraints | Description |
-|--------|------|-------------|-------------|
-| `id` | INTEGER | PRIMARY KEY AUTOINCREMENT | Unique channel ID |
-| `name` | VARCHAR(255) | NOT NULL | Channel name (e.g., "Projects", "Errands") |
-| `workspace` | ENUM('work', 'personal') | NOT NULL | Workspace this channel belongs to |
-| `color` | VARCHAR(7) | NULL | Hex color for visual identification |
-| `created_at` | TIMESTAMP | NOT NULL DEFAULT NOW | When channel was created |
+| Column       | Type                     | Constraints               | Description                                |
+| ------------ | ------------------------ | ------------------------- | ------------------------------------------ |
+| `id`         | INTEGER                  | PRIMARY KEY AUTOINCREMENT | Unique channel ID                          |
+| `name`       | VARCHAR(255)             | NOT NULL                  | Channel name (e.g., "Projects", "Errands") |
+| `workspace`  | ENUM('work', 'personal') | NOT NULL                  | Workspace this channel belongs to          |
+| `color`      | VARCHAR(7)               | NULL                      | Hex color for visual identification        |
+| `created_at` | TIMESTAMP                | NOT NULL DEFAULT NOW      | When channel was created                   |
 
 **Indexes:**
+
 - PRIMARY KEY on `id`
 - INDEX on `workspace`
 
 **Sample Data:**
+
 ```sql
 INSERT INTO channels (name, workspace, color) VALUES
   ('Projects', 'work', '#8B7BB8'),
@@ -86,20 +94,21 @@ INSERT INTO channels (name, workspace, color) VALUES
 
 **Purpose:** Store all task data
 
-| Column | Type | Constraints | Description |
-|--------|------|-------------|-------------|
-| `id` | INTEGER | PRIMARY KEY AUTOINCREMENT | Unique task ID |
-| `title` | VARCHAR(500) | NOT NULL | Task title/summary |
-| `description` | TEXT | NULL | Full task description (Markdown) |
-| `workspace` | ENUM('work', 'personal') | NOT NULL DEFAULT 'personal' | Work or personal task |
-| `channel_id` | INTEGER | NULL, FK → channels(id) | Category within workspace |
-| `status` | ENUM('backlog', 'today', 'in_progress', 'done') | NOT NULL DEFAULT 'backlog' | Current task status |
-| `due_date` | TIMESTAMP | NULL | When task is due |
-| `is_routine` | BOOLEAN | NOT NULL DEFAULT FALSE | Whether this is a daily routine |
-| `created_at` | TIMESTAMP | NOT NULL DEFAULT NOW | When task was created |
-| `updated_at` | TIMESTAMP | NOT NULL DEFAULT NOW | Last update timestamp |
+| Column        | Type                                            | Constraints                 | Description                      |
+| ------------- | ----------------------------------------------- | --------------------------- | -------------------------------- |
+| `id`          | INTEGER                                         | PRIMARY KEY AUTOINCREMENT   | Unique task ID                   |
+| `title`       | VARCHAR(500)                                    | NOT NULL                    | Task title/summary               |
+| `description` | TEXT                                            | NULL                        | Full task description (Markdown) |
+| `workspace`   | ENUM('work', 'personal')                        | NOT NULL DEFAULT 'personal' | Work or personal task            |
+| `channel_id`  | INTEGER                                         | NULL, FK → channels(id)     | Category within workspace        |
+| `status`      | ENUM('backlog', 'today', 'in_progress', 'done') | NOT NULL DEFAULT 'backlog'  | Current task status              |
+| `due_date`    | TIMESTAMP                                       | NULL                        | When task is due                 |
+| `is_routine`  | BOOLEAN                                         | NOT NULL DEFAULT FALSE      | Whether this is a daily routine  |
+| `created_at`  | TIMESTAMP                                       | NOT NULL DEFAULT NOW        | When task was created            |
+| `updated_at`  | TIMESTAMP                                       | NOT NULL DEFAULT NOW        | Last update timestamp            |
 
 **Indexes:**
+
 - PRIMARY KEY on `id`
 - INDEX on `status` (frequent filtering)
 - INDEX on `workspace` (frequent filtering)
@@ -107,9 +116,11 @@ INSERT INTO channels (name, workspace, color) VALUES
 - INDEX on `due_date` (for "due soon" queries)
 
 **Foreign Keys:**
+
 - `channel_id` → `channels(id)` ON DELETE SET NULL
 
 **Sample Data:**
+
 ```sql
 INSERT INTO tasks (title, description, workspace, channel_id, status, due_date, is_routine) VALUES
   ('Review PRs', 'Review team pull requests', 'work', 1, 'today', NULL, TRUE),
@@ -126,13 +137,7 @@ INSERT INTO tasks (title, description, workspace, channel_id, status, due_date, 
 
 ```typescript
 // channels/entities/channel.entity.ts
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  OneToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from 'typeorm';
 import { Task } from '../../tasks/entities/task.entity';
 
 export enum Workspace {
@@ -590,6 +595,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
 ### Prisma Seed Configuration
 
 **package.json:**
+
 ```json
 {
   "prisma": {
@@ -603,6 +609,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
 ```
 
 **apps/backend/project.json (add prisma-seed target):**
+
 ```json
 {
   "targets": {
@@ -627,6 +634,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
 ### Seed Script
 
 **apps/backend/prisma/seed.ts:**
+
 ```typescript
 import { PrismaClient, TaskStatus, Workspace } from '@prisma/client';
 
@@ -1029,6 +1037,7 @@ apps/backend/prisma/
 ```
 
 **apps/backend/prisma/seed.ts:**
+
 ```typescript
 import { seedChannels } from './seeds/channels';
 import { seedTasks } from './seeds/tasks';
@@ -1116,6 +1125,7 @@ CREATE INDEX idx_tasks_due_date ON tasks(due_date);
 ### Changes Required
 
 1. **Connection Config**
+
    ```typescript
    type: 'postgres',
    host: process.env.DB_HOST,
@@ -1146,12 +1156,14 @@ CREATE INDEX idx_tasks_due_date ON tasks(due_date);
 ## Summary
 
 ### v0.1 Schema (Ready to Implement)
+
 - ✅ `channels` - Task categories
 - ✅ `tasks` - Core task data
 - ✅ Indexes for performance
 - ✅ Foreign keys for data integrity
 
 ### Future Additions
+
 - v0.2: `routine_completions`, `streaks`
 - v0.3: `parent_id` for subtasks
 - v0.4: `archived_at` for soft deletes

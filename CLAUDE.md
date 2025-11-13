@@ -868,3 +868,5 @@ git@github.com:georgeaf18/Tasker.git
 ---
 
 **You've got this. Let's build something incredible. 🚀**
+
+- make sure you're updating linear as you work through tickets

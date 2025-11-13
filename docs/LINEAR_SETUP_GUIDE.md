@@ -8,6 +8,7 @@ This guide walks you through setting up the Tasker project in Linear.
 2. **Name:** Tasker
 3. **Identifier:** TASK
 4. **Description:**
+
    ```
    ADHD-friendly, dyslexia-friendly task management application for visual learners.
 
@@ -19,9 +20,11 @@ This guide walks you through setting up the Tasker project in Linear.
 Create the following milestones in order:
 
 ### Alpha (v0.1)
+
 - **Name:** Alpha (v0.1)
 - **Target Date:** 2025-11-18 (1 week from now)
 - **Description:**
+
   ```
   MVP: Backlog sidebar + basic kanban board
 
@@ -30,9 +33,11 @@ Create the following milestones in order:
   ```
 
 ### v0.2
+
 - **Name:** v0.2 - Dopamine & Routines
 - **Target Date:** 2025-11-22
 - **Description:**
+
   ```
   Add motivation features: confetti, streaks, routine tasks
 
@@ -40,9 +45,11 @@ Create the following milestones in order:
   ```
 
 ### v0.3
+
 - **Name:** v0.3 - Complexity & Planning
 - **Target Date:** 2025-11-26
 - **Description:**
+
   ```
   Handle complex tasks: subtasks, weekly planning, search
 
@@ -50,9 +57,11 @@ Create the following milestones in order:
   ```
 
 ### v0.4
+
 - **Name:** v0.4 - Polish & UX
 - **Target Date:** 2025-11-29
 - **Description:**
+
   ```
   Keyboard shortcuts, dark mode, settings, onboarding
 
@@ -60,9 +69,11 @@ Create the following milestones in order:
   ```
 
 ### Beta (v0.5)
+
 - **Name:** Beta (v0.5)
 - **Target Date:** 2025-12-13
 - **Description:**
+
   ```
   Integrations + AI: Jira, Calendar, Email, Standup generation
 
@@ -70,9 +81,11 @@ Create the following milestones in order:
   ```
 
 ### v1.0 Production
+
 - **Name:** v1.0 Production
 - **Target Date:** 2025-12-20
 - **Description:**
+
   ```
   Production-ready: performance, error handling, docs
 
@@ -80,9 +93,11 @@ Create the following milestones in order:
   ```
 
 ### v2.0+ Future
+
 - **Name:** v2.0+ Future
 - **Target Date:** 2026-Q1
 - **Description:**
+
   ```
   ML-powered insights, analytics, predictions
 
@@ -92,6 +107,7 @@ Create the following milestones in order:
 ## Step 3: Create Labels
 
 ### By Area
+
 - `frontend` - Angular UI work
 - `backend` - Node.js API work
 - `database` - SQLite schema/queries
@@ -99,6 +115,7 @@ Create the following milestones in order:
 - `infrastructure` - DevOps, CI/CD, deployment
 
 ### By Type
+
 - `feature` - New functionality
 - `bug` - Something broken
 - `enhancement` - Improvement to existing feature
@@ -108,6 +125,7 @@ Create the following milestones in order:
 - `testing` - Test coverage
 
 ### By Integration
+
 - `integration/jira` - Jira-related work
 - `integration/calendar` - Calendar-related work
 - `integration/email` - Email-related work
@@ -115,12 +133,14 @@ Create the following milestones in order:
 - `integration/ai` - AI/LLM features
 
 ### By Priority
+
 - `p0` - Critical, blocking
 - `p1` - High priority
 - `p2` - Medium priority
 - `p3` - Low priority / nice-to-have
 
 ### Special
+
 - `accessibility` - A11y work
 - `performance` - Performance optimization
 - `security` - Security-related
@@ -132,13 +152,16 @@ Copy these issues into Linear (Backlog → Todo as you work on them):
 ---
 
 ### TASK-1: Project Scaffolding & Repository Setup
+
 **Labels:** `infrastructure`, `p0`
 **Milestone:** Alpha (v0.1)
 **Description:**
+
 ```markdown
 Set up the foundational project structure and repository.
 
 ## Tasks
+
 - [ ] Initialize Git repository
 - [ ] Create `.gitignore` for Node.js + Angular
 - [ ] Set up monorepo structure (frontend, backend, database, mcp-server)
@@ -150,6 +173,7 @@ Set up the foundational project structure and repository.
 - [ ] Create initial project documentation structure
 
 ## Success Criteria
+
 - Repository initialized with clean structure
 - All developers can clone and see project layout
 - Linting and formatting work
@@ -159,13 +183,16 @@ Set up the foundational project structure and repository.
 ---
 
 ### TASK-2: Architecture Decision Records (ADRs)
+
 **Labels:** `documentation`, `research`, `p0`
 **Milestone:** Alpha (v0.1)
 **Description:**
+
 ```markdown
 Document key architectural decisions before implementation.
 
 ## Decisions to Document
+
 1. **Backend Framework:** NestJS vs Express vs Fastify
 2. **Frontend State Management:** Angular signals vs NgRx vs services
 3. **Drag-and-Drop Library:** ng-dnd vs Angular CDK vs custom
@@ -174,7 +201,9 @@ Document key architectural decisions before implementation.
 6. **API Design:** REST structure, versioning strategy
 
 ## Format
+
 Each ADR should include:
+
 - Context (what problem are we solving?)
 - Decision (what did we choose?)
 - Rationale (why?)
@@ -182,6 +211,7 @@ Each ADR should include:
 - Alternatives considered
 
 ## Success Criteria
+
 - All major tech stack decisions documented
 - ADRs reviewed and approved
 - Ready to start scaffolding with chosen technologies
@@ -190,14 +220,17 @@ Each ADR should include:
 ---
 
 ### TASK-3: Backend Framework & API Setup
+
 **Labels:** `backend`, `infrastructure`, `p0`
 **Milestone:** Alpha (v0.1)
 **Depends on:** TASK-2
 **Description:**
+
 ```markdown
 Set up Node.js backend with chosen framework.
 
 ## Tasks
+
 - [ ] Initialize backend project with TypeScript
 - [ ] Set up chosen framework (NestJS/Express/Fastify)
 - [ ] Configure environment variables (.env support)
@@ -210,10 +243,12 @@ Set up Node.js backend with chosen framework.
 
 ## API Structure (Initial)
 ```
+
 /api/
-  /tasks
-  /channels
-  /health
+/tasks
+/channels
+/health
+
 ```
 
 ## Success Criteria
@@ -227,14 +262,17 @@ Set up Node.js backend with chosen framework.
 ---
 
 ### TASK-4: Frontend Angular Setup
+
 **Labels:** `frontend`, `infrastructure`, `p0`
 **Milestone:** Alpha (v0.1)
 **Depends on:** TASK-2
 **Description:**
+
 ```markdown
 Set up Angular application with latest standalone components.
 
 ## Tasks
+
 - [ ] Create new Angular project (standalone components)
 - [ ] Configure TypeScript strict mode
 - [ ] Set up routing (lazy loading)
@@ -247,8 +285,10 @@ Set up Angular application with latest standalone components.
 
 ## Initial Route Structure
 ```
-/           - Main kanban view
-/settings   - User settings
+
+/ - Main kanban view
+/settings - User settings
+
 ```
 
 ## Success Criteria
@@ -262,16 +302,20 @@ Set up Angular application with latest standalone components.
 ---
 
 ### TASK-5: Database Schema Design & Implementation
+
 **Labels:** `database`, `backend`, `p0`
 **Milestone:** Alpha (v0.1)
 **Description:**
+
 ```markdown
 Design and implement SQLite database schema.
 
 ## Schema (v0.1)
 
 ### Tables
+
 **tasks**
+
 - id (INTEGER PRIMARY KEY)
 - title (TEXT NOT NULL)
 - description (TEXT)
@@ -284,6 +328,7 @@ Design and implement SQLite database schema.
 - updated_at (TEXT ISO8601)
 
 **channels**
+
 - id (INTEGER PRIMARY KEY)
 - name (TEXT NOT NULL)
 - workspace (TEXT: 'work' | 'personal')
@@ -291,6 +336,7 @@ Design and implement SQLite database schema.
 - created_at (TEXT ISO8601)
 
 ## Tasks
+
 - [ ] Create schema SQL file
 - [ ] Set up database connection (better-sqlite3 or similar)
 - [ ] Create migration system
@@ -301,6 +347,7 @@ Design and implement SQLite database schema.
 - [ ] Document database schema
 
 ## Success Criteria
+
 - Database file created (tasker.db)
 - Schema migrated successfully
 - Seed data loads
@@ -311,14 +358,17 @@ Design and implement SQLite database schema.
 ---
 
 ### TASK-6: Design System Implementation
+
 **Labels:** `frontend`, `design`, `p0`
 **Milestone:** Alpha (v0.1)
 **Depends on:** TASK-4
 **Description:**
+
 ```markdown
 Implement design system from docs/DESIGN_SYSTEM.md
 
 ## Tasks
+
 - [ ] Create CSS custom properties (design tokens)
 - [ ] Implement color palette (light + dark mode)
 - [ ] Set up typography system (Verdana + fallbacks)
@@ -334,6 +384,7 @@ Implement design system from docs/DESIGN_SYSTEM.md
 - [ ] Document component usage
 
 ## Success Criteria
+
 - All design tokens implemented as CSS variables
 - Dark mode toggle works
 - All base components render correctly
@@ -345,13 +396,16 @@ Implement design system from docs/DESIGN_SYSTEM.md
 ---
 
 ### TASK-7: Development Environment & Tooling
+
 **Labels:** `infrastructure`, `p0`
 **Milestone:** Alpha (v0.1)
 **Description:**
-```markdown
+
+````markdown
 Set up development environment and tooling.
 
 ## Tasks
+
 - [ ] Create docker-compose.yml (optional, for future Postgres)
 - [ ] Set up VS Code workspace settings
 - [ ] Configure debugging for frontend + backend
@@ -362,6 +416,7 @@ Set up development environment and tooling.
 - [ ] Create developer onboarding documentation
 
 ## Scripts to Create
+
 ```json
 {
   "dev": "Run frontend + backend concurrently",
@@ -373,14 +428,17 @@ Set up development environment and tooling.
   "format": "Run Prettier write"
 }
 ```
+````
 
 ## Success Criteria
+
 - One command starts full dev environment
 - Hot reload works for frontend and backend
 - Debugging configured in VS Code
 - All npm scripts documented
 - New developer can get started in < 30 minutes
-```
+
+````
 
 ---
 
@@ -417,19 +475,22 @@ Set up testing infrastructure for frontend and backend.
 - Code coverage reports generated
 - Test utilities documented
 - Sample tests written for reference
-```
+````
 
 ---
 
 ### TASK-9: CI/CD Pipeline Setup
+
 **Labels:** `infrastructure`, `p1`
 **Milestone:** Alpha (v0.1)
 **Depends on:** TASK-8
 **Description:**
+
 ```markdown
 Set up continuous integration and deployment pipeline.
 
 ## Tasks
+
 - [ ] Create GitHub Actions workflow (or GitLab CI, etc.)
 - [ ] Configure pipeline stages:
   - [ ] Lint (ESLint + Prettier)
@@ -442,11 +503,13 @@ Set up continuous integration and deployment pipeline.
 - [ ] Document CI/CD workflow
 
 ## Pipeline Triggers
+
 - Push to main → full pipeline + deploy
 - Pull request → lint + test + build
 - Manual trigger → full pipeline
 
 ## Success Criteria
+
 - Pipeline runs on every push/PR
 - Tests must pass before merge
 - Build artifacts generated
@@ -463,13 +526,16 @@ These are high-level epics - don't break into subtasks yet. Create them in Backl
 ---
 
 ### Epic: Morning Ritual Flow
+
 **Labels:** `feature`, `frontend`, `integration/ai`, `p1`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 Guided morning ritual with AI-generated standup.
 
 ## Features
+
 - Personalized greeting (time, weather)
 - Review yesterday's incomplete tasks
 - Quick actions: Tomorrow, Next Week, Backlog, Delete
@@ -478,12 +544,14 @@ Guided morning ritual with AI-generated standup.
 - Dedicated tab/page for standup text (copy/paste to Slack)
 
 ## Success Criteria
+
 - Ritual appears on first app open each day
 - Weather API integrated
 - AI standup generates readable update
 - User uses it daily
 
 ## Dependencies
+
 - AI/LLM integration (Claude API)
 - Weather API
 - Task filtering by date
@@ -492,13 +560,16 @@ Guided morning ritual with AI-generated standup.
 ---
 
 ### Epic: End-of-Day Reflection
+
 **Labels:** `feature`, `frontend`, `integration/ai`, `p1`
 **Milestone:** v0.2
 **Description:**
+
 ```markdown
 Reflective end-of-day flow with celebration and gentle accountability.
 
 ## Features
+
 - "Close the day" button
 - Two modes: Celebrate (wins) + Reflect (shortcomings)
 - Supportive, non-judgmental tone
@@ -506,12 +577,14 @@ Reflective end-of-day flow with celebration and gentle accountability.
 - After completion: delayed reminder to phone (Pushover)
 
 ## Success Criteria
+
 - User feels motivated to close the day
 - Reflection feels supportive, not guilt-inducing
 - Streaks tracked accurately
 - Pushover notifications work
 
 ## Dependencies
+
 - Streak tracking system
 - Pushover API integration
 - AI for reflection prompts (optional)
@@ -520,13 +593,16 @@ Reflective end-of-day flow with celebration and gentle accountability.
 ---
 
 ### Epic: Kanban Board View
+
 **Labels:** `feature`, `frontend`, `p0`
 **Milestone:** Alpha (v0.1)
 **Description:**
+
 ```markdown
 Main kanban board with 3 columns: Today, In Progress, Done.
 
 ## Features
+
 - 3 columns with clear visual separation
 - Drag tasks between columns
 - Visual status indicators (color-coded)
@@ -534,12 +610,14 @@ Main kanban board with 3 columns: Today, In Progress, Done.
 - Smooth animations (with reduced-motion support)
 
 ## Success Criteria
+
 - Kanban board is main view
 - Drag-and-drop feels smooth
 - Status updates persist
 - Works on desktop + responsive
 
 ## Dependencies
+
 - Drag-and-drop library
 - Design system components
 - Task API
@@ -548,13 +626,16 @@ Main kanban board with 3 columns: Today, In Progress, Done.
 ---
 
 ### Epic: Backlog Sidebar
+
 **Labels:** `feature`, `frontend`, `p0`
 **Milestone:** Alpha (v0.1)
 **Description:**
+
 ```markdown
 Always-visible backlog sidebar organized by workspace and channels.
 
 ## Features
+
 - Collapsible sidebar (can hide)
 - "Yesterday incomplete" section (v0.2)
 - "Due soon" section (v0.2)
@@ -564,12 +645,14 @@ Always-visible backlog sidebar organized by workspace and channels.
 - Empty states
 
 ## Success Criteria
+
 - All backlog tasks visible
 - Easy to find tasks by workspace/channel
 - Drag to board works smoothly
 - Sidebar doesn't feel overwhelming
 
 ## Dependencies
+
 - Task filtering/grouping
 - Drag-and-drop
 - Design system
@@ -578,13 +661,16 @@ Always-visible backlog sidebar organized by workspace and channels.
 ---
 
 ### Epic: Task Management (CRUD)
+
 **Labels:** `feature`, `frontend`, `backend`, `p0`
 **Milestone:** Alpha (v0.1)
 **Description:**
+
 ```markdown
 Create, read, update, delete tasks.
 
 ## Features
+
 - Create task modal/form
   - Title (required)
   - Description (optional)
@@ -597,12 +683,14 @@ Create, read, update, delete tasks.
 - Task persistence in SQLite
 
 ## Success Criteria
+
 - Can create tasks quickly
 - All fields save correctly
 - Edit/delete work
 - Data persists across app restarts
 
 ## Dependencies
+
 - Database schema
 - API endpoints
 - Form components
@@ -611,13 +699,16 @@ Create, read, update, delete tasks.
 ---
 
 ### Epic: Subtasks & Nested Kanban
+
 **Labels:** `feature`, `frontend`, `backend`, `p1`
 **Milestone:** v0.3
 **Description:**
+
 ```markdown
 Subtasks with mini kanban (To Do, Doing, Done).
 
 ## Features
+
 - Add/edit/delete subtasks
 - Each task card shows nested kanban
 - Subtasks have 3 states: To Do, Doing, Done
@@ -625,11 +716,13 @@ Subtasks with mini kanban (To Do, Doing, Done).
 - Track subtask completion
 
 ## Success Criteria
+
 - Complex tasks can be broken down
 - Subtask kanban feels intuitive
 - Progress visible at a glance
 
 ## Dependencies
+
 - Main kanban working
 - Nested drag-and-drop support
 ```
@@ -637,13 +730,16 @@ Subtasks with mini kanban (To Do, Doing, Done).
 ---
 
 ### Epic: Time Tracking & Timers
+
 **Labels:** `feature`, `frontend`, `backend`, `p1`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 Both focus timer + pomodoro visible simultaneously.
 
 ## Features
+
 - Focus timer (counts up)
 - Pomodoro timer (25/5 cycles)
 - Both visible at same time
@@ -653,11 +749,13 @@ Both focus timer + pomodoro visible simultaneously.
 - Pie chart visual timer (time blindness support)
 
 ## Success Criteria
+
 - User can run both timers simultaneously
 - Time logs accurate
 - Visual representation helps with time blindness
 
 ## Dependencies
+
 - Task API (time_logs table)
 - Timer UI components
 ```
@@ -665,13 +763,16 @@ Both focus timer + pomodoro visible simultaneously.
 ---
 
 ### Epic: Calendar Integration
+
 **Labels:** `feature`, `integration/calendar`, `backend`, `p1`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 Import and display calendar events.
 
 ## Features
+
 - iOS Calendar integration
 - iCal subscription support
 - Timeline view (Sunsama-style)
@@ -679,11 +780,13 @@ Import and display calendar events.
 - Events displayed alongside tasks
 
 ## Success Criteria
+
 - Calendar events visible in app
 - Timeline view works
 - No manual sync needed
 
 ## Dependencies
+
 - Calendar API research
 - CalDAV or similar
 ```
@@ -691,13 +794,16 @@ Import and display calendar events.
 ---
 
 ### Epic: Jira Integration
+
 **Labels:** `feature`, `integration/jira`, `backend`, `p1`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 Import Jira tickets and sync status.
 
 ## Features
+
 - See all assigned Jira tickets
 - Import tickets with details + subtasks
 - Sync status back to Jira when completed
@@ -705,11 +811,13 @@ Import Jira tickets and sync status.
 - Sprint review summary generation (AI)
 
 ## Success Criteria
+
 - Jira tickets appear automatically
 - Completing task updates Jira
 - Sprint reviews generate stakeholder summaries
 
 ## Dependencies
+
 - Jira API authentication
 - AI integration for summaries
 ```
@@ -717,13 +825,16 @@ Import Jira tickets and sync status.
 ---
 
 ### Epic: Email Forward Integration
+
 **Labels:** `feature`, `integration/email`, `backend`, `p2`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 Forward email → create task automatically.
 
 ## Features
+
 - Unique email address per user (tasks-abc123@app.com)
 - Email parser:
   - Subject → Task title
@@ -732,11 +843,13 @@ Forward email → create task automatically.
 - Manual channel assignment after creation
 
 ## Success Criteria
+
 - Email forwarding works
 - Tasks created correctly
 - Email context preserved
 
 ## Dependencies
+
 - Email service (SendGrid/Mailgun/SES)
 - Email parsing library
 ```
@@ -744,22 +857,27 @@ Forward email → create task automatically.
 ---
 
 ### Epic: Apple Reminders Integration
+
 **Labels:** `feature`, `integration/reminders`, `backend`, `p2`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 Sync with Apple Reminders for mobile capture.
 
 ## Features
+
 - Import reminders from Apple Reminders
 - Sync bidirectionally
 - Mobile capture workflow (create in Reminders, appears in Tasker)
 
 ## Success Criteria
+
 - Reminders sync automatically
 - Mobile capture workflow seamless
 
 ## Dependencies
+
 - EventKit/Shortcuts/AppleScript research
 - macOS-specific code
 ```
@@ -767,13 +885,16 @@ Sync with Apple Reminders for mobile capture.
 ---
 
 ### Epic: AI Features (Standup, Sprint Reviews)
+
 **Labels:** `feature`, `integration/ai`, `backend`, `p1`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 AI-generated standup and sprint review summaries.
 
 ## Features
+
 - Daily standup generation (yesterday + today)
 - Sprint review summaries (bi-weekly, select tickets)
 - Professional, stakeholder-appropriate tone
@@ -781,11 +902,13 @@ AI-generated standup and sprint review summaries.
 - Stored for history
 
 ## Success Criteria
+
 - Standup saves time every morning
 - Sprint reviews impress stakeholders
 - Tone matches user needs
 
 ## Dependencies
+
 - Claude API or similar LLM
 - Jira integration (for sprint reviews)
 - Prompt engineering
@@ -794,13 +917,16 @@ AI-generated standup and sprint review summaries.
 ---
 
 ### Epic: Gamification & Streaks
+
 **Labels:** `feature`, `frontend`, `backend`, `p1`
 **Milestone:** v0.2
 **Description:**
+
 ```markdown
 Confetti, sound, streaks - make task completion satisfying.
 
 ## Features
+
 - Confetti animation on task completion
 - Sound effect (toggle in settings)
 - Color pulse/glow effect
@@ -809,11 +935,13 @@ Confetti, sound, streaks - make task completion satisfying.
 - Visual progress indicators
 
 ## Success Criteria
+
 - Task completion feels rewarding (dopamine hit)
 - Streaks motivate consistency
 - Not overwhelming/annoying
 
 ## Dependencies
+
 - canvas-confetti library
 - Audio files
 - Streak tracking in database
@@ -822,24 +950,29 @@ Confetti, sound, streaks - make task completion satisfying.
 ---
 
 ### Epic: Weekly Planning View
+
 **Labels:** `feature`, `frontend`, `p2`
 **Milestone:** v0.3
 **Description:**
+
 ```markdown
 Week-as-sprint planning view.
 
 ## Features
+
 - View current week as sprint
 - See tasks planned for each day
 - Drag tasks from backlog → specific day
 - Simple, not overwhelming
 
 ## Success Criteria
+
 - User can plan week quickly
 - Doesn't add cognitive load
 - Feels helpful, not mandatory
 
 ## Dependencies
+
 - Task date filtering
 - Drag-and-drop to days
 ```
@@ -847,13 +980,16 @@ Week-as-sprint planning view.
 ---
 
 ### Epic: Multiple View Modes
+
 **Labels:** `feature`, `frontend`, `p2`
 **Milestone:** v1.0
 **Description:**
+
 ```markdown
 Kanban, List, Calendar views.
 
 ## Features
+
 - Kanban view (default)
 - List view (simple task list)
 - Calendar view (timeline with tasks + events)
@@ -861,11 +997,13 @@ Kanban, List, Calendar views.
 - Preferences saved
 
 ## Success Criteria
+
 - All views show same data
 - Toggle feels seamless
 - User can choose preferred view
 
 ## Dependencies
+
 - Calendar integration
 - View state management
 ```
@@ -873,13 +1011,16 @@ Kanban, List, Calendar views.
 ---
 
 ### Epic: Home Dashboard
+
 **Labels:** `feature`, `frontend`, `p2`
 **Milestone:** v1.0
 **Description:**
+
 ```markdown
 Widget-like command center showing all integrations.
 
 ## Features
+
 - Quick stats (tasks done today, streak)
 - Jira tickets preview
 - Calendar upcoming events
@@ -888,24 +1029,29 @@ Widget-like command center showing all integrations.
 - All-in-one view
 
 ## Success Criteria
+
 - Dashboard is useful landing page
 - Widgets load quickly
 - Info at a glance
 
 ## Dependencies
+
 - All integrations complete
 ```
 
 ---
 
 ### Epic: MCP Server for Claude
+
 **Labels:** `feature`, `backend`, `integration/ai`, `p2`
 **Milestone:** Beta (v0.5)
 **Description:**
+
 ```markdown
 MCP server so Claude can manage tasks.
 
 ## Features
+
 - Claude can read tasks
 - Claude can create/update tasks
 - Claude can organize backlog
@@ -913,11 +1059,13 @@ MCP server so Claude can manage tasks.
 - Voice-like interaction
 
 ## Success Criteria
+
 - "Claude, what should I work on next?" works
 - Claude can reorganize based on deadlines
 - Feels like having an assistant
 
 ## Dependencies
+
 - MCP SDK
 - Task API complete
 - Authentication/permissions
@@ -945,16 +1093,19 @@ Configure these states in Linear:
 ## Step 8: Daily Workflow
 
 ### Monday (Sprint Planning)
+
 - Review backlog
 - Move issues to Todo for the week
 - Update priorities
 
 ### Tuesday-Thursday
+
 - Work on issues
 - Update status (In Progress → In Review → Done)
 - Update Linear daily
 
 ### Friday (Review & Retro)
+
 - Review completed work
 - Retrospective notes
 - Plan next week

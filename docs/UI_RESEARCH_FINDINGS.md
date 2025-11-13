@@ -5,12 +5,14 @@
 ### Core Design Principles
 
 **Minimize Visual Clutter**
+
 - Excess visual clutter leads to cognitive overload for ADHD users
 - Clean, minimalist design with minimal visual distractions is crucial
 - Limit primary navigation to 5-7 main categories to prevent overwhelming users
 - Use white space strategically - studies show adequate white space improves text comprehension by 20% and reduces errors by 62%
 
 **Information Display Guidelines**
+
 - ADHD brains don't filter information effectively and struggle to order, prioritize, and organize incoming data
 - Cognitive overload occurs when users are forced to process too much information at once
 - Information anxiety isn't caused by large amounts of information, but by large amounts of **irrelevant** information
@@ -18,6 +20,7 @@
 - Keep progressive disclosure levels below three for optimal effectiveness
 
 **Visual & Audio Cues**
+
 - Incorporate visual and audio cues to help with short-term memory challenges
 - Visual cues bypass many executive functioning demands by creating direct pathways from seeing to doing
 - Make objects, actions, and options obvious and persistent - users shouldn't rely on memory
@@ -26,6 +29,7 @@
 - Use colorful, novel, or personally meaningful visual cues to provide dopamine hits
 
 **Reduce Decision Fatigue**
+
 - Follow Hick's Law: fewer choices = faster decisions
 - Research shows individuals with ADHD exhibit increased brain activation during decision tasks compared to neurotypical controls
 - Limit choices to streamline decisions and reduce mental load
@@ -33,6 +37,7 @@
 - Autofill, smart defaults, and predictive search reduce required thinking
 
 **Making "Next Action" Always Obvious**
+
 - Progressive disclosure gradually reveals information and breaks things into manageable chunks
 - Simplifying flows into steps provides feeling of progress and dopamine boosts
 - Use clear call-to-action buttons
@@ -42,17 +47,20 @@
 ### Color Palettes for ADHD
 
 **Recommended Colors**
+
 - Soft, muted colors: light blues, greens, and pastels reduce sensory overload
 - Blue facilitates concentration and learning, lowers heart rate and blood pressure
 - Green can enhance reading ability and comprehension
 - Use soft hues with minimal saturation - easy on the eyes
 
 **Colors to Avoid**
+
 - Bright and intense colors (reds, oranges, yellows) can be overstimulating
 - These colors may increase hyperactivity and agitation
 - Use sparingly if at all
 
 **Color Strategy**
+
 - Consistent and simple color schemes reduce visual clutter and promote order
 - Sudden changes in color can be distracting
 - Use neutral backgrounds with strategic color accents for visual interest without overstimulation
@@ -60,6 +68,7 @@
 
 **The Best Colors for Focus vs. Distraction Study (W3C)**
 People with dyslexia most preferred (in order):
+
 1. Black & yellow
 2. Black & cream
 3. Blue & white
@@ -72,6 +81,7 @@ People with dyslexia most preferred (in order):
 ### Navigation Patterns
 
 **Sidebar Navigation Best Practices**
+
 - Simple, straightforward navigation systems help users find their way without getting lost
 - Consistent and predictable layouts make navigation intuitive and reassuring
 - Keep navigation menus in same place and order on all pages
@@ -83,11 +93,13 @@ People with dyslexia most preferred (in order):
 ### Animation Guidelines
 
 **Impact on ADHD Users**
+
 - People with ADHD might be so distracted by animated elements they forget why they visited the website
 - Non-essential movement can trigger distraction, dizziness, headaches, and nausea
 - Blinking and flashing animation is particularly problematic for ADHD
 
 **Technical Requirements**
+
 - Implement `prefers-reduced-motion` media query to provide experience with fewer animations
 - Motion animation triggered by interaction can be disabled unless essential
 - Build option for users to pause, stop, or hide movement for non-essential moving/blinking/scrolling elements that start automatically, last more than 5 seconds
@@ -95,12 +107,14 @@ People with dyslexia most preferred (in order):
 - Excessive animations, autoplay videos, flashing graphics, pop-up ads, and busy backgrounds cause sensory overload
 
 **WCAG Guidelines**
+
 - WCAG 2.3.3: Animation from interactions can be disabled unless essential to functionality
 - Reduce unnecessary animations to minimize distractions
 
 ### Gamification Elements
 
 **Why Gamification Works**
+
 - ADHD brains have lower dopamine availability, making tasks without immediate payoff feel uninteresting
 - Gamification triggers reward loops that strengthen task engagement
 - Each action provides immediate feedback to reinforce forward motion
@@ -108,6 +122,7 @@ People with dyslexia most preferred (in order):
 - Study with adolescents reported 60% boost in compliance with rewards like points, badges, and streaks
 
 **Effective Gamification Elements**
+
 - **Streaks**: Visual progress bars track consecutive days completing tasks, create sense of consistency
 - **Completion Animations**: Color changes, animations, or icons offer immediate feedback
 - **Micro-Rewards**: Points, badges, and achievements tap into dopamine system for habit formation
@@ -116,6 +131,7 @@ People with dyslexia most preferred (in order):
 - **Subtle Sounds**: Signal progress and invite users back
 
 **Design Considerations**
+
 - Keep gamification simple, meaningful, and tailored to individual needs
 - Avoid flashy visuals and constant feedback that could lead to sensory overload
 - Prevent novelty from fading by varying rewards
@@ -124,17 +140,20 @@ People with dyslexia most preferred (in order):
 ### Time Blindness Solutions
 
 **The Problem**
+
 - Time blindness is the inability to sense the passing of time
 - People with ADHD struggle to sense time passage internally
 - Abstract time concepts are difficult for ADHD brains to process
 
 **Visual Timer Design**
+
 - **Pie-chart/colored disk approach**: Red disk provides immediate visual update of time passed and remaining
 - Make time visible and trackable - externalize it
 - Analog clocks show movement of time more intuitively than digital
 - Display time as shrinking colored disk to make abstract time concrete
 
 **UI Implementation**
+
 - Use calendars, reminders, timers, and visual cues to make time visible
 - Break day into chunks and subchunks with visual timers for each segment
 - Time blocking: Schedule blocks and use visual timers to track
@@ -142,6 +161,7 @@ People with dyslexia most preferred (in order):
 - Consider hourglass visualizations for time passing
 
 **Recommended Apps/Features**
+
 - Structured (visual daily planner)
 - Inflow (ADHD management)
 - Toggl (time tracking)
@@ -156,6 +176,7 @@ People with dyslexia most preferred (in order):
 **Recommended Font Families**
 
 **Top Choices (Research-Backed)**
+
 - **Arial**: Widely supported, though spacing criticized as "horrible" and letters "quite closed"
 - **Helvetica**: Performed well in studies, preferred by dyslexics over specialized fonts
 - **Verdana**: Explicitly designed for on-screen reading with wide letter spacing, tall x-heights, highly legible at small sizes
@@ -167,6 +188,7 @@ People with dyslexia most preferred (in order):
 - **Open Sans**: Straightforward, clear spacing, tall letter sizes, rounded shapes, free and open-source
 
 **Key Characteristics**
+
 - Sans serif, monospaced, and roman font styles significantly improve reading performance
 - Wide letter spacing (letterforms spaced farther apart)
 - Tall x-heights
@@ -174,6 +196,7 @@ People with dyslexia most preferred (in order):
 - Strong character definition
 
 **Fonts to Avoid**
+
 - Serif fonts (letters can appear crowded)
 - Proportional fonts
 - Italic fonts (especially OpenDyslexic Italic) - significantly reduce readability
@@ -181,6 +204,7 @@ People with dyslexia most preferred (in order):
 ### OpenDyslexic Font Controversy
 
 **Research Findings - Mostly Negative**
+
 - 2016 study (Wery & Diliberto): No improvement in reading rate or accuracy for students with dyslexia
 - Actually reduced reading speed and accuracy compared to Arial and Times New Roman
 - None of the students preferred reading in OpenDyslexic
@@ -188,10 +212,12 @@ People with dyslexia most preferred (in order):
 - Standard fonts like Arial, Helvetica, and Verdana were more effective and preferred than specialized dyslexia fonts
 
 **Positive Finding**
+
 - 2023 study: OpenDyslexic effective in increasing reading fluency and comprehension for three students
 - Readers reported font was easier to read, leading to less reading anxiety
 
 **Scientific Consensus**
+
 - OpenDyslexic does not provide measurable improvements in reading performance for most individuals with dyslexia
 - However, subjective preference matters - some find it reduces anxiety even if performance doesn't improve
 
@@ -203,14 +229,17 @@ People with dyslexia most preferred (in order):
 ### Spacing Guidelines
 
 **Letter Spacing**
+
 - BDA 2018 guide recommends larger inter-letter/character spacing (tracking)
 - Ideally around **35% of the average letter width**
 - Improves readability significantly
 
 **Word Spacing**
+
 - Inter-word spacing should be at least **3.5 times the inter-letter spacing**
 
 **Line Spacing**
+
 - **1.5 line spacing is preferable** (BDA recommendation)
 - Some sources suggest 1.5x-2x range
 - For optimal readability, aim for line height of 1.5x the font size
@@ -218,6 +247,7 @@ People with dyslexia most preferred (in order):
 ### Line Length
 
 **General Guidelines**
+
 - **BDA Recommendation**: 60-70 characters per line
 - **Optimal for body text**: 50-60 characters (Emil Ruder)
 - **Widely regarded as satisfactory**: 45-75 characters
@@ -225,6 +255,7 @@ People with dyslexia most preferred (in order):
 - **For dyslexic readers**: Up to 45 characters to minimize visual tracking difficulties
 
 **Accessibility Standards**
+
 - **WCAG 1.4.8**: Lines should be 80 or fewer characters (40 or fewer for Chinese/Japanese/Korean)
 - **Novice readers**: 34-60 characters (45 optimal)
 - **Expert readers**: 45-80 characters (60 optimal)
@@ -234,6 +265,7 @@ People with dyslexia most preferred (in order):
 ### Color Contrast
 
 **WCAG Requirements**
+
 - **Level AA**: Text and background contrast ratio of at least **4.5:1**
 - **Level AA Large Text**: Heading/larger text at least **3:1**
 - **Level AAA**: Text and background at least **7:1**
@@ -242,6 +274,7 @@ People with dyslexia most preferred (in order):
 **Large text defined as**: At least 18pt, or 14pt bold
 
 **Dyslexia-Specific Considerations**
+
 - Total contrast (pure white on black or vice versa) can be **difficult** for people with dyslexia
 - Very high contrast can hinder readability
 - Better option: Black text on off-white background
@@ -252,11 +285,13 @@ People with dyslexia most preferred (in order):
 ### Text Alignment
 
 **Recommended: Left-Aligned**
+
 - BDA guideline: Left align text, without justification
 - Creates consistent edge that helps users with visual tracking issues
 - Research (Ling & van Schaik): Left-aligned text boosted performance over justified
 
 **Avoid: Justified Text**
+
 - Creates "rivers" of white running down the page due to extra word spacing
 - River effect: Large irregular gaps stack up, creating distracting whitespace
 - Wide spaces make it difficult to identify individual words
@@ -264,17 +299,20 @@ People with dyslexia most preferred (in order):
 - WCAG AAA (1.4.8): No justified text for highest conformance
 
 **Also Avoid**
+
 - Centered text (limit to 1-2 line blocks)
 - Right-aligned text
 
 ### Chunking Information
 
 **Why It Matters**
+
 - "Walls of text" (large blocks of unbroken text) particularly difficult for dyslexic readers
 - Breaking text into smaller chunks helps process information more effectively
 - Visual breaks reduce cognitive load
 
 **Best Practices**
+
 - **Short paragraphs**: 3-5 sentences ideally
 - **Descriptive headings and subheadings**: Help with orientation and finding information
 - **Bullet points**: Where appropriate
@@ -291,27 +329,32 @@ People with dyslexia most preferred (in order):
 ### Kanban Boards for ADHD Users
 
 **Why Kanban Works**
+
 - Visual organization helps ADHD users stay focused and manage tasks effectively
 - Visual representation perfect for ADHD brains that thrive on clarity
 - Helps grasp entire workflow at a glance, reducing cognitive overload
 - Provides clear focus on ongoing tasks
 
 **Core Principles**
+
 1. **Visualize your work**
 2. **Limit your works in progress**
 
 **Recommended Structure**
+
 - Columns: To Do, Doing, Done
 - Provides sense of progress
 - Keeps users focused on few tasks rather than flitting between many
 
 **Key Features**
+
 - **Color coding**: Assign colors to indicate priority, urgency, or categories - visual cues help identify what needs attention
 - **Custom statuses**: Closed, Open, Review, In Progress, Blocked
 - **Task specificity**: Clear, specific task descriptions (e.g., "Study math chapter 5, pages 45-60, for 30 minutes" vs. "Study math")
 - **Physical option**: Experts recommend starting with Post-It notes and whiteboard before digital
 
 **Benefits**
+
 - Visualizing tasks and progress makes it easier to stay focused
 - Prioritizing based on urgency prevents overwhelm
 - Breaking down larger tasks into smaller, manageable steps
@@ -320,6 +363,7 @@ People with dyslexia most preferred (in order):
 ### Card-Based Layouts
 
 **Why They Work**
+
 - Break information into digestible, scannable chunks
 - Reduce cognitive load
 - Support visual processing
@@ -327,6 +371,7 @@ People with dyslexia most preferred (in order):
 - Mirror fluid nature of thoughts and priorities many with ADHD experience
 
 **Best Practices**
+
 - Use consistent card structure
 - Include visual indicators (status, priority)
 - Allow customization of card appearance
@@ -336,21 +381,25 @@ People with dyslexia most preferred (in order):
 ### Progressive Disclosure
 
 **Definition**
+
 - Technique that reduces cognitive load by gradually revealing information as needed
 - Ensures users get right amount of information at right time
 
 **Implementation Patterns**
+
 - **Accordions and tabs**: For organizing content
 - **Dropdown menus**: Keep interfaces uncluttered
 - **Step-by-step processes (staged disclosure)**: For complex forms and onboarding
 - **Collapsible sections**: Let users control information density
 
 **ADHD-Specific Benefits**
+
 - Helps maintain focus by revealing information only when necessary
 - Prevents overwhelm from seeing too much at once
 - Allows users to focus on one task at a time (e.g., Nike's step-by-step onboarding)
 
 **Best Practices**
+
 - Keep disclosure levels below three - too many layers have opposite effect
 - Ensure clear and intuitive navigation paths
 - Provide context about what's hidden
@@ -359,6 +408,7 @@ People with dyslexia most preferred (in order):
 ### Status Indicators
 
 **Why Color Coding Works for ADHD**
+
 - Studies show color boosts memory and attention
 - Visual cues help compensate for executive function challenges
 - Children with ADHD can focus significantly longer on colorful text vs. plain
@@ -367,17 +417,20 @@ People with dyslexia most preferred (in order):
 **Common Color Coding Systems**
 
 **By Energy Level/Effort**
+
 - Green: 5-minute tasks
 - Orange: Medium-effort tasks
 - Red: Big-deal tasks requiring major focus
 - Purple: "Would be nice" tasks (not urgent but meaningful)
 
 **By Priority/Urgency**
+
 - Red: Urgent/deadline tasks
 - Yellow: Medium priority
 - Green: "Go!" - top priority or low urgency (depends on system)
 
 **By Life Category**
+
 - Blue: Work
 - Green: Personal/health
 - Red: Urgent/deadline
@@ -385,11 +438,13 @@ People with dyslexia most preferred (in order):
 - Purple: Family
 
 **Traffic Light System**
+
 - Red: Not started/blocked
 - Yellow: In progress
 - Green: Complete
 
 **Design Recommendations**
+
 - Externalize priorities - make them visible
 - Reduce cognitive load through visual systems
 - Allow customization of color meanings
@@ -404,6 +459,7 @@ People with dyslexia most preferred (in order):
 ### Research Findings - Complex and Individualized
 
 **For Dyslexia**
+
 - **Mixed preferences** - highly individual
 - Many prefer lighter backgrounds with appropriate contrast (not pure white)
 - Some find dark mode easier (reduces visual noise and distraction)
@@ -412,15 +468,18 @@ People with dyslexia most preferred (in order):
 - **Best solution**: Change background to something other than white or black
 
 **For ADHD**
+
 - Neurodivergent users find dark mode less overstimulating
 - Improves focus and usability for some
 
 **Accessibility Concerns**
+
 - Dark mode can cause "halation effect" for users with astigmatism (~47% of people)
 - Can make things hard to read for people with dyslexia and astigmatism
 - Not a one-size-fits-all accessibility solution
 
 **Recommendation**
+
 - **Provide user choice** - essential
 - Dark mode valuable option but not universal solution
 - Best approach: Offer customization options
@@ -433,10 +492,12 @@ People with dyslexia most preferred (in order):
 ### Amazing Marvin
 
 **Why It Works for ADHD**
+
 - Designed specifically for executive dysfunction, ADHD, and procrastinators
 - "Hands down one of the best to-do apps for ADHD"
 
 **Key Features**
+
 - **Full customization**: Tailor workflows, color schemes, productivity strategies
 - **Strategies library**: Enable/disable features based on specific ADHD challenges
 - **Procrastination Wizard**: Identifies barriers to productivity, provides strategies to overcome
@@ -446,6 +507,7 @@ People with dyslexia most preferred (in order):
 - **View completed tasks**: From daily view for sense of accomplishment
 
 **User Testimonials**
+
 - "Every task needs a different tool, and some days I need more tools than others"
 - "ADHD craves structure but loves novelty - Marvin is the perfect level of customizable vs structured"
 - Everything needed is immediately available and customizable
@@ -453,22 +515,26 @@ People with dyslexia most preferred (in order):
 ### TickTick
 
 **ADHD-Friendly Features**
+
 - "Built to help you focus on your tasks, not just keep track of them"
 - Rewards focus with fun achievement system
 
 **Gamification System**
+
 - **Points**: For task creation, task completion (scaled by priority/complexity), habit tracking
 - **Achievements & badges**: For specific milestones
 - **Streaks**: For maintaining daily/weekly task completion
 - **Visual progress bars**: Showing advancement towards goals
 
 **UI Design**
+
 - Clean, user-friendly design minimizes friction when capturing tasks
 - Priority levels (low, medium, high) visually distinguish urgent tasks
 - Color coding as ADHD-friendly feature
 - Integrated tools reduce cognitive load (to-do, calendar, habit tracker, Pomodoro timer all in one)
 
 **Key Features**
+
 - **"Won't do" option**: Leaves door open for low-energy days
 - **Eisenhower Matrix**: View and assign tasks by importance and urgency
 - **Built-in Pomodoro**: Estimate task duration, track time via sprints
@@ -477,16 +543,19 @@ People with dyslexia most preferred (in order):
 ### Trello
 
 **Why It's ADHD-Friendly**
+
 - "Much more ADHD-friendly with highly visual interface"
 - "Works like magic for people with ADHD"
 - Makes it easier to see, understand, and prioritize goals
 
 **Visual Processing**
+
 - Many with ADHD are visual thinkers who process information better in graphical format
 - Having tasks visually clear makes it quicker to know where work is or what to work on next
 - Capitalizes on brain's ability to process visual information more efficiently than text
 
 **Design Features**
+
 - **Board-and-card system**: Perfect for non-linear thinking
 - **Drag-and-drop**: Easy reorganization of tasks
 - **Visual representation**: Reduces overwhelm, provides clearer sense of what needs to be done
@@ -500,6 +569,7 @@ People with dyslexia most preferred (in order):
 ## 8. Actionable Design Recommendations
 
 ### Typography Hierarchy
+
 ```
 Font Family: Verdana, Arial, Tahoma, Open Sans, Helvetica (in priority order)
 Body Text Size: 16-19px (1-1.2em)
@@ -512,6 +582,7 @@ Alignment: Left-aligned, never justified
 ```
 
 ### Color Palette
+
 ```
 Background: Off-white (#FAFAF8) or cream, never pure white
 Text: Off-black (#2B2B2B), never pure black
@@ -526,6 +597,7 @@ Contrast Ratio: Minimum 4.5:1, but avoid pure black/white
 ```
 
 ### Layout Structure
+
 ```
 White Space: Generous - aim for 20% comprehension improvement
 Progressive Disclosure: Maximum 3 levels deep
@@ -537,6 +609,7 @@ Chunking: Use headings, bullets, short paragraphs
 ```
 
 ### Interactive Elements
+
 ```
 Animations:
   - Implement prefers-reduced-motion
@@ -559,6 +632,7 @@ Forms:
 ```
 
 ### Task Management Features
+
 ```
 Board Structure:
   - Kanban: To Do, Doing, Done (minimum)
@@ -585,6 +659,7 @@ Status Indicators:
 ```
 
 ### Customization Options (Essential)
+
 ```
 Required Options:
   - Dark mode / Light mode / Auto
@@ -596,6 +671,7 @@ Required Options:
 ```
 
 ### Navigation Best Practices
+
 ```
 Sidebar:
   - Consistent position
