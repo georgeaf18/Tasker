@@ -1,5 +1,5 @@
 <div class="backlog-sidebar-container">
-    <p-panel header="Backlog" [toggleable]="false">
+    <p-panel [toggleable]="false">
         <div class="backlog-content">
             @if (backlogTasks().length === 0) {
                 <p-message severity="info" [text]="'No tasks in backlog'" />
