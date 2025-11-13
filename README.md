@@ -14,34 +14,40 @@ As someone with ADHD and memory issues, I can't remember what I need to do witho
 ## Core Features (v1.0 Vision)
 
 ### Morning Ritual
+
 - Personalized greeting with weather and time
 - Review yesterday's incomplete tasks
 - AI-generated daily standup for work
 
 ### Visual Task Management
+
 - Backlog sidebar organized by workspace/channels
 - Kanban board: Today → In Progress → Done
 - Nested subtask management
 - Drag-and-drop task organization
 
 ### Time Tracking
+
 - Both focus timer AND pomodoro visible simultaneously
 - Time estimates vs actual tracking
 - Visual time representation (pie chart)
 
 ### Integrations
+
 - Jira tickets import
 - Calendar events (iOS Calendar, iCal)
 - Apple Reminders sync
 - Email forward to task
 
 ### AI Features
+
 - Daily standup generation
 - Sprint review summaries (bi-weekly)
 - End-of-day reflection prompts
 - Task organization via MCP server
 
 ### Gamification
+
 - Streak tracking
 - Confetti + sound on task completion
 - Visual progress indicators
@@ -49,26 +55,31 @@ As someone with ADHD and memory issues, I can't remember what I need to do witho
 ## Tech Stack
 
 ### Frontend
+
 - **Framework:** Angular (latest, standalone components)
 - **UI Library:** TBD (dyslexia-friendly focus)
 - **Styling:** CSS with design tokens
 - **Drag & Drop:** TBD (supports nested zones)
 
 ### Backend
+
 - **Runtime:** Node.js
 - **Framework:** TBD (NestJS vs Express vs Fastify)
 - **API:** REST
 - **Language:** TypeScript
 
 ### Database
+
 - **v0.1-v1.0:** SQLite (local file)
 - **v2.0+:** PostgreSQL (if multi-device needed)
 
 ### AI/LLM
+
 - Claude API for standup/sprint review generation
 - MCP server for task management
 
 ### Integrations
+
 - Jira API
 - iOS Calendar / iCal
 - Apple Reminders (via EventKit/Shortcuts/AppleScript)
@@ -78,6 +89,7 @@ As someone with ADHD and memory issues, I can't remember what I need to do witho
 ## Design Principles
 
 ### ADHD-Friendly
+
 - Minimize visual clutter
 - One primary action always obvious
 - Reduce decision fatigue
@@ -86,6 +98,7 @@ As someone with ADHD and memory issues, I can't remember what I need to do witho
 - Visual timers for time blindness
 
 ### Dyslexia-Friendly
+
 - Verdana font family, 22px base size
 - 1.5 line height, 0.12em letter spacing
 - 45-60 character line length
@@ -94,6 +107,7 @@ As someone with ADHD and memory issues, I can't remember what I need to do witho
 - Off-black text (#2B2B2A)
 
 ### Visual Learner
+
 - Color-coded statuses
 - Generous whitespace
 - Card-based layouts
@@ -101,6 +115,7 @@ As someone with ADHD and memory issues, I can't remember what I need to do witho
 - Icons + text labels
 
 ### Accessibility
+
 - WCAG 2.1 Level AA minimum
 - 4.5:1 contrast ratio minimum
 - prefers-reduced-motion support
@@ -128,11 +143,13 @@ tasker/
 ## Development Setup
 
 **Prerequisites:**
+
 - Node.js 20+ (LTS)
 - npm or pnpm
 - Git
 
 **Setup (TBD - will be documented after scaffolding):**
+
 ```bash
 # Clone repo
 git clone [repo-url]
@@ -148,12 +165,31 @@ npm run db:setup
 npm run dev
 ```
 
+## Security: Database Access Control
+
+Toggle PostgreSQL external access for security during AI development:
+
+```bash
+# Enable for development (GUI tools, host backend)
+./scripts/toggle-db-access.sh on
+
+# Disable for AI auto-approve sessions
+./scripts/toggle-db-access.sh off
+
+# Check status
+./scripts/toggle-db-access.sh status
+```
+
+See [Database Setup Guide](./docs/database-setup.md#security-postgresql-access-control) for details.
+
 ## Version Roadmap
 
 ### v0.1 Alpha (Week 1)
+
 **Goal:** Solve backlog visibility - see everything in one place
 
 **Features:**
+
 - Basic backlog sidebar (organized by workspace/channel)
 - Simple kanban board (Today, In Progress, Done)
 - Create/edit/delete tasks manually
@@ -164,9 +200,11 @@ npm run dev
 **Success:** Using it daily instead of Sunsama for basic task tracking
 
 ### v0.2 (3-4 days)
+
 **Goal:** Add motivation and routine support
 
 **Features:**
+
 - Confetti + sound on task completion
 - Streak tracking
 - Routine tasks auto-populate Today
@@ -174,27 +212,33 @@ npm run dev
 - End-of-day reflection flow
 
 ### v0.3 (3-4 days)
+
 **Goal:** Handle complex tasks
 
 **Features:**
+
 - Subtasks with nested kanban
 - Weekly planning view
 - Due date filtering
 - Task search
 
 ### v0.4 (3-4 days)
+
 **Goal:** Polish and usability
 
 **Features:**
+
 - Keyboard shortcuts
 - Dark mode toggle
 - Settings panel
 - Onboarding flow
 
 ### v0.5 Beta (2 weeks)
+
 **Goal:** Integrations and AI
 
 **Features:**
+
 - Jira integration
 - Calendar integration
 - Email forward import
@@ -203,9 +247,11 @@ npm run dev
 - Pushover notifications
 
 ### v1.0 Production (1 week)
+
 **Goal:** Production-ready
 
 **Features:**
+
 - Performance optimization
 - Error handling
 - User documentation
@@ -213,9 +259,11 @@ npm run dev
 - Multiple view modes
 
 ### v2.0+ Future
+
 **Goal:** Intelligence and insights
 
 **Features:**
+
 - ML-powered time estimates
 - Productivity analytics
 - Pattern recognition
@@ -224,6 +272,7 @@ npm run dev
 ## Design System Highlights
 
 ### Colors
+
 - **Primary:** Muted purple (#8B7BB8)
 - **Secondary:** Soft blue (#6B9AC4)
 - **Accent:** Dusty pink (#C89FA7)
@@ -231,12 +280,14 @@ npm run dev
 - **Success:** Sage green (#7A9B76)
 
 ### Typography
+
 - **Font:** Verdana, Open Sans, Helvetica, Arial
 - **Base Size:** 22px (optimized for myopia/astigmatism)
 - **Line Height:** 1.5
 - **Letter Spacing:** 0.12em
 
 ### Spacing
+
 - **Base Unit:** 8px
 - **Scale:** 8, 16, 24, 32, 48, 64, 96
 
