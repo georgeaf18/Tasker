@@ -27,7 +27,7 @@ export class TaskStateService {
     private readonly tasksSignal = signal<Task[]>([]);
     private readonly loadingSignal = signal<boolean>(false);
     private readonly errorSignal = signal<string | null>(null);
-    private readonly selectedWorkspaceSignal = signal<Workspace>(Workspace.PERSONAL);
+    private readonly selectedWorkspaceSignal = signal<Workspace>(Workspace.WORK);
 
     // Readonly accessors
     readonly tasks = this.tasksSignal.asReadonly();
@@ -35,7 +35,7 @@ export class TaskStateService {
     readonly error = this.errorSignal.asReadonly();
     readonly selectedWorkspace = this.selectedWorkspaceSignal.asReadonly();
 
-    // Computed signals - Status-based views
+    // Computed signals - Status-based views (all workspaces)
     readonly backlogTasks = computed(() =>
         this.tasksSignal().filter(t => t.status === TaskStatus.BACKLOG)
     );
@@ -50,6 +50,28 @@ export class TaskStateService {
 
     readonly doneTasks = computed(() =>
         this.tasksSignal().filter(t => t.status === TaskStatus.DONE)
+    );
+
+    // Computed signals - Status-based views filtered by current workspace
+    readonly currentWorkspaceTodayTasks = computed(() =>
+        this.tasksSignal().filter(t =>
+            t.status === TaskStatus.TODAY &&
+            t.workspace === this.selectedWorkspaceSignal()
+        )
+    );
+
+    readonly currentWorkspaceInProgressTasks = computed(() =>
+        this.tasksSignal().filter(t =>
+            t.status === TaskStatus.IN_PROGRESS &&
+            t.workspace === this.selectedWorkspaceSignal()
+        )
+    );
+
+    readonly currentWorkspaceDoneTasks = computed(() =>
+        this.tasksSignal().filter(t =>
+            t.status === TaskStatus.DONE &&
+            t.workspace === this.selectedWorkspaceSignal()
+        )
     );
 
     // Computed signals - Workspace-based views

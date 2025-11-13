@@ -1,10 +1,11 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild, effect, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { Workspace } from './models';
 import { KanbanBoardComponent } from './components/kanban-board/kanban-board.component';
 import { BacklogSidebarComponent } from './components/backlog-sidebar/backlog-sidebar.component';
+import { TaskStateService } from './services/task-state.service';
 
 @Component({
   imports: [CommonModule, RouterModule, ToastModule, KanbanBoardComponent, BacklogSidebarComponent],
@@ -15,9 +16,18 @@ import { BacklogSidebarComponent } from './components/backlog-sidebar/backlog-si
 export class App {
   @ViewChild(BacklogSidebarComponent) backlogSidebar!: BacklogSidebarComponent;
 
+  private readonly taskState = inject(TaskStateService);
+
   protected readonly title = 'Tasker';
   protected readonly currentWorkspace = signal<Workspace>(Workspace.WORK);
   protected readonly Workspace = Workspace;
+
+  constructor() {
+    // Sync currentWorkspace changes to TaskStateService
+    effect(() => {
+      this.taskState.setSelectedWorkspace(this.currentWorkspace());
+    });
+  }
 
   protected toggleWorkspace(): void {
     this.currentWorkspace.update(current =>

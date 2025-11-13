@@ -1,5 +1,6 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { of, throwError, delay, Subject } from 'rxjs';
+import { MessageService } from 'primeng/api';
 import { TaskStateService } from './task-state.service';
 import { TaskApiService } from './task-api.service';
 import { Task, CreateTaskDto, UpdateTaskDto, TaskFilters } from '../models';
@@ -9,6 +10,7 @@ import { Workspace } from '../models/workspace.enum';
 describe('TaskStateService', () => {
     let service: TaskStateService;
     let mockTaskApiService: jest.Mocked<TaskApiService>;
+    let mockMessageService: jest.Mocked<MessageService>;
 
     // Mock task data factory
     const createMockTask = (overrides: Partial<Task> = {}): Task => ({
@@ -35,10 +37,17 @@ describe('TaskStateService', () => {
             getTask: jest.fn()
         } as any;
 
+        // Create mock for MessageService
+        mockMessageService = {
+            add: jest.fn(),
+            clear: jest.fn()
+        } as any;
+
         TestBed.configureTestingModule({
             providers: [
                 TaskStateService,
-                { provide: TaskApiService, useValue: mockTaskApiService }
+                { provide: TaskApiService, useValue: mockTaskApiService },
+                { provide: MessageService, useValue: mockMessageService }
             ]
         });
 
@@ -62,8 +71,8 @@ describe('TaskStateService', () => {
             expect(service.error()).toBeNull();
         });
 
-        it('should initialize with PERSONAL workspace selected', () => {
-            expect(service.selectedWorkspace()).toBe(Workspace.PERSONAL);
+        it('should initialize with WORK workspace selected', () => {
+            expect(service.selectedWorkspace()).toBe(Workspace.WORK);
         });
     });
 
@@ -186,6 +195,24 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
+        it('should show success toast when task is added', (done) => {
+            const dto: CreateTaskDto = { title: 'New Task', workspace: Workspace.PERSONAL };
+            const createdTask = createMockTask({ id: 5, title: 'New Task' });
+            mockTaskApiService.createTask.mockReturnValue(of(createdTask));
+
+            service.addTask(dto);
+
+            setTimeout(() => {
+                expect(mockMessageService.add).toHaveBeenCalledWith({
+                    severity: 'success',
+                    summary: 'Task Created',
+                    detail: 'Task has been successfully created',
+                    life: 3000
+                });
+                done();
+            }, 0);
+        });
+
         it('should handle error when adding task fails', (done) => {
             const dto: CreateTaskDto = { title: 'New Task', workspace: Workspace.PERSONAL };
             const errorMessage = 'Failed to create task';
@@ -200,6 +227,26 @@ describe('TaskStateService', () => {
                 expect(service.loading()).toBe(false);
                 expect(service.error()).toBe(errorMessage);
                 expect(service.tasks()).toHaveLength(1); // Original task still there
+                done();
+            }, 0);
+        });
+
+        it('should show error toast when adding task fails', (done) => {
+            const dto: CreateTaskDto = { title: 'New Task', workspace: Workspace.PERSONAL };
+            const errorMessage = 'Failed to create task';
+            mockTaskApiService.createTask.mockReturnValue(
+                throwError(() => new Error(errorMessage))
+            );
+
+            service.addTask(dto);
+
+            setTimeout(() => {
+                expect(mockMessageService.add).toHaveBeenCalledWith({
+                    severity: 'error',
+                    summary: 'Create Failed',
+                    detail: errorMessage,
+                    life: 5000
+                });
                 done();
             }, 0);
         });
@@ -254,6 +301,26 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
+        it('should show success toast when task is updated', (done) => {
+            const originalTask = createMockTask({ id: 1, title: 'Original Title' });
+            const updatedTask = createMockTask({ id: 1, title: 'Updated Title' });
+
+            service.setTasks([originalTask]);
+            mockTaskApiService.updateTask.mockReturnValue(of(updatedTask));
+
+            service.updateTask(1, { title: 'Updated Title' });
+
+            setTimeout(() => {
+                expect(mockMessageService.add).toHaveBeenCalledWith({
+                    severity: 'success',
+                    summary: 'Task Updated',
+                    detail: 'Task has been successfully updated',
+                    life: 3000
+                });
+                done();
+            }, 0);
+        });
+
         it('should update task status', (done) => {
             const originalTask = createMockTask({ id: 1, status: TaskStatus.BACKLOG });
             const updatedTask = createMockTask({ id: 1, status: TaskStatus.TODAY });
@@ -284,6 +351,28 @@ describe('TaskStateService', () => {
                 expect(service.loading()).toBe(false);
                 expect(service.error()).toBe(errorMessage);
                 expect(service.tasks()[0].title).toBe('Original'); // Not updated
+                done();
+            }, 0);
+        });
+
+        it('should show error toast when updating task fails', (done) => {
+            const originalTask = createMockTask({ id: 1, title: 'Original' });
+            service.setTasks([originalTask]);
+
+            const errorMessage = 'Failed to update task';
+            mockTaskApiService.updateTask.mockReturnValue(
+                throwError(() => new Error(errorMessage))
+            );
+
+            service.updateTask(1, { title: 'Updated' });
+
+            setTimeout(() => {
+                expect(mockMessageService.add).toHaveBeenCalledWith({
+                    severity: 'error',
+                    summary: 'Update Failed',
+                    detail: errorMessage,
+                    life: 5000
+                });
                 done();
             }, 0);
         });
@@ -351,6 +440,24 @@ describe('TaskStateService', () => {
             }, 0);
         });
 
+        it('should show success toast when task is removed', (done) => {
+            const tasks = [createMockTask({ id: 1 }), createMockTask({ id: 2 })];
+            service.setTasks(tasks);
+            mockTaskApiService.deleteTask.mockReturnValue(of(void 0));
+
+            service.removeTask(1);
+
+            setTimeout(() => {
+                expect(mockMessageService.add).toHaveBeenCalledWith({
+                    severity: 'success',
+                    summary: 'Task Deleted',
+                    detail: 'Task has been successfully deleted',
+                    life: 3000
+                });
+                done();
+            }, 0);
+        });
+
         it('should handle error when removing task fails', (done) => {
             const tasks = [createMockTask({ id: 1 }), createMockTask({ id: 2 })];
             service.setTasks(tasks);
@@ -366,6 +473,28 @@ describe('TaskStateService', () => {
                 expect(service.loading()).toBe(false);
                 expect(service.error()).toBe(errorMessage);
                 expect(service.tasks()).toHaveLength(2); // Not removed
+                done();
+            }, 0);
+        });
+
+        it('should show error toast when removing task fails', (done) => {
+            const tasks = [createMockTask({ id: 1 }), createMockTask({ id: 2 })];
+            service.setTasks(tasks);
+
+            const errorMessage = 'Failed to delete task';
+            mockTaskApiService.deleteTask.mockReturnValue(
+                throwError(() => new Error(errorMessage))
+            );
+
+            service.removeTask(1);
+
+            setTimeout(() => {
+                expect(mockMessageService.add).toHaveBeenCalledWith({
+                    severity: 'error',
+                    summary: 'Delete Failed',
+                    detail: errorMessage,
+                    life: 5000
+                });
                 done();
             }, 0);
         });

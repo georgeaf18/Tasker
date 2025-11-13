@@ -49,9 +49,10 @@ export class KanbanBoardComponent implements OnInit {
   selectedTask = signal<Task | null>(null);
   showTaskDialog = signal<boolean>(false);
 
-  todayTasks = computed(() => this.taskState.todayTasks());
-  inProgressTasks = computed(() => this.taskState.inProgressTasks());
-  doneTasks = computed(() => this.taskState.doneTasks());
+  // Use workspace-filtered computed signals from TaskStateService
+  todayTasks = computed(() => this.taskState.currentWorkspaceTodayTasks());
+  inProgressTasks = computed(() => this.taskState.currentWorkspaceInProgressTasks());
+  doneTasks = computed(() => this.taskState.currentWorkspaceDoneTasks());
 
   dailyProgress = computed(() => {
     const today = this.todayTasks().length;

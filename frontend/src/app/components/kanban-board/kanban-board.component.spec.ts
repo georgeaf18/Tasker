@@ -68,24 +68,24 @@ describe('KanbanBoardComponent', () => {
     beforeEach(async () => {
         // Create mock signals for TaskStateService
         tasksSignal = signal<Task[]>([]);
-        const todayTasksSignal = computed(() =>
+        const currentWorkspaceTodayTasksSignal = computed(() =>
             tasksSignal().filter((t) => t.status === TaskStatus.TODAY)
         );
-        const inProgressTasksSignal = computed(() =>
+        const currentWorkspaceInProgressTasksSignal = computed(() =>
             tasksSignal().filter((t) => t.status === TaskStatus.IN_PROGRESS)
         );
-        const doneTasksSignal = computed(() =>
+        const currentWorkspaceDoneTasksSignal = computed(() =>
             tasksSignal().filter((t) => t.status === TaskStatus.DONE)
         );
 
-        // Create mock service with signals
+        // Create mock service with workspace-filtered signals
         mockTaskStateService = {
             loadTasks: jest.fn(),
             updateTask: jest.fn(),
             removeTask: jest.fn(),
-            todayTasks: todayTasksSignal,
-            inProgressTasks: inProgressTasksSignal,
-            doneTasks: doneTasksSignal,
+            currentWorkspaceTodayTasks: currentWorkspaceTodayTasksSignal,
+            currentWorkspaceInProgressTasks: currentWorkspaceInProgressTasksSignal,
+            currentWorkspaceDoneTasks: currentWorkspaceDoneTasksSignal,
         };
 
         await TestBed.configureTestingModule({
@@ -541,14 +541,14 @@ describe('KanbanBoardComponent', () => {
     });
 
     describe('Integration with TaskStateService', () => {
-        it('should use TaskStateService computed signals', () => {
+        it('should use TaskStateService workspace-filtered computed signals', () => {
             setMockTasks(mockTasks);
             fixture.detectChanges();
 
-            // Verify component is using service's computed signals
-            expect(component.todayTasks()).toBe(mockTaskStateService.todayTasks!());
-            expect(component.inProgressTasks()).toBe(mockTaskStateService.inProgressTasks!());
-            expect(component.doneTasks()).toBe(mockTaskStateService.doneTasks!());
+            // Verify component is using service's workspace-filtered computed signals
+            expect(component.todayTasks()).toBe(mockTaskStateService.currentWorkspaceTodayTasks!());
+            expect(component.inProgressTasks()).toBe(mockTaskStateService.currentWorkspaceInProgressTasks!());
+            expect(component.doneTasks()).toBe(mockTaskStateService.currentWorkspaceDoneTasks!());
         });
 
         it('should call loadTasks with no filters on init', () => {
