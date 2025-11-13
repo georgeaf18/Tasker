@@ -1,5 +1,6 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
 import { BadgeModule } from 'primeng/badge';
@@ -25,6 +26,7 @@ import { Task, TaskStatus, Workspace } from '../../models/task.model';
   selector: 'app-kanban-board',
   imports: [
     CommonModule,
+    DragDropModule,
     PanelModule,
     CardModule,
     BadgeModule,
@@ -108,6 +110,19 @@ export class KanbanBoardComponent implements OnInit {
       return 'Tomorrow';
     } else {
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+  }
+
+  /**
+   * Handles drag and drop events between kanban columns.
+   * Updates task status based on which column the task was dropped into.
+   */
+  onDrop(event: CdkDragDrop<Task[]>, newStatus: TaskStatus): void {
+    const task = event.item.data as Task;
+
+    // Only update if the status actually changed
+    if (task.status !== newStatus) {
+      this.taskState.updateTask(task.id, { status: newStatus });
     }
   }
 }
