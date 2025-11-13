@@ -93,14 +93,14 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 25px;
+  font-size: 26px;
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0.5px;
 }
 
 .column-title i {
-  font-size: 22px;
+  font-size: 24px;
 }
 
 /* Column-specific colors - Subtle solid colors */

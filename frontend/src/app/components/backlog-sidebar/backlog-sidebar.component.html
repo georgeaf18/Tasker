@@ -125,119 +125,99 @@
     </div>
 </div>
 
-<!-- Create Task Dialog -->
-<p-dialog 
-    [(visible)]="createTaskDialogVisible" 
-    [header]="'Create New Task'" 
+<!-- Create Task Dialog - Sleek Design -->
+<p-dialog
+    [(visible)]="createTaskDialogVisible"
     [modal]="true"
-    [style]="{width: '450px'}"
+    [style]="{width: '700px'}"
     [draggable]="false"
     [resizable]="false"
+    [showHeader]="false"
+    [dismissableMask]="true"
+    styleClass="sleek-task-dialog"
 >
-    <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()">
-        <div class="form-field">
-            <label for="title">Title *</label>
+    <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()" class="sleek-form">
+        <!-- Top Actions -->
+        <div class="dialog-top-actions">
+            <button type="button" class="add-task-btn" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
+                <i class="pi pi-user-plus"></i>
+                <span>Add task</span>
+            </button>
+        </div>
+
+        <!-- Main Input -->
+        <div class="task-input-container">
             <input
                 id="title"
                 type="text"
-                pInputText
                 formControlName="title"
-                placeholder="Enter task title"
-                class="w-full"
-            />
-            @if (createTaskForm.get('title')?.invalid && createTaskForm.get('title')?.touched) {
-                <small class="error-message">Title is required</small>
-            }
-        </div>
-
-        <div class="form-field">
-            <label for="description">Description</label>
-            <textarea
-                id="description"
-                pTextarea
-                formControlName="description"
-                placeholder="Enter task description"
-                [rows]="3"
-                class="w-full"
-            ></textarea>
-        </div>
-
-        <div class="form-field">
-            <label for="status">Add to *</label>
-            <p-select
-                id="status"
-                formControlName="status"
-                [options]="statusOptions"
-                optionLabel="label"
-                optionValue="value"
-                placeholder="Select column"
-                class="w-full"
+                placeholder="Task description..."
+                class="sleek-task-input"
+                autocomplete="off"
             />
         </div>
 
-        <div class="form-field">
-            <label for="workspace">Context *</label>
-            <p-select
-                id="workspace"
-                formControlName="workspace"
-                [options]="workspaceOptions"
-                optionLabel="label"
-                optionValue="value"
-                placeholder="Select context"
-                class="w-full"
-            />
-        </div>
-        
-        <div class="form-field">
-            <label for="channel">Channel</label>
-            <p-select
-                id="channel"
-                formControlName="channelId"
-                [options]="filteredChannels()"
-                optionLabel="name"
-                optionValue="id"
-                placeholder="Select channel (optional)"
-                class="w-full"
-                [showClear]="true"
-            />
-        </div>
-        
-        <div class="form-field">
-            <label for="dueDate">Due Date</label>
-            <p-datepicker
-                id="dueDate"
-                formControlName="dueDate"
-                [showIcon]="true"
-                placeholder="Select due date (optional)"
-                class="w-full"
-                dateFormat="mm/dd/yy"
-                [showTime]="true"
-            />
-        </div>
-        
-        <div class="form-field-checkbox">
-            <p-checkbox 
-                formControlName="isRoutine"
-                [binary]="true"
-                inputId="isRoutine"
-            />
-            <label for="isRoutine">Is this a routine task?</label>
+        <!-- Metadata Row -->
+        <div class="metadata-row">
+            <!-- Status/Due Date Button -->
+            <button type="button" class="metadata-btn" (click)="op1.toggle($event)">
+                <i class="pi pi-calendar"></i>
+                <span>{{ createTaskForm.get('status')?.value === 'TODAY' ? 'Today' : createTaskForm.get('status')?.value === 'IN_PROGRESS' ? 'In Progress' : createTaskForm.get('status')?.value === 'DONE' ? 'Done' : 'Backlog' }}</span>
+            </button>
+            <p-popover #op1>
+                <div class="metadata-popover">
+                    @for (option of statusOptions; track option.value) {
+                        <div class="popover-option" (click)="createTaskForm.patchValue({status: option.value}); op1.hide()">
+                            <i class="pi pi-calendar"></i>
+                            <span>{{ option.label }}</span>
+                        </div>
+                    }
+                </div>
+            </p-popover>
+
+            <!-- Time Button (Optional) -->
+            <button type="button" class="metadata-btn">
+                <i class="pi pi-clock"></i>
+                <span>--:--</span>
+            </button>
+
+            <!-- Channel Button -->
+            <button type="button" class="metadata-btn" (click)="op2.toggle($event)">
+                <i class="pi pi-hashtag"></i>
+                <span>{{ getChannelName(createTaskForm.get('channelId')?.value) || 'development' }}</span>
+            </button>
+            <p-popover #op2>
+                <div class="metadata-popover">
+                    @for (channel of filteredChannels(); track channel.id) {
+                        <div class="popover-option" (click)="createTaskForm.patchValue({channelId: channel.id}); op2.hide()">
+                            <i class="pi pi-hashtag"></i>
+                            <span>{{ channel.name }}</span>
+                        </div>
+                    }
+                </div>
+            </p-popover>
+
+            <!-- Workspace Button -->
+            <button type="button" class="metadata-btn" (click)="op3.toggle($event)">
+                <i class="pi pi-{{ createTaskForm.get('workspace')?.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+            </button>
+            <p-popover #op3>
+                <div class="metadata-popover">
+                    @for (workspace of workspaceOptions; track workspace.value) {
+                        <div class="popover-option" (click)="createTaskForm.patchValue({workspace: workspace.value}); op3.hide()">
+                            <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+                            <span>{{ workspace.label }}</span>
+                        </div>
+                    }
+                </div>
+            </p-popover>
+
+            <!-- Priority/Up Arrow Button -->
+            <button type="button" class="metadata-btn">
+                <i class="pi pi-arrow-up"></i>
+            </button>
         </div>
     </form>
-    
-    <ng-template pTemplate="footer">
-        <p-button 
-            label="Cancel" 
-            severity="secondary"
-            (onClick)="hideCreateTaskDialog()"
-        />
-        <p-button 
-            label="Create" 
-            severity="primary"
-            (onClick)="submitCreateTask()"
-            [disabled]="createTaskForm.invalid"
-        />
-    </ng-template>
 </p-dialog>
 
 <!-- Task Details/Edit Dialog -->

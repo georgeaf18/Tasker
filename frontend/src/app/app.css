@@ -123,23 +123,30 @@
   position: relative;
   width: var(--sidebar-width);
   flex-shrink: 0;
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out;
 }
 
 .sidebar-container.sidebar-hidden {
-  transform: translateX(calc(-1 * var(--sidebar-width)));
   width: 0;
 }
 
 /* Sidebar */
 .sidebar {
-  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-width);
   height: 100%;
   background-color: var(--color-bg-secondary);
   border-right: var(--border-width) solid var(--color-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-container.sidebar-hidden .sidebar {
+  transform: translateX(calc(-1 * var(--sidebar-width)));
 }
 
 .sidebar-header {
@@ -191,31 +198,34 @@
 /* Sidebar Toggle Button */
 .sidebar-toggle-btn {
   position: absolute;
-  right: -12px; /* Position outside wrapper */
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 48px;
+  left: calc(var(--sidebar-width) - 16px); /* Position at sidebar edge */
+  bottom: var(--spacing-md);
+  width: 32px;
+  height: 64px;
   background: var(--color-primary);
   color: white;
   border: none;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 12px 12px 0;
   cursor: pointer;
   z-index: 1001;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  transition: left 0.3s ease-in-out, width 0.2s ease;
+}
+
+.sidebar-container.sidebar-hidden .sidebar-toggle-btn {
+  left: -16px; /* When hidden, position at left edge of viewport */
 }
 
 .sidebar-toggle-btn:hover {
   background: var(--color-primary-hover);
-  width: 28px;
+  width: 36px;
 }
 
 .sidebar-toggle-btn i {
-  font-size: 14px;
+  font-size: 18px;
 }
 
 /* Main Content */

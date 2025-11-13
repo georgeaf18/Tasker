@@ -45,12 +45,12 @@
 
   /* Typography - ADHD/Dyslexia-friendly but professional */
   --font-family-base: 'Open Sans', Verdana, sans-serif;
-  --font-size-base: 16px;
-  --font-size-sm: 14px;
-  --font-size-xs: 13px;
-  --font-size-lg: 20px;
-  --font-size-xl: 26px;
-  --font-size-2xl: 32px;
+  --font-size-base: 14px;
+  --font-size-sm: 12px;
+  --font-size-xs: 11px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 22px;
   --line-height-base: 1.5;
   --letter-spacing-base: 0.01em;
   --letter-spacing-wide: 0.025em;

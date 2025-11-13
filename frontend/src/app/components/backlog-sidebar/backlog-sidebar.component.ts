@@ -17,6 +17,7 @@ import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { BadgeModule } from 'primeng/badge';
+import { Popover } from 'primeng/popover';
 import { ConfirmationService } from 'primeng/api';
 import { TaskStateService } from '../../services/task-state.service';
 import { ChannelApiService } from '../../services/channel-api.service';
@@ -58,7 +59,8 @@ interface GroupedTasks {
         MessageModule,
         ConfirmDialogModule,
         TooltipModule,
-        BadgeModule
+        BadgeModule,
+        Popover
     ],
     providers: [ConfirmationService],
     templateUrl: './backlog-sidebar.component.html',
@@ -191,6 +193,12 @@ export class BacklogSidebarComponent implements OnInit {
         if (!workspace) return [];
         return this.channelsSignal().filter(c => c.workspace === workspace);
     });
+
+    getChannelName(channelId: number | null | undefined): string | null {
+        if (!channelId) return null;
+        const channel = this.channelsSignal().find(c => c.id === channelId);
+        return channel?.name || null;
+    }
     
     ngOnInit(): void {
         this.taskStateService.loadTasks();
@@ -224,6 +232,9 @@ export class BacklogSidebarComponent implements OnInit {
             };
 
             this.taskStateService.addTask(dto);
+            this.hideCreateTaskDialog();
+        } else {
+            // If form is invalid (empty title), just close the dialog
             this.hideCreateTaskDialog();
         }
     }
