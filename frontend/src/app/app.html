@@ -33,17 +33,21 @@
 
   <!-- Main Layout: Sidebar + Content -->
   <div class="app-layout">
-    <!-- Backlog Sidebar -->
-    <aside class="sidebar" [class.sidebar-hidden]="!sidebarVisible()">
-      <div class="sidebar-header">
-        <h2>Backlog</h2>
-        <button type="button" class="add-task-button" title="Add Task" (click)="openCreateTaskDialog()">
-          <i class="pi pi-plus"></i>
-        </button>
-      </div>
-      <div class="sidebar-content">
-        <app-backlog-sidebar></app-backlog-sidebar>
-      </div>
+    <!-- Sidebar Container Wrapper -->
+    <div class="sidebar-container" [class.sidebar-hidden]="!sidebarVisible()">
+      <!-- Backlog Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>Backlog</h2>
+          <button type="button" class="add-task-button" title="Add Task" (click)="openCreateTaskDialog()">
+            <i class="pi pi-plus"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <app-backlog-sidebar></app-backlog-sidebar>
+        </div>
+      </aside>
+      <!-- Toggle button outside sidebar but in wrapper -->
       <button
         type="button"
         class="sidebar-toggle-btn"
@@ -51,7 +55,7 @@
         [attr.aria-label]="sidebarVisible() ? 'Hide backlog' : 'Show backlog'">
         <i [class]="sidebarVisible() ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"></i>
       </button>
-    </aside>
+    </div>
 
     <!-- Main Content Area -->
     <main class="main-content">

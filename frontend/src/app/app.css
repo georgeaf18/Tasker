@@ -118,22 +118,28 @@
   overflow: hidden;
 }
 
-/* Sidebar */
-.sidebar {
+/* Sidebar Container Wrapper */
+.sidebar-container {
   position: relative;
   width: var(--sidebar-width);
-  flex-shrink: 0; /* Prevent sidebar from shrinking */
+  flex-shrink: 0;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+}
+
+.sidebar-container.sidebar-hidden {
+  transform: translateX(calc(-1 * var(--sidebar-width)));
+  width: 0;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 100%;
+  height: 100%;
   background-color: var(--color-bg-secondary);
   border-right: var(--border-width) solid var(--color-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
-}
-
-.sidebar.sidebar-hidden {
-  transform: translateX(calc(-1 * var(--sidebar-width)));
-  width: 0; /* Collapse width to let main content expand */
 }
 
 .sidebar-header {
@@ -184,8 +190,8 @@
 
 /* Sidebar Toggle Button */
 .sidebar-toggle-btn {
-  position: absolute; /* Absolute positioning relative to sidebar */
-  right: -12px; /* Position at right edge of sidebar */
+  position: absolute;
+  right: -12px; /* Position outside wrapper */
   top: 50%;
   transform: translateY(-50%);
   width: 24px;
@@ -195,7 +201,7 @@
   border: none;
   border-radius: 0 8px 8px 0;
   cursor: pointer;
-  z-index: 1001; /* Above sidebar */
+  z-index: 1001;
   display: flex;
   align-items: center;
   justify-content: center;
