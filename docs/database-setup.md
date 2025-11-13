@@ -247,6 +247,73 @@ npm run db:up
 
 ---
 
+## Security: PostgreSQL Access Control
+
+For security during AI development sessions, you can control whether PostgreSQL is accessible externally.
+
+### Quick Toggle
+
+Use the convenience script:
+
+```bash
+# Enable external access (for your development work)
+./scripts/toggle-db-access.sh on
+
+# Disable external access (for AI auto-approve mode)
+./scripts/toggle-db-access.sh off
+
+# Check current status
+./scripts/toggle-db-access.sh status
+```
+
+### Manual Configuration
+
+Edit `.env` and set `POSTGRES_EXTERNAL_PORT`:
+
+**Enabled (Development):**
+
+```env
+POSTGRES_EXTERNAL_PORT=5432
+```
+
+- Database accessible at `localhost:5432`
+- GUI tools (TablePlus, Prisma Studio, etc.) can connect
+- Backend on host can connect
+
+**Disabled (AI Sessions):**
+
+```env
+POSTGRES_EXTERNAL_PORT=
+```
+
+- Database NOT accessible externally
+- Secure during AI auto-approve mode
+- Backend in Docker can still connect via service name
+
+**Apply changes:**
+
+```bash
+docker-compose up -d
+```
+
+### Why This Matters
+
+When Claude Code works in auto-approve mode, disabling external database access adds an extra security layer:
+
+- Prevents malicious code from accessing your database
+- Isolates the container from external networks
+- Backend services in Docker can still communicate internally
+- Simple toggle lets you enable access when you need it
+
+### Best Practices
+
+1. **Development work:** Enable external access (`./scripts/toggle-db-access.sh on`)
+2. **AI auto-approve sessions:** Disable external access (`./scripts/toggle-db-access.sh off`)
+3. **After AI session:** Re-enable if needed
+4. **Production:** Always keep disabled (handled by separate docker-compose.prod.yml)
+
+---
+
 ## Data Persistence
 
 ### How It Works
