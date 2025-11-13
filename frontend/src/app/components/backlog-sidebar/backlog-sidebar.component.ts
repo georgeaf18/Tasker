@@ -1,4 +1,4 @@
-import { Component, computed, signal, OnInit, effect } from '@angular/core';
+import { Component, computed, signal, OnInit, OnDestroy, effect, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
@@ -71,6 +71,19 @@ export class BacklogSidebarComponent implements OnInit {
 
     // Signal to track which accordion panels are expanded (0 = Work, 1 = Personal)
     readonly expandedPanels = signal<number[]>([]);
+
+    /**
+     * Keyboard shortcut to open create task dialog
+     * Ctrl+K (Windows/Linux) or Cmd+K (macOS)
+     */
+    @HostListener('window:keydown', ['$event'])
+    handleKeyboardShortcut(event: KeyboardEvent): void {
+        // Check for Ctrl+K (Windows/Linux) or Cmd+K (macOS)
+        if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+            event.preventDefault();
+            this.showCreateTaskDialog();
+        }
+    }
 
     readonly channels = this.channelsSignal.asReadonly();
 
