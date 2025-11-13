@@ -1,51 +1,121 @@
 <div class="backlog-sidebar-container">
-    <p-panel [toggleable]="false">
-        <div
-          class="backlog-content"
-          cdkDropList
-          [cdkDropListData]="backlogTasks()"
-          [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list']"
-          (cdkDropListDropped)="onDrop($event)"
-          id="backlog-list">
-            @if (backlogTasks().length === 0) {
-                <p-message severity="info" [text]="'No tasks in backlog'" />
-            } @else {
-                @for (task of backlogTasks(); track task.id) {
-                    <div class="task-list-item">
-                        <p-card
-                            cdkDrag
-                            [cdkDragData]="task"
-                            [style]="{'cursor': 'grab'}"
-                            (click)="showTaskDetails(task)"
-                            [pTooltip]="task.description || 'No description'"
-                            tooltipPosition="right"
-                        >
-                            <div class="task-card-content">
-                                <div class="task-title">{{ task.title }}</div>
-                                @if (task.dueDate) {
-                                    <div class="task-meta">
-                                        <i class="pi pi-calendar"></i>
-                                        <span>{{ task.dueDate | date:'short' }}</span>
-                                    </div>
-                                }
-                                @if (task.isRoutine) {
-                                    <div class="task-routine-badge">
-                                        <i class="pi pi-sync"></i> Routine
-                                    </div>
-                                }
-                            </div>
-                        </p-card>
+    <div class="accordion-wrapper">
+        <p-accordion
+            [multiple]="true"
+            [(value)]="expandedPanels"
+            class="workspace-accordion">
+
+            <!-- Work Section -->
+            <p-accordionpanel [value]="0">
+                <p-accordionheader>
+                    <div class="workspace-header work-header">
+                        <i class="pi pi-briefcase workspace-icon"></i>
+                        <span class="workspace-name">Work</span>
+                        <p-badge [value]="workTaskCount().toString()" styleClass="workspace-badge" />
                     </div>
-                }
-            }
-        </div>
-    </p-panel>
-    
+                </p-accordionheader>
+                <p-accordioncontent>
+                <div
+                    class="workspace-content"
+                    cdkDropList
+                    [cdkDropListData]="workTasks()"
+                    [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list', 'personal-backlog-list']"
+                    (cdkDropListDropped)="onDrop($event)"
+                    id="work-backlog-list">
+                    @if (workTasks().length === 0) {
+                        <p-message severity="info" [text]="'No work tasks in backlog'" />
+                    } @else {
+                        @for (task of workTasks(); track task.id) {
+                            <div class="task-list-item">
+                                <p-card
+                                    cdkDrag
+                                    [cdkDragData]="task"
+                                    [style]="{'cursor': 'grab'}"
+                                    (click)="showTaskDetails(task)"
+                                    [pTooltip]="task.description || 'No description'"
+                                    tooltipPosition="right"
+                                >
+                                    <div class="task-card-content">
+                                        <div class="task-title">{{ task.title }}</div>
+                                        @if (task.dueDate) {
+                                            <div class="task-meta">
+                                                <i class="pi pi-calendar"></i>
+                                                <span>{{ task.dueDate | date:'short' }}</span>
+                                            </div>
+                                        }
+                                        @if (task.isRoutine) {
+                                            <div class="task-routine-badge">
+                                                <i class="pi pi-sync"></i> Routine
+                                            </div>
+                                        }
+                                    </div>
+                                </p-card>
+                            </div>
+                        }
+                    }
+                </div>
+                </p-accordioncontent>
+            </p-accordionpanel>
+
+            <!-- Personal Section -->
+            <p-accordionpanel [value]="1">
+                <p-accordionheader>
+                    <div class="workspace-header personal-header">
+                        <i class="pi pi-home workspace-icon"></i>
+                        <span class="workspace-name">Personal</span>
+                        <p-badge [value]="personalTaskCount().toString()" styleClass="workspace-badge" />
+                    </div>
+                </p-accordionheader>
+                <p-accordioncontent>
+                <div
+                    class="workspace-content"
+                    cdkDropList
+                    [cdkDropListData]="personalTasks()"
+                    [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list', 'work-backlog-list']"
+                    (cdkDropListDropped)="onDrop($event)"
+                    id="personal-backlog-list">
+                    @if (personalTasks().length === 0) {
+                        <p-message severity="info" [text]="'No personal tasks in backlog'" />
+                    } @else {
+                        @for (task of personalTasks(); track task.id) {
+                            <div class="task-list-item">
+                                <p-card
+                                    cdkDrag
+                                    [cdkDragData]="task"
+                                    [style]="{'cursor': 'grab'}"
+                                    (click)="showTaskDetails(task)"
+                                    [pTooltip]="task.description || 'No description'"
+                                    tooltipPosition="right"
+                                >
+                                    <div class="task-card-content">
+                                        <div class="task-title">{{ task.title }}</div>
+                                        @if (task.dueDate) {
+                                            <div class="task-meta">
+                                                <i class="pi pi-calendar"></i>
+                                                <span>{{ task.dueDate | date:'short' }}</span>
+                                            </div>
+                                        }
+                                        @if (task.isRoutine) {
+                                            <div class="task-routine-badge">
+                                                <i class="pi pi-sync"></i> Routine
+                                            </div>
+                                        }
+                                    </div>
+                                </p-card>
+                            </div>
+                        }
+                    }
+                </div>
+                </p-accordioncontent>
+            </p-accordionpanel>
+        </p-accordion>
+    </div>
+
     <!-- Floating Action Button -->
     <div class="fab-container">
-        <p-button 
-            icon="pi pi-plus" 
-            [rounded]="true" 
+        <p-button
+            icon="pi pi-plus"
+            [rounded]="true"
             [raised]="true"
             severity="primary"
             (onClick)="showCreateTaskDialog()"

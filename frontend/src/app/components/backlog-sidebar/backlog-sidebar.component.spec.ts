@@ -119,13 +119,15 @@ describe('BacklogSidebarComponent', () => {
     beforeEach(async () => {
         // Create mocks with signal support
         const backlogTasksSignal = signal<Task[]>(mockTasks.filter(t => t.status === TaskStatus.BACKLOG));
+        const selectedWorkspaceSignal = signal<Workspace>(Workspace.WORK);
 
         mockTaskStateService = {
             loadTasks: jest.fn(),
             addTask: jest.fn(),
             updateTask: jest.fn(),
             removeTask: jest.fn(),
-            backlogTasks: backlogTasksSignal
+            backlogTasks: backlogTasksSignal,
+            selectedWorkspace: selectedWorkspaceSignal
         };
 
         mockChannelApiService = {
@@ -164,6 +166,7 @@ describe('BacklogSidebarComponent', () => {
             expect(component.createTaskForm).toBeDefined();
             expect(component.editTaskForm).toBeDefined();
             expect(component.createTaskForm.get('workspace')?.value).toBe(Workspace.PERSONAL);
+            expect(component.createTaskForm.get('status')?.value).toBe(TaskStatus.BACKLOG);
             expect(component.createTaskForm.get('isRoutine')?.value).toBe(false);
         });
 
@@ -197,11 +200,34 @@ describe('BacklogSidebarComponent', () => {
             expect(component.selectedTask()).toBeNull();
         });
 
+        it('should initialize expandedPanels signal', () => {
+            expect(component.expandedPanels).toBeDefined();
+        });
+
         it('should have workspace options configured', () => {
             expect(component.workspaceOptions).toEqual([
                 { label: 'Work', value: Workspace.WORK },
                 { label: 'Personal', value: Workspace.PERSONAL }
             ]);
+        });
+
+        it('should have status options configured', () => {
+            expect(component.statusOptions).toEqual([
+                { label: 'Backlog', value: TaskStatus.BACKLOG },
+                { label: 'Today', value: TaskStatus.TODAY }
+            ]);
+        });
+
+        it('should have required validator on status field', () => {
+            const statusControl = component.createTaskForm.get('status');
+
+            expect(statusControl?.hasError('required')).toBe(false); // Has default value
+
+            statusControl?.setValue(null);
+            expect(statusControl?.hasError('required')).toBe(true);
+
+            statusControl?.setValue(TaskStatus.TODAY);
+            expect(statusControl?.hasError('required')).toBe(false);
         });
     });
 
@@ -227,6 +253,163 @@ describe('BacklogSidebarComponent', () => {
             fixture.detectChanges();
 
             expect(component.backlogTasks()).toEqual([]);
+        });
+    });
+
+    describe('Computed Signals: workTaskCount() and personalTaskCount()', () => {
+        it('should correctly count work tasks', () => {
+            fixture.detectChanges();
+
+            const workCount = component.workTaskCount();
+            const expectedWorkTasks = mockTasks.filter(
+                t => t.status === TaskStatus.BACKLOG && t.workspace === Workspace.WORK
+            );
+
+            expect(workCount).toBe(expectedWorkTasks.length);
+            expect(workCount).toBe(2); // Based on mockTasks
+        });
+
+        it('should correctly count personal tasks', () => {
+            fixture.detectChanges();
+
+            const personalCount = component.personalTaskCount();
+            const expectedPersonalTasks = mockTasks.filter(
+                t => t.status === TaskStatus.BACKLOG && t.workspace === Workspace.PERSONAL
+            );
+
+            expect(personalCount).toBe(expectedPersonalTasks.length);
+            expect(personalCount).toBe(2); // Based on mockTasks
+        });
+
+        it('should return 0 when no work tasks exist', () => {
+            const personalOnlySignal = signal<Task[]>(
+                mockTasks.filter(t => t.status === TaskStatus.BACKLOG && t.workspace === Workspace.PERSONAL)
+            );
+            Object.defineProperty(mockTaskStateService, 'backlogTasks', {
+                get: () => personalOnlySignal
+            });
+
+            fixture = TestBed.createComponent(BacklogSidebarComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            expect(component.workTaskCount()).toBe(0);
+            expect(component.personalTaskCount()).toBe(2);
+        });
+
+        it('should return 0 when no personal tasks exist', () => {
+            const workOnlySignal = signal<Task[]>(
+                mockTasks.filter(t => t.status === TaskStatus.BACKLOG && t.workspace === Workspace.WORK)
+            );
+            Object.defineProperty(mockTaskStateService, 'backlogTasks', {
+                get: () => workOnlySignal
+            });
+
+            fixture = TestBed.createComponent(BacklogSidebarComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            expect(component.workTaskCount()).toBe(2);
+            expect(component.personalTaskCount()).toBe(0);
+        });
+    });
+
+    describe('Computed Signals: workTasks() and personalTasks()', () => {
+        it('should return only work tasks', () => {
+            fixture.detectChanges();
+
+            const workTasks = component.workTasks();
+
+            expect(workTasks.length).toBe(2);
+            expect(workTasks.every(t => t.workspace === Workspace.WORK)).toBe(true);
+            expect(workTasks.every(t => t.status === TaskStatus.BACKLOG)).toBe(true);
+        });
+
+        it('should return only personal tasks', () => {
+            fixture.detectChanges();
+
+            const personalTasks = component.personalTasks();
+
+            expect(personalTasks.length).toBe(2);
+            expect(personalTasks.every(t => t.workspace === Workspace.PERSONAL)).toBe(true);
+            expect(personalTasks.every(t => t.status === TaskStatus.BACKLOG)).toBe(true);
+        });
+
+        it('should return empty array when no work tasks exist', () => {
+            const personalOnlySignal = signal<Task[]>(
+                mockTasks.filter(t => t.status === TaskStatus.BACKLOG && t.workspace === Workspace.PERSONAL)
+            );
+            Object.defineProperty(mockTaskStateService, 'backlogTasks', {
+                get: () => personalOnlySignal
+            });
+
+            fixture = TestBed.createComponent(BacklogSidebarComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            expect(component.workTasks()).toEqual([]);
+        });
+
+        it('should return empty array when no personal tasks exist', () => {
+            const workOnlySignal = signal<Task[]>(
+                mockTasks.filter(t => t.status === TaskStatus.BACKLOG && t.workspace === Workspace.WORK)
+            );
+            Object.defineProperty(mockTaskStateService, 'backlogTasks', {
+                get: () => workOnlySignal
+            });
+
+            fixture = TestBed.createComponent(BacklogSidebarComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            expect(component.personalTasks()).toEqual([]);
+        });
+    });
+
+    describe('Effect: Auto-expand accordion based on workspace', () => {
+        it('should expand Work section when workspace is WORK', () => {
+            const selectedWorkspaceSignal = signal<Workspace>(Workspace.WORK);
+            Object.defineProperty(mockTaskStateService, 'selectedWorkspace', {
+                get: () => selectedWorkspaceSignal
+            });
+
+            fixture = TestBed.createComponent(BacklogSidebarComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            expect(component.expandedPanels()).toEqual([0]); // Work is index 0
+        });
+
+        it('should expand Personal section when workspace is PERSONAL', () => {
+            const selectedWorkspaceSignal = signal<Workspace>(Workspace.PERSONAL);
+            Object.defineProperty(mockTaskStateService, 'selectedWorkspace', {
+                get: () => selectedWorkspaceSignal
+            });
+
+            fixture = TestBed.createComponent(BacklogSidebarComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            expect(component.expandedPanels()).toEqual([1]); // Personal is index 1
+        });
+
+        it('should update expanded panels when workspace changes', () => {
+            const selectedWorkspaceSignal = signal<Workspace>(Workspace.WORK);
+            Object.defineProperty(mockTaskStateService, 'selectedWorkspace', {
+                get: () => selectedWorkspaceSignal
+            });
+
+            fixture = TestBed.createComponent(BacklogSidebarComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            expect(component.expandedPanels()).toEqual([0]); // Work expanded
+
+            // Change workspace to PERSONAL
+            selectedWorkspaceSignal.set(Workspace.PERSONAL);
+            fixture.detectChanges();
+
+            expect(component.expandedPanels()).toEqual([1]); // Personal expanded
         });
     });
 
@@ -435,6 +618,7 @@ describe('BacklogSidebarComponent', () => {
             component.createTaskForm.patchValue({
                 title: 'Old Title',
                 description: 'Old Description',
+                status: TaskStatus.TODAY,
                 workspace: Workspace.WORK,
                 channelId: 1,
                 dueDate: new Date(),
@@ -445,6 +629,7 @@ describe('BacklogSidebarComponent', () => {
 
             expect(component.createTaskForm.get('title')?.value).toBe(null);
             expect(component.createTaskForm.get('description')?.value).toBe(null);
+            expect(component.createTaskForm.get('status')?.value).toBe(TaskStatus.BACKLOG);
             expect(component.createTaskForm.get('workspace')?.value).toBe(Workspace.PERSONAL);
             expect(component.createTaskForm.get('channelId')?.value).toBe(null);
             expect(component.createTaskForm.get('dueDate')?.value).toBe(null);
@@ -497,7 +682,7 @@ describe('BacklogSidebarComponent', () => {
             expect(component.createTaskDialogVisible()).toBe(false); // Still false
         });
 
-        it('should include BACKLOG status in created task', () => {
+        it('should include BACKLOG status in created task by default', () => {
             component.createTaskForm.patchValue({
                 title: 'Test Task',
                 workspace: Workspace.PERSONAL
@@ -508,6 +693,23 @@ describe('BacklogSidebarComponent', () => {
             expect(mockTaskStateService.addTask).toHaveBeenCalledWith(
                 expect.objectContaining({
                     status: TaskStatus.BACKLOG
+                })
+            );
+        });
+
+        it('should include selected status (TODAY) in created task', () => {
+            component.createTaskForm.patchValue({
+                title: 'Today Task',
+                workspace: Workspace.WORK,
+                status: TaskStatus.TODAY
+            });
+
+            component.submitCreateTask();
+
+            expect(mockTaskStateService.addTask).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    title: 'Today Task',
+                    status: TaskStatus.TODAY
                 })
             );
         });

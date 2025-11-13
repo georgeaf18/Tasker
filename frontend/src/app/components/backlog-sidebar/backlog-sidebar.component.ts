@@ -1,9 +1,9 @@
-import { Component, computed, signal, OnInit } from '@angular/core';
+import { Component, computed, signal, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
-import { AccordionModule } from 'primeng/accordion';
+import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'primeng/accordion';
 import { DataViewModule } from 'primeng/dataview';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -16,6 +16,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip';
+import { BadgeModule } from 'primeng/badge';
 import { ConfirmationService } from 'primeng/api';
 import { TaskStateService } from '../../services/task-state.service';
 import { ChannelApiService } from '../../services/channel-api.service';
@@ -41,7 +42,10 @@ interface GroupedTasks {
         ReactiveFormsModule,
         DragDropModule,
         PanelModule,
-        AccordionModule,
+        Accordion,
+        AccordionPanel,
+        AccordionHeader,
+        AccordionContent,
         DataViewModule,
         CardModule,
         ButtonModule,
@@ -53,7 +57,8 @@ interface GroupedTasks {
         CheckboxModule,
         MessageModule,
         ConfirmDialogModule,
-        TooltipModule
+        TooltipModule,
+        BadgeModule
     ],
     providers: [ConfirmationService],
     templateUrl: './backlog-sidebar.component.html',
@@ -61,6 +66,9 @@ interface GroupedTasks {
 })
 export class BacklogSidebarComponent implements OnInit {
     private channelsSignal = signal<Channel[]>([]);
+
+    // Signal to track which accordion panels are expanded (0 = Work, 1 = Personal)
+    readonly expandedPanels = signal<number[]>([]);
 
     readonly channels = this.channelsSignal.asReadonly();
 
@@ -88,6 +96,16 @@ export class BacklogSidebarComponent implements OnInit {
             dueDate: [null],
             isRoutine: [false]
         });
+
+        // Effect to auto-expand accordion based on selected workspace
+        effect(() => {
+            const currentWorkspace = this.taskStateService.selectedWorkspace();
+            if (currentWorkspace === Workspace.WORK) {
+                this.expandedPanels.set([0]); // Expand Work section
+            } else {
+                this.expandedPanels.set([1]); // Expand Personal section
+            }
+        });
     }
 
     readonly backlogTasks = computed(() => this.taskStateService.backlogTasks());
@@ -95,15 +113,15 @@ export class BacklogSidebarComponent implements OnInit {
     readonly groupedByWorkspace = computed(() => {
         const tasks = this.backlogTasks();
         const channels = this.channelsSignal();
-        
+
         const groups: GroupedTasks[] = [];
-        
+
         [Workspace.WORK, Workspace.PERSONAL].forEach(workspace => {
             const workspaceTasks = tasks.filter(t => t.workspace === workspace);
             const workspaceChannels = channels.filter(c => c.workspace === workspace);
-            
+
             const channelGroups = new Map<number | null, Task[]>();
-            
+
             workspaceTasks.forEach(task => {
                 const channelId: number | null = task.channelId ?? null;
                 if (!channelGroups.has(channelId)) {
@@ -111,7 +129,7 @@ export class BacklogSidebarComponent implements OnInit {
                 }
                 channelGroups.get(channelId)!.push(task);
             });
-            
+
             const channelsWithTasks = Array.from(channelGroups.entries()).map(([channelId, tasks]) => {
                 const channel = channelId ? workspaceChannels.find(c => c.id === channelId) || null : null;
                 return {
@@ -120,7 +138,7 @@ export class BacklogSidebarComponent implements OnInit {
                     tasks
                 };
             });
-            
+
             if (channelsWithTasks.length > 0) {
                 groups.push({
                     workspace,
@@ -129,9 +147,27 @@ export class BacklogSidebarComponent implements OnInit {
                 });
             }
         });
-        
+
         return groups;
     });
+
+    // Computed signals for workspace-specific task counts
+    readonly workTaskCount = computed(() =>
+        this.backlogTasks().filter(t => t.workspace === Workspace.WORK).length
+    );
+
+    readonly personalTaskCount = computed(() =>
+        this.backlogTasks().filter(t => t.workspace === Workspace.PERSONAL).length
+    );
+
+    // Get tasks for a specific workspace
+    readonly workTasks = computed(() =>
+        this.backlogTasks().filter(t => t.workspace === Workspace.WORK)
+    );
+
+    readonly personalTasks = computed(() =>
+        this.backlogTasks().filter(t => t.workspace === Workspace.PERSONAL)
+    );
     
     createTaskDialogVisible = signal(false);
     taskDetailsDialogVisible = signal(false);
