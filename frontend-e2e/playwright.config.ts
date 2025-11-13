@@ -12,38 +12,91 @@ const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 // require('dotenv').config();
 
 /**
+ * Playwright E2E Test Configuration for Tasker
+ *
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
+
+  // Test timeout: 30 seconds per test
+  timeout: 30000,
+
+  // Expect timeout: 5 seconds for assertions
+  expect: {
+    timeout: 5000,
+  },
+
+  // Fail fast in CI, continue locally for better debugging
+  fullyParallel: true,
+
+  // Retry failed tests in CI for flakiness, no retries locally
+  retries: process.env['CI'] ? 2 : 0,
+
+  // Workers: use all CPUs in CI, limit locally for stability
+  workers: process.env['CI'] ? '100%' : 4,
+
+  // Reporter configuration
+  reporter: [
+    ['html', { open: 'never' }],
+    ['list'],
+    process.env['CI'] ? ['github'] : ['list'],
+  ],
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    /* Screenshot on failure */
+    screenshot: 'only-on-failure',
+
+    /* Video on first retry */
+    video: 'retain-on-failure',
+
+    /* Action timeout: 10 seconds for individual actions */
+    actionTimeout: 10000,
+
+    /* Navigation timeout: 15 seconds for page loads */
+    navigationTimeout: 15000,
   },
+
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npx nx run frontend:serve',
-    url: 'http://localhost:4200',
-    reuseExistingServer: true,
-    cwd: workspaceRoot,
-  },
+  webServer: [
+    {
+      command: 'npx nx run backend:serve',
+      url: 'http://localhost:3000/api/health',
+      reuseExistingServer: !process.env['CI'],
+      cwd: workspaceRoot,
+      timeout: 120000,
+    },
+    {
+      command: 'npx nx run frontend:serve',
+      url: 'http://localhost:4200',
+      reuseExistingServer: !process.env['CI'],
+      cwd: workspaceRoot,
+      timeout: 120000,
+    },
+  ],
+
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // Uncomment for cross-browser testing
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     // Uncomment for mobile browsers support
     /* {

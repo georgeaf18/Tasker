@@ -4,43 +4,48 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 24px;
-  background: #FAF9F7;
+  padding: 0;
+  background: transparent;
   overflow: hidden;
 }
 
 /* Progress Section */
 .progress-section {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-xl);
+  padding: 0 var(--spacing-xs);
 }
 
 .progress-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: var(--spacing-md);
 }
 
 .progress-header h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #2B2B2B;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .progress-percentage {
-  font-size: 24px;
+  font-size: var(--font-size-lg);
   font-weight: 700;
-  color: #8B5CF6;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Kanban Board Grid */
 .kanban-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 0;
   flex: 1;
   overflow: hidden;
+  padding: 0;
 }
 
 /* Column Styles */
@@ -55,14 +60,18 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
+  box-shadow: none;
+  background: var(--color-bg-primary);
+  border-right: 1px solid var(--color-border);
 }
 
 ::ng-deep .kanban-panel .p-panel-content {
   flex: 1;
   overflow: hidden;
   padding: 0;
+  background: var(--color-bg-primary);
 }
 
 /* Column Headers */
@@ -71,118 +80,129 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 12px 16px;
+  padding: 0px 4px;
 }
 
 .column-title {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 22px;
-  font-weight: 600;
+  gap: 6px;
+  font-size: 25px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0.5px;
 }
 
 .column-title i {
-  font-size: 24px;
+  font-size: 22px;
 }
 
-/* Column-specific colors */
+/* Column-specific colors - Subtle solid colors */
 .today-column ::ng-deep .p-panel-header {
-  background: #6B9AC4;
+  background: #3B82F6;
   color: white;
+  border-bottom: none;
 }
 
 .in-progress-column ::ng-deep .p-panel-header {
-  background: #8B7BB8;
+  background: #8B5CF6;
   color: white;
+  border-bottom: none;
 }
 
 .done-column ::ng-deep .p-panel-header {
-  background: #7A9B76;
+  background: #10B981;
   color: white;
+  border-bottom: none;
 }
 
 /* Badge styling */
 ::ng-deep .p-badge {
-  min-width: 28px;
-  height: 28px;
-  font-size: 16px;
-  font-weight: 600;
+  min-width: 24px;
+  height: 24px;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
 }
 
 /* Column Content */
 .column-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
   overflow-y: auto;
-  max-height: calc(100% - 80px);
+  max-height: calc(100% - 60px);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Modern thin style */
 .column-content::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .column-content::-webkit-scrollbar-track {
-  background: #F3F2EE;
-  border-radius: 4px;
+  background: transparent;
 }
 
 .column-content::-webkit-scrollbar-thumb {
-  background: #A8A6A2;
-  border-radius: 4px;
+  background: var(--color-border);
+  border-radius: 3px;
+  transition: background 0.2s ease;
 }
 
 .column-content::-webkit-scrollbar-thumb:hover {
-  background: #878787;
+  background: var(--color-text-tertiary);
 }
 
 /* Task Cards */
 ::ng-deep .task-card {
   cursor: pointer;
-  transition: all 200ms ease-in-out;
-  border-left: 4px solid #8B5CF6;
-  margin-bottom: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  background: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 ::ng-deep .task-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(43, 43, 43, 0.12);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--color-primary-hover);
 }
 
 ::ng-deep .task-card .p-card-body {
-  padding: 16px;
+  padding: var(--spacing-md);
 }
 
 .task-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
-  border-bottom: 1px solid #F3F2EE;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: var(--border-width) solid var(--color-border-light);
 }
 
 .channel-chip {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
 }
 
 .routine-icon {
-  font-size: 18px;
-  color: #8B5CF6;
+  font-size: var(--font-size-base);
+  color: var(--color-accent);
 }
 
 .task-card-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-sm);
 }
 
 .task-title {
-  font-size: 22px;
+  font-size: var(--font-size-base);
   font-weight: 600;
-  color: #2B2B2B;
+  color: var(--color-text-primary);
   margin: 0;
   line-height: 1.4;
 }
@@ -190,24 +210,25 @@
 .task-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
 }
 
 .workspace-tag {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
 }
 
 .due-date {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 16px;
-  color: #5A5A5A;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .due-date i {
-  font-size: 16px;
+  font-size: var(--font-size-sm);
 }
 
 /* Empty State */
@@ -218,52 +239,51 @@
 
 /* Task Details Dialog */
 ::ng-deep .task-dialog .p-dialog-header {
-  background: #8B5CF6;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: white;
-  font-size: 24px;
-  padding: 20px;
+  padding: var(--spacing-lg);
 }
 
 ::ng-deep .task-dialog .p-dialog-header .p-dialog-title {
-  font-size: 24px;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
 }
 
 ::ng-deep .task-dialog .p-dialog-content {
-  padding: 24px;
+  padding: var(--spacing-xl);
 }
 
 .task-details {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--spacing-xl);
 }
 
 .detail-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-md);
 }
 
 .detail-section h4 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #2B2B2B;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
   margin: 0;
-  border-bottom: 2px solid #F3F2EE;
-  padding-bottom: 8px;
+  border-bottom: 2px solid var(--color-primary-light);
+  padding-bottom: var(--spacing-sm);
 }
 
 .task-description {
-  font-size: 18px;
+  font-size: var(--font-size-base);
   line-height: 1.6;
-  color: #2B2B2B;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .no-description {
-  font-size: 18px;
-  color: #878787;
+  font-size: var(--font-size-base);
+  color: var(--color-text-tertiary);
   font-style: italic;
   margin: 0;
 }
@@ -271,41 +291,44 @@
 .metadata-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: var(--spacing-lg);
 }
 
 .metadata-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-sm);
 }
 
 .metadata-label {
-  font-size: 16px;
-  font-weight: 600;
-  color: #5A5A5A;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
 .status-badge {
   display: inline-block;
-  padding: 4px 12px;
-  background: #EDE9FE;
-  color: #8B5CF6;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  border-radius: var(--border-radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
 .status-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: var(--spacing-sm);
 }
 
 ::ng-deep .status-buttons .p-button {
   flex: 1;
-  min-width: 150px;
+  min-width: 140px;
 }
 
 .dialog-footer {
@@ -313,7 +336,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  gap: 12px;
+  gap: var(--spacing-md);
 }
 
 /* Responsive Design */
@@ -351,35 +374,60 @@
 
 /* PrimeNG Overrides for ADHD-friendly design */
 ::ng-deep .p-progressbar {
-  height: 16px;
-  border-radius: 8px;
+  height: 12px;
+  border-radius: var(--border-radius);
+  background: var(--color-border-light);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 ::ng-deep .p-progressbar .p-progressbar-value {
-  background: linear-gradient(90deg, #8B5CF6 0%, #7A9B76 100%);
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-success) 100%);
+  border-radius: var(--border-radius);
+  position: relative;
+  overflow: hidden;
+}
+
+::ng-deep .p-progressbar .p-progressbar-value::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 ::ng-deep .p-card {
-  box-shadow: 0 2px 8px rgba(43, 43, 43, 0.08);
+  box-shadow: var(--shadow-sm);
+  border: var(--border-width) solid var(--color-border);
 }
 
 ::ng-deep .p-panel .p-panel-header {
-  border-radius: 12px 12px 0 0;
+  border-radius: 0;
 }
 
 ::ng-deep .p-chip {
-  font-weight: 500;
+  font-weight: 600;
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 ::ng-deep .p-tag {
-  font-weight: 600;
-  padding: 4px 12px;
-  font-size: 14px;
+  font-weight: 700;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  border-radius: var(--border-radius-sm);
 }
 
 ::ng-deep .p-button {
-  font-size: 18px;
+  font-size: var(--font-size-base);
   font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius);
 }

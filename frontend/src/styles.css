@@ -3,53 +3,78 @@
 
 /* Design System CSS Variables */
 :root {
-  /* Colors */
-  --color-primary: #8B7BB8;
-  --color-primary-hover: #7A6AA7;
-  --color-primary-active: #6B5996;
-  --color-secondary: #6B9AC4;
-  --color-secondary-hover: #5A89B3;
-  --color-secondary-active: #4978A2;
-  --color-accent: #C89FA7;
-  --color-destructive: #C97064;
-  --color-success: #7A9B76;
+  /* Colors - More vibrant and modern */
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-primary-active: #5B21B6;
+  --color-primary-light: #A78BFA;
+  --color-primary-bg: #EDE9FE;
 
-  --color-bg-primary: #FAF9F7;
-  --color-bg-secondary: #F5F3F0;
-  --color-bg-tertiary: #E8E6E3;
+  --color-secondary: #3B82F6;
+  --color-secondary-hover: #2563EB;
+  --color-secondary-active: #1D4ED8;
+  --color-secondary-light: #60A5FA;
+  --color-secondary-bg: #DBEAFE;
 
-  --color-text-primary: #2B2B2A;
-  --color-text-secondary: #5D5B59;
-  --color-text-tertiary: #7A7876;
+  --color-accent: #EC4899;
+  --color-accent-hover: #DB2777;
+  --color-accent-light: #F472B6;
+
+  --color-destructive: #EF4444;
+  --color-destructive-hover: #DC2626;
+
+  --color-success: #10B981;
+  --color-success-hover: #059669;
+  --color-success-bg: #D1FAE5;
+
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FEF3C7;
+
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F9FAFB;
+  --color-bg-tertiary: #F3F4F6;
+  --color-bg-hover: #F9FAFB;
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
   --color-text-on-primary: #FFFFFF;
 
-  /* Typography - ADHD/Dyslexia-friendly */
-  --font-family-base: 'Open Sans', Verdana, sans-serif;
-  --font-size-base: 22px;
-  --font-size-sm: 18px;
-  --font-size-lg: 26px;
-  --font-size-xl: 32px;
-  --line-height-base: 1.6;
-  --letter-spacing-base: 0.02em;
-  --letter-spacing-wide: 0.05em;
+  --color-border: #E5E7EB;
+  --color-border-light: #F3F4F6;
 
-  /* Spacing - 8px base unit */
-  --spacing-xs: 8px;
-  --spacing-sm: 16px;
-  --spacing-md: 24px;
-  --spacing-lg: 32px;
-  --spacing-xl: 48px;
-  --spacing-2xl: 64px;
+  /* Typography - ADHD/Dyslexia-friendly but professional */
+  --font-family-base: 'Open Sans', Verdana, sans-serif;
+  --font-size-base: 16px;
+  --font-size-sm: 14px;
+  --font-size-xs: 13px;
+  --font-size-lg: 20px;
+  --font-size-xl: 26px;
+  --font-size-2xl: 32px;
+  --line-height-base: 1.5;
+  --letter-spacing-base: 0.01em;
+  --letter-spacing-wide: 0.025em;
+
+  /* Spacing - Tighter but still comfortable */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
 
   /* Layout */
-  --sidebar-width: 300px;
+  --sidebar-width: 280px;
   --border-radius: 8px;
-  --border-width: 2px;
+  --border-radius-sm: 6px;
+  --border-radius-lg: 12px;
+  --border-width: 1px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(43, 43, 42, 0.12);
-  --shadow-md: 0 4px 6px rgba(43, 43, 42, 0.16);
-  --shadow-lg: 0 10px 20px rgba(43, 43, 42, 0.2);
+  /* Shadows - More depth */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Global Body Styles */
@@ -84,10 +109,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
 }
 
 h2 {
+  font-size: var(--font-size-xl);
+}
+
+h3 {
   font-size: var(--font-size-lg);
 }
 
@@ -108,17 +137,30 @@ p {
 }
 
 .p-button {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
   font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.p-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .p-inputtext {
-  padding: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
   border-width: var(--border-width);
+  border-color: var(--color-border);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.p-inputtext:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-bg);
 }
 
 /* Utility Classes */
