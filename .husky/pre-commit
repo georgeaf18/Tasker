@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Pre-commit hook: UI baseline check
+# Ensures UI hasn't changed significantly from baseline before committing
+# To skip: git commit --no-verify
+
+echo "🔍 Running UI baseline check..."
+
+# Run the UI baseline test
+npx playwright test ui-baseline-check.spec.ts --reporter=line
+
+# If test fails, block commit
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ UI baseline check failed!"
+  echo ""
+  echo "The UI has changed significantly from the baseline."
+  echo "Options:"
+  echo "  1. Review the diff and fix unintended changes"
+  echo "  2. If changes are intentional, update the baseline:"
+  echo "     mv .ui-confirmations/ui-*.png baseline-stable-ui.png"
+  echo "  3. Skip check (not recommended): git commit --no-verify"
+  echo ""
+  exit 1
+fi
+
+echo "✅ UI baseline check passed"

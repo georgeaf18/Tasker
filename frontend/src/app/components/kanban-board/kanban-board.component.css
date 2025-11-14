@@ -43,7 +43,8 @@
   display: flex;
   gap: 0;
   flex: 1;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding: 0;
   height: 100%;
   width: 100%;
@@ -57,7 +58,7 @@
   height: 100%;
   overflow: hidden;
   min-height: 0;
-  min-width: 0; /* Allow flex shrinking */
+  min-width: 300px; /* Prevent columns from shrinking too much */
 }
 
 ::ng-deep .kanban-panel {
@@ -172,6 +173,25 @@
 }
 
 .column-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* Horizontal scrollbar for kanban board */
+.kanban-board::-webkit-scrollbar {
+  height: 8px;
+}
+
+.kanban-board::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-board::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.kanban-board::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-tertiary);
 }
 

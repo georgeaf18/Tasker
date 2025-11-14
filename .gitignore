@@ -48,6 +48,8 @@ yarn-error.log*
 coverage/
 .nyc_output/
 *.lcov
+.e2e-temp/
+.ui-confirmations/
 
 # Misc
 .cache/
