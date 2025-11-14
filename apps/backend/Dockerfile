@@ -13,15 +13,15 @@ COPY nx.json tsconfig.base.json ./
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
 
-# Copy source code
-COPY apps/backend ./apps/backend
-COPY libs ./libs
-COPY prisma ./prisma
+# Copy backend source code
+COPY backend ./backend
 
 # Generate Prisma client
+WORKDIR /app/backend
 RUN npx prisma generate
 
 # Build backend using Nx
+WORKDIR /app
 RUN npx nx build backend --prod
 
 # Production stage
@@ -39,14 +39,14 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --only=production && \
+# Install only production dependencies (skip prepare scripts like husky)
+RUN npm ci --only=production --ignore-scripts && \
     npm cache clean --force
 
 # Copy built application from builder
-COPY --from=builder /app/dist/apps/backend ./dist
+COPY --from=builder /app/dist/backend ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/backend/prisma ./prisma
 
 # Change ownership to app user
 RUN chown -R nodejs:nodejs /app

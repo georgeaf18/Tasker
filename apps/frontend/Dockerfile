@@ -10,12 +10,11 @@ COPY nx.json tsconfig.base.json ./
 # Install dependencies
 RUN npm ci
 
-# Copy source code
-COPY apps/frontend ./apps/frontend
-COPY libs ./libs
+# Copy frontend source code
+COPY frontend ./frontend
 
 # Build frontend using Nx with production configuration
-RUN npx nx build frontend --prod --output-path=dist/apps/frontend
+RUN npx nx build frontend --prod --output-path=dist/frontend
 
 # Production stage - nginx
 FROM nginx:alpine AS production
@@ -27,7 +26,7 @@ RUN apk add --no-cache curl
 COPY apps/frontend/nginx.conf /etc/nginx/nginx.conf
 
 # Copy built files from builder
-COPY --from=builder /app/dist/apps/frontend /usr/share/nginx/html
+COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
 
 # Create nginx user if not exists and set permissions
 RUN chown -R nginx:nginx /usr/share/nginx/html && \
