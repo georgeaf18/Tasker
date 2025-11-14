@@ -1,128 +1,19 @@
-.backlog-sidebar-container {
-    height: 100vh;
-    width: var(--sidebar-width);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--color-bg-secondary);
+/* Scrollbar hiding - cross-browser */
+:host ::ng-deep * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+:host ::ng-deep *::-webkit-scrollbar {
+    display: none !important;
 }
 
-/* Accordion wrapper takes all available space except FAB */
-.accordion-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: var(--spacing-md);
-    padding-bottom: calc(var(--spacing-xl) + 56px); /* Space for FAB */
-}
-
-/* Workspace content areas with smart height management */
-.workspace-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    padding: var(--spacing-xs) var(--spacing-sm);
-    min-height: 200px;
-    max-height: 100%;
-}
-
-.task-list-item {
-    margin-bottom: var(--spacing-xs); /* Reduced whitespace */
-}
-
-.task-card-content {
-    padding: var(--spacing-sm) var(--spacing-md); /* Sleeker padding */
-}
-
-.task-title {
-    font-weight: 600;
-    font-size: var(--font-size-base);
-    margin-bottom: var(--spacing-xs);
-    color: var(--color-text-primary);
-    line-height: 1.4;
-}
-
-.task-meta {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    margin-top: var(--spacing-sm);
-    flex-wrap: wrap;
-}
-
-.task-routine-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
-    color: white;
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: 700;
-    margin-top: var(--spacing-xs);
-    box-shadow: var(--shadow-sm);
-}
-
-.fab-container {
-    position: absolute;
-    bottom: var(--spacing-xl);
-    right: var(--spacing-xl);
-    z-index: 100;
-}
-
-/* Form styling */
-.form-field {
-    margin-bottom: var(--spacing-lg);
-}
-
-.form-field label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    font-weight: 700;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
-}
-
-.form-field-checkbox {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-lg);
-}
-
-.form-field-checkbox label {
-    margin: 0;
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    font-weight: 500;
-}
-
-.error-message {
-    display: block;
-    color: var(--color-destructive);
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-}
-
-.w-full {
-    width: 100%;
-}
-
-/* Card hover effect */
+/* PrimeNG Card Hover Effect */
 :host ::ng-deep .p-card {
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
     cursor: pointer;
     border: var(--border-width) solid var(--color-border);
     border-left: 3px solid transparent;
-    border-radius: 4px; /* Less rounded */
+    border-radius: 4px;
 }
 
 :host ::ng-deep .p-card:hover {
@@ -131,157 +22,49 @@
     border-left-color: var(--color-primary);
 }
 
-/* Hide scrollbar while keeping scroll functionality */
-.workspace-content {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-}
-
-.workspace-content::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
-
-/* Workspace Accordion Styling */
+/* Accordion layout */
 :host ::ng-deep .workspace-accordion {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: var(--spacing-sm);
+    display: flex; flex-direction: column; height: 100%; gap: var(--spacing-sm);
 }
-
 :host ::ng-deep .workspace-accordion .p-accordiontab {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0; /* Critical for flex children with overflow */
-    margin-bottom: var(--spacing-sm);
+    display: flex; flex-direction: column; flex: 1; min-height: 0; margin-bottom: var(--spacing-sm);
 }
 
-:host ::ng-deep .workspace-accordion .p-accordiontab:last-child {
-    margin-bottom: 0;
-}
-
-/* Accordion header styling */
-:host ::ng-deep .p-accordion .p-accordiontab-header {
-    min-height: 56px;
-}
-
+/* Accordion header */
 :host ::ng-deep .p-accordion .p-accordiontab-header-link {
-    padding: var(--spacing-md);
-    font-weight: 700;
-    font-size: var(--font-size-base);
-    background: var(--color-bg-primary);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--border-radius);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
+    padding: var(--spacing-md); font-weight: 700; font-size: var(--font-size-base);
+    background: var(--color-bg-primary); border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius); transition: all 0.2s ease;
 }
-
 :host ::ng-deep .p-accordion .p-accordiontab-header-link:hover {
-    background: var(--color-bg-hover);
-    border-color: var(--color-primary-light);
-    transform: translateX(2px);
+    background: var(--color-bg-hover); border-color: var(--color-primary-light); transform: translateX(2px);
 }
-
-/* Expanded state styling */
 :host ::ng-deep .p-accordion .p-accordiontab-header-link[aria-expanded="true"] {
-    background: linear-gradient(135deg, var(--color-primary-bg) 0%, var(--color-secondary-bg) 100%);
-    border-color: var(--color-primary);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    background: linear-gradient(135deg, var(--color-primary-bg), var(--color-secondary-bg));
+    border-color: var(--color-primary); border-bottom-left-radius: 0; border-bottom-right-radius: 0;
 }
 
-/* Accordion content with dynamic height */
+/* Accordion content */
 :host ::ng-deep .p-accordion .p-accordiontab-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 0;
-    background: var(--color-bg-secondary);
-    border: var(--border-width) solid var(--color-border);
-    border-top: none;
-    border-bottom-left-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
+    flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0;
+    background: var(--color-bg-secondary); border: var(--border-width) solid var(--color-border);
+    border-top: none; border-bottom-left-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius);
 }
 
-/* Workspace header styling */
-.workspace-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    width: 100%;
-}
-
-.workspace-icon {
-    font-size: 1.25rem;
-}
-
-.workspace-name {
-    flex: 1;
-    font-size: var(--font-size-base);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
-}
-
-/* Work section specific colors */
-.work-header .workspace-icon {
-    color: var(--color-secondary);
-}
-
-.work-header .workspace-name {
-    color: var(--color-secondary);
-}
-
-/* Personal section specific colors */
-.personal-header .workspace-icon {
-    color: var(--color-accent);
-}
-
-.personal-header .workspace-name {
-    color: var(--color-accent);
-}
-
-/* Badge styling */
+/* Badge */
 :host ::ng-deep .workspace-badge {
-    background: var(--color-primary);
-    color: white;
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    min-width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    background: var(--color-primary); color: white; font-size: var(--font-size-sm);
+    font-weight: 700; min-width: 24px; height: 24px; border-radius: 12px;
 }
 
-/* Remove panel padding and borders */
-:host ::ng-deep .p-panel {
-    border: none;
-    box-shadow: none;
-}
+/* Panel overrides */
+:host ::ng-deep .p-panel { border: none; box-shadow: none; }
+:host ::ng-deep .p-panel .p-panel-header { display: none; }
+:host ::ng-deep .p-panel .p-panel-content { padding: 0; border: none; }
 
-:host ::ng-deep .p-panel .p-panel-header {
-    display: none;
-}
-
-:host ::ng-deep .p-panel .p-panel-content {
-    padding: 0;
-    border: none;
-}
-
-/* Drag and Drop Styles */
-:host ::ng-deep .p-card.cdk-drag {
-    cursor: grab;
-}
-
-:host ::ng-deep .p-card.cdk-drag:active {
-    cursor: grabbing;
-}
-
+/* Drag states */
+:host ::ng-deep .p-card.cdk-drag { cursor: grab; }
+:host ::ng-deep .p-card.cdk-drag:active { cursor: grabbing; }
 :host ::ng-deep .p-card.cdk-drag-dragging {
     opacity: 0.8;
     transform: rotate(2deg);
@@ -290,308 +73,59 @@
     border-left-width: 4px;
     z-index: 1000;
 }
-
 :host ::ng-deep .cdk-drag-placeholder {
     opacity: 0.4;
     border: 2px dashed var(--color-primary);
     background: var(--color-primary-bg);
     box-shadow: none;
 }
-
 .workspace-content.cdk-drop-list-receiving {
     background: var(--color-primary-bg);
     border-radius: var(--border-radius);
 }
 
-:host ::ng-deep .cdk-drag-preview {
-    opacity: 0.9;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    border-radius: var(--border-radius);
-}
-
-.workspace-content.cdk-drop-list-dragging :host ::ng-deep .p-card:not(.cdk-drag-placeholder) {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-/* Ensure only one expanded panel takes full height */
-:host ::ng-deep .workspace-accordion .p-accordiontab:not(.p-accordiontab-active) {
-    flex: 0 0 auto;
-}
-
+/* Accordion expansion */
+:host ::ng-deep .workspace-accordion .p-accordiontab:not(.p-accordiontab-active) { flex: 0 0 auto; }
 :host ::ng-deep .workspace-accordion .p-accordiontab.p-accordiontab-active {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
+    flex: 1 1 auto; display: flex; flex-direction: column;
 }
+:host ::ng-deep .workspace-accordion:has(.p-accordiontab.p-accordiontab-active:nth-child(1)):has(.p-accordiontab.p-accordiontab-active:nth-child(2)) .p-accordiontab.p-accordiontab-active { flex: 1 1 50%; }
 
-/* When both panels are expanded, split height equally */
-:host ::ng-deep .workspace-accordion:has(.p-accordiontab.p-accordiontab-active:nth-child(1)):has(.p-accordiontab.p-accordiontab-active:nth-child(2)) .p-accordiontab.p-accordiontab-active {
-    flex: 1 1 50%;
-}
-
-/* Sleek Task Dialog Styling */
+/* Dialog */
 :host ::ng-deep .p-dialog.sleek-task-dialog {
     background: var(--color-bg-primary) !important;
     border-radius: 16px;
-    overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     border: var(--border-width) solid var(--color-border) !important;
 }
-
 :host ::ng-deep .p-dialog.sleek-task-dialog .p-dialog-content {
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
 }
+:host ::ng-deep .p-dialog.sleek-task-dialog .p-dialog-header { display: none !important; }
 
-:host ::ng-deep .p-dialog.sleek-task-dialog .p-dialog-header {
-    display: none !important;
-}
-
-.sleek-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-xl);
-}
-
-.dialog-top-actions {
-    display: flex;
-    justify-content: flex-start;
-}
-
-.add-task-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-primary);
-    color: #ffffff;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.add-task-btn:hover:not(:disabled) {
-    background: var(--color-primary-hover);
-    transform: translateY(-1px);
-}
-
-.add-task-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.task-input-container {
-    margin: var(--spacing-lg) 0;
-}
-
-.sleek-task-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--color-text-primary);
-    font-size: 28px;
-    font-weight: 300;
-    padding: var(--spacing-md) 0;
-    outline: none;
-}
-
-.sleek-task-input::placeholder {
-    color: var(--color-text-tertiary);
-}
-
-.metadata-row {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    flex-wrap: wrap;
-}
-
+/* Metadata buttons */
 .metadata-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
+    display: flex; align-items: center; gap: var(--spacing-xs);
     padding: var(--spacing-xs) var(--spacing-md);
-    background: var(--color-bg-secondary);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    transition: all 0.2s ease;
+    background: var(--color-bg-secondary); color: var(--color-text-secondary);
+    border: 1px solid var(--color-border); border-radius: var(--border-radius);
+    cursor: pointer; font-size: var(--font-size-sm); transition: all 0.2s ease;
 }
-
 .metadata-btn:hover {
-    background: var(--color-bg-hover);
-    color: var(--color-text-primary);
+    background: var(--color-bg-hover); color: var(--color-text-primary);
     border-color: var(--color-primary-light);
 }
-
-.metadata-btn i {
-    font-size: var(--font-size-sm);
+.metadata-btn i { font-size: var(--font-size-sm); }
+.routine-btn.routine-active {
+    background: var(--color-primary); color: white; border-color: var(--color-primary);
 }
+.routine-btn.routine-active:hover { background: var(--color-primary-hover); }
 
-/* Popover Styling */
+/* Popover */
 :host ::ng-deep .p-popover {
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    background: var(--color-bg-primary); border: 1px solid var(--color-border);
+    border-radius: var(--border-radius); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
-
-:host ::ng-deep .p-popover .p-popover-content {
-    padding: var(--spacing-xs);
-}
-
-.metadata-popover {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-    min-width: 200px;
-}
-
-.popover-option {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    color: var(--color-text-secondary);
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.popover-option:hover {
-    background: var(--color-bg-hover);
-    color: var(--color-text-primary);
-}
-
-.popover-option i {
-    font-size: var(--font-size-sm);
-}
-
-/* Edit Dialog - Action Buttons */
-.dialog-actions-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
-}
-
-.right-actions {
-    display: flex;
-    gap: var(--spacing-sm);
-}
-
-.delete-task-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: transparent;
-    color: var(--color-destructive);
-    border: 1px solid var(--color-destructive);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.delete-task-btn:hover {
-    background: var(--color-destructive);
-    color: white;
-    transform: translateY(-1px);
-}
-
-.save-task-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-primary);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.save-task-btn:hover:not(:disabled) {
-    background: var(--color-primary-hover);
-    transform: translateY(-1px);
-}
-
-.save-task-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Description Textarea */
-.description-container {
-    margin: var(--spacing-md) 0;
-}
-
-.sleek-description-textarea {
-    width: 100%;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    color: var(--color-text-primary);
-    font-size: var(--font-size-base);
-    font-family: var(--font-family-base);
-    padding: var(--spacing-md);
-    outline: none;
-    resize: vertical;
-    min-height: 100px;
-    transition: all 0.2s ease;
-}
-
-.sleek-description-textarea:focus {
-    border-color: var(--color-primary);
-    background: var(--color-bg-primary);
-}
-
-.sleek-description-textarea::placeholder {
-    color: var(--color-text-tertiary);
-}
-
-/* Date Popover */
-.date-popover {
-    padding: var(--spacing-sm) !important;
-}
-
-.clear-date-btn {
-    width: 100%;
-    margin-top: var(--spacing-sm);
-    padding: var(--spacing-sm);
-    background: transparent;
-    color: var(--color-destructive);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    transition: all 0.2s ease;
-}
-
-.clear-date-btn:hover {
-    background: var(--color-bg-hover);
-    border-color: var(--color-destructive);
-}
-
-/* Routine Button Active State */
-.routine-btn.active {
-    background: var(--color-primary);
-    color: white;
-    border-color: var(--color-primary);
-}
-
-.routine-btn.active:hover {
-    background: var(--color-primary-hover);
-}
+:host ::ng-deep .p-popover .p-popover-content { padding: var(--spacing-xs); }

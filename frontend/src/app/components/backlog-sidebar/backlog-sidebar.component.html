@@ -1,5 +1,5 @@
-<div class="backlog-sidebar-container">
-    <div class="accordion-wrapper">
+<div class="h-screen w-[var(--sidebar-width)] relative flex flex-col overflow-hidden bg-[var(--color-bg-secondary)]">
+    <div class="flex-1 flex flex-col overflow-hidden px-4 py-6 pb-[calc(var(--spacing-xl)+56px)] w-full box-border">
         <p-accordion
             [multiple]="true"
             [(value)]="expandedPanels"
@@ -8,15 +8,15 @@
             <!-- Work Section -->
             <p-accordionpanel [value]="0">
                 <p-accordionheader>
-                    <div class="workspace-header work-header">
-                        <i class="pi pi-briefcase workspace-icon"></i>
-                        <span class="workspace-name">Work</span>
+                    <div class="flex items-center gap-6 w-full work-header">
+                        <i class="pi pi-briefcase text-xl text-[var(--color-secondary)]"></i>
+                        <span class="flex-1 text-base font-bold uppercase tracking-[var(--letter-spacing-wide)] text-[var(--color-secondary)]">Work</span>
                         <p-badge [value]="workTaskCount().toString()" styleClass="workspace-badge" />
                     </div>
                 </p-accordionheader>
                 <p-accordioncontent>
                 <div
-                    class="workspace-content"
+                    class="workspace-content flex-1 overflow-y-auto overflow-x-hidden px-2 py-2 min-h-[200px] max-h-full w-full box-border"
                     cdkDropList
                     [cdkDropListData]="workTasks()"
                     [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list', 'personal-backlog-list']"
@@ -26,7 +26,7 @@
                         <p-message severity="info" [text]="'No work tasks in backlog'" />
                     } @else {
                         @for (task of workTasks(); track task.id) {
-                            <div class="task-list-item">
+                            <div class="mb-2">
                                 <p-card
                                     cdkDrag
                                     [cdkDragData]="task"
@@ -35,16 +35,16 @@
                                     [pTooltip]="task.description || 'No description'"
                                     tooltipPosition="right"
                                 >
-                                    <div class="task-card-content">
-                                        <div class="task-title">{{ task.title }}</div>
+                                    <div class="px-6 py-4">
+                                        <div class="font-semibold text-base mb-2 text-[var(--color-text-primary)] leading-tight break-words max-w-full">{{ task.title }}</div>
                                         @if (task.dueDate) {
-                                            <div class="task-meta">
+                                            <div class="flex items-center gap-4 text-sm text-[var(--color-text-secondary)] mt-4 flex-wrap">
                                                 <i class="pi pi-calendar"></i>
                                                 <span>{{ task.dueDate | date:'short' }}</span>
                                             </div>
                                         }
                                         @if (task.isRoutine) {
-                                            <div class="task-routine-badge">
+                                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-hover)] text-white rounded-sm text-xs font-bold mt-2 shadow-sm">
                                                 <i class="pi pi-sync"></i> Routine
                                             </div>
                                         }
@@ -60,15 +60,15 @@
             <!-- Personal Section -->
             <p-accordionpanel [value]="1">
                 <p-accordionheader>
-                    <div class="workspace-header personal-header">
-                        <i class="pi pi-home workspace-icon"></i>
-                        <span class="workspace-name">Personal</span>
+                    <div class="flex items-center gap-6 w-full personal-header">
+                        <i class="pi pi-home text-xl text-[var(--color-accent)]"></i>
+                        <span class="flex-1 text-base font-bold uppercase tracking-[var(--letter-spacing-wide)] text-[var(--color-accent)]">Personal</span>
                         <p-badge [value]="personalTaskCount().toString()" styleClass="workspace-badge" />
                     </div>
                 </p-accordionheader>
                 <p-accordioncontent>
                 <div
-                    class="workspace-content"
+                    class="workspace-content flex-1 overflow-y-auto overflow-x-hidden px-2 py-2 min-h-[200px] max-h-full w-full box-border"
                     cdkDropList
                     [cdkDropListData]="personalTasks()"
                     [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list', 'work-backlog-list']"
@@ -78,7 +78,7 @@
                         <p-message severity="info" [text]="'No personal tasks in backlog'" />
                     } @else {
                         @for (task of personalTasks(); track task.id) {
-                            <div class="task-list-item">
+                            <div class="mb-2">
                                 <p-card
                                     cdkDrag
                                     [cdkDragData]="task"
@@ -87,16 +87,16 @@
                                     [pTooltip]="task.description || 'No description'"
                                     tooltipPosition="right"
                                 >
-                                    <div class="task-card-content">
-                                        <div class="task-title">{{ task.title }}</div>
+                                    <div class="px-6 py-4">
+                                        <div class="font-semibold text-base mb-2 text-[var(--color-text-primary)] leading-tight break-words max-w-full">{{ task.title }}</div>
                                         @if (task.dueDate) {
-                                            <div class="task-meta">
+                                            <div class="flex items-center gap-4 text-sm text-[var(--color-text-secondary)] mt-4 flex-wrap">
                                                 <i class="pi pi-calendar"></i>
                                                 <span>{{ task.dueDate | date:'short' }}</span>
                                             </div>
                                         }
                                         @if (task.isRoutine) {
-                                            <div class="task-routine-badge">
+                                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-hover)] text-white rounded-sm text-xs font-bold mt-2 shadow-sm">
                                                 <i class="pi pi-sync"></i> Routine
                                             </div>
                                         }
@@ -112,7 +112,7 @@
     </div>
 
     <!-- Floating Action Button -->
-    <div class="fab-container">
+    <div class="absolute bottom-[var(--spacing-xl)] right-[var(--spacing-xl)] z-[100]">
         <p-button
             icon="pi pi-plus"
             [rounded]="true"
@@ -136,39 +136,39 @@
     [dismissableMask]="true"
     styleClass="sleek-task-dialog"
 >
-    <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()" class="sleek-form">
+    <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()" class="flex flex-col gap-8 p-12">
         <!-- Top Actions -->
-        <div class="dialog-top-actions">
-            <button type="button" class="add-task-btn" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
+        <div class="flex justify-start">
+            <button type="button" class="flex items-center gap-4 px-6 py-4 bg-[var(--color-primary)] text-white border-none rounded cursor-pointer text-sm font-medium transition-all duration-200 hover:bg-[var(--color-primary-hover)] hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
                 <i class="pi pi-user-plus"></i>
                 <span>Add task</span>
             </button>
         </div>
 
         <!-- Main Input -->
-        <div class="task-input-container">
+        <div class="my-8">
             <input
                 id="title"
                 type="text"
                 formControlName="title"
                 placeholder="Task description..."
-                class="sleek-task-input"
+                class="w-full bg-transparent border-none text-[var(--color-text-primary)] text-[28px] font-light px-0 py-4 outline-none placeholder:text-[var(--color-text-tertiary)]"
                 autocomplete="off"
             />
         </div>
 
         <!-- Metadata Row -->
-        <div class="metadata-row">
+        <div class="flex items-center gap-4 flex-wrap">
             <!-- Status/Due Date Button -->
             <button type="button" class="metadata-btn" (click)="op1.toggle($event)">
                 <i class="pi pi-calendar"></i>
                 <span>{{ createTaskForm.get('status')?.value === 'TODAY' ? 'Today' : createTaskForm.get('status')?.value === 'IN_PROGRESS' ? 'In Progress' : createTaskForm.get('status')?.value === 'DONE' ? 'Done' : 'Backlog' }}</span>
             </button>
             <p-popover #op1>
-                <div class="metadata-popover">
+                <div class="flex flex-col gap-2 min-w-[200px]">
                     @for (option of statusOptions; track option.value) {
-                        <div class="popover-option" (click)="createTaskForm.patchValue({status: option.value}); op1.hide()">
-                            <i class="pi pi-calendar"></i>
+                        <div class="flex items-center gap-4 px-6 py-4 text-[var(--color-text-secondary)] rounded-sm cursor-pointer transition-all duration-200 hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]" (click)="createTaskForm.patchValue({status: option.value}); op1.hide()">
+                            <i class="pi pi-calendar text-sm"></i>
                             <span>{{ option.label }}</span>
                         </div>
                     }
@@ -187,10 +187,10 @@
                 <span>{{ getChannelName(createTaskForm.get('channelId')?.value) || 'development' }}</span>
             </button>
             <p-popover #op2>
-                <div class="metadata-popover">
+                <div class="flex flex-col gap-2 min-w-[200px]">
                     @for (channel of filteredChannels(); track channel.id) {
-                        <div class="popover-option" (click)="createTaskForm.patchValue({channelId: channel.id}); op2.hide()">
-                            <i class="pi pi-hashtag"></i>
+                        <div class="flex items-center gap-4 px-6 py-4 text-[var(--color-text-secondary)] rounded-sm cursor-pointer transition-all duration-200 hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]" (click)="createTaskForm.patchValue({channelId: channel.id}); op2.hide()">
+                            <i class="pi pi-hashtag text-sm"></i>
                             <span>{{ channel.name }}</span>
                         </div>
                     }
@@ -202,10 +202,10 @@
                 <i class="pi pi-{{ createTaskForm.get('workspace')?.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
             </button>
             <p-popover #op3>
-                <div class="metadata-popover">
+                <div class="flex flex-col gap-2 min-w-[200px]">
                     @for (workspace of workspaceOptions; track workspace.value) {
-                        <div class="popover-option" (click)="createTaskForm.patchValue({workspace: workspace.value}); op3.hide()">
-                            <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+                        <div class="flex items-center gap-4 px-6 py-4 text-[var(--color-text-secondary)] rounded-sm cursor-pointer transition-all duration-200 hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]" (click)="createTaskForm.patchValue({workspace: workspace.value}); op3.hide()">
+                            <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }} text-sm"></i>
                             <span>{{ workspace.label }}</span>
                         </div>
                     }
@@ -232,16 +232,16 @@
     styleClass="sleek-task-dialog"
 >
     @if (selectedTask()) {
-        <form [formGroup]="editTaskForm" (ngSubmit)="submitEditTask()" class="sleek-form">
+        <form [formGroup]="editTaskForm" (ngSubmit)="submitEditTask()" class="flex flex-col gap-8 p-12">
             <!-- Action Buttons Row -->
-            <div class="dialog-actions-row">
-                <button type="button" class="delete-task-btn" (click)="confirmDeleteTask()">
+            <div class="flex justify-between items-center mb-6">
+                <button type="button" class="flex items-center gap-4 px-6 py-4 bg-transparent text-[var(--color-destructive)] border border-[var(--color-destructive)] rounded cursor-pointer text-sm font-medium transition-all duration-200 hover:bg-[var(--color-destructive)] hover:text-white hover:-translate-y-px" (click)="confirmDeleteTask()">
                     <i class="pi pi-trash"></i>
                     <span>Delete</span>
                 </button>
 
-                <div class="right-actions">
-                    <button type="button" class="save-task-btn" (click)="submitEditTask()" [disabled]="editTaskForm.invalid">
+                <div class="flex gap-4">
+                    <button type="button" class="flex items-center gap-4 px-6 py-4 bg-[var(--color-primary)] text-white border-none rounded cursor-pointer text-sm font-medium transition-all duration-200 hover:bg-[var(--color-primary-hover)] hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed" (click)="submitEditTask()" [disabled]="editTaskForm.invalid">
                         <i class="pi pi-check"></i>
                         <span>Save</span>
                     </button>
@@ -249,44 +249,44 @@
             </div>
 
             <!-- Title Input -->
-            <div class="task-input-container">
+            <div class="my-8">
                 <input
                     id="edit-title"
                     type="text"
                     formControlName="title"
                     placeholder="Task description..."
-                    class="sleek-task-input"
+                    class="w-full bg-transparent border-none text-[var(--color-text-primary)] text-[28px] font-light px-0 py-4 outline-none placeholder:text-[var(--color-text-tertiary)]"
                     autocomplete="off"
                 />
             </div>
 
             <!-- Description Textarea -->
-            <div class="description-container">
+            <div class="my-6">
                 <textarea
                     id="edit-description"
                     formControlName="description"
                     placeholder="Add more details..."
-                    class="sleek-description-textarea"
+                    class="w-full bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded text-[var(--color-text-primary)] text-base font-[var(--font-family-base)] px-6 py-6 outline-none resize-y min-h-[100px] transition-all duration-200 focus:border-[var(--color-primary)] focus:bg-[var(--color-bg-primary)] placeholder:text-[var(--color-text-tertiary)]"
                     rows="4"
                 ></textarea>
             </div>
 
             <!-- Metadata Row -->
-            <div class="metadata-row">
+            <div class="flex items-center gap-4 flex-wrap">
                 <!-- Channel Button -->
                 <button type="button" class="metadata-btn" (click)="opEditChannel.toggle($event)">
                     <i class="pi pi-hashtag"></i>
                     <span>{{ getChannelName(editTaskForm.get('channelId')?.value) || 'No channel' }}</span>
                 </button>
                 <p-popover #opEditChannel>
-                    <div class="metadata-popover">
-                        <div class="popover-option" (click)="editTaskForm.patchValue({channelId: null}); opEditChannel.hide()">
-                            <i class="pi pi-times"></i>
+                    <div class="flex flex-col gap-2 min-w-[200px]">
+                        <div class="flex items-center gap-4 px-6 py-4 text-[var(--color-text-secondary)] rounded-sm cursor-pointer transition-all duration-200 hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]" (click)="editTaskForm.patchValue({channelId: null}); opEditChannel.hide()">
+                            <i class="pi pi-times text-sm"></i>
                             <span>No channel</span>
                         </div>
                         @for (channel of filteredChannels(); track channel.id) {
-                            <div class="popover-option" (click)="editTaskForm.patchValue({channelId: channel.id}); opEditChannel.hide()">
-                                <i class="pi pi-hashtag"></i>
+                            <div class="flex items-center gap-4 px-6 py-4 text-[var(--color-text-secondary)] rounded-sm cursor-pointer transition-all duration-200 hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]" (click)="editTaskForm.patchValue({channelId: channel.id}); opEditChannel.hide()">
+                                <i class="pi pi-hashtag text-sm"></i>
                                 <span>{{ channel.name }}</span>
                             </div>
                         }
@@ -299,10 +299,10 @@
                     <span>{{ editTaskForm.get('workspace')?.value === 'WORK' ? 'Work' : 'Personal' }}</span>
                 </button>
                 <p-popover #opEditWorkspace>
-                    <div class="metadata-popover">
+                    <div class="flex flex-col gap-2 min-w-[200px]">
                         @for (workspace of workspaceOptions; track workspace.value) {
-                            <div class="popover-option" (click)="editTaskForm.patchValue({workspace: workspace.value}); opEditWorkspace.hide()">
-                                <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+                            <div class="flex items-center gap-4 px-6 py-4 text-[var(--color-text-secondary)] rounded-sm cursor-pointer transition-all duration-200 hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]" (click)="editTaskForm.patchValue({workspace: workspace.value}); opEditWorkspace.hide()">
+                                <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }} text-sm"></i>
                                 <span>{{ workspace.label }}</span>
                             </div>
                         }
@@ -315,7 +315,7 @@
                     <span>{{ editTaskForm.get('dueDate')?.value ? (editTaskForm.get('dueDate')?.value | date:'MMM d, y') : 'No due date' }}</span>
                 </button>
                 <p-popover #opEditDueDate>
-                    <div class="metadata-popover date-popover">
+                    <div class="date-popover p-4">
                         <p-datepicker
                             formControlName="dueDate"
                             [showIcon]="false"
@@ -324,7 +324,7 @@
                             (onSelect)="opEditDueDate.hide()"
                         />
                         @if (editTaskForm.get('dueDate')?.value) {
-                            <button type="button" class="clear-date-btn" (click)="editTaskForm.patchValue({dueDate: null}); opEditDueDate.hide()">
+                            <button type="button" class="w-full mt-4 px-4 py-4 bg-transparent text-[var(--color-destructive)] border border-[var(--color-border)] rounded-sm cursor-pointer text-sm transition-all duration-200 hover:bg-[var(--color-bg-hover)] hover:border-[var(--color-destructive)]" (click)="editTaskForm.patchValue({dueDate: null}); opEditDueDate.hide()">
                                 Clear date
                             </button>
                         }
@@ -334,7 +334,7 @@
                 <!-- Routine Toggle -->
                 <button type="button"
                     class="metadata-btn routine-btn"
-                    [class.active]="editTaskForm.get('isRoutine')?.value"
+                    [class.routine-active]="editTaskForm.get('isRoutine')?.value"
                     (click)="editTaskForm.patchValue({isRoutine: !editTaskForm.get('isRoutine')?.value})">
                     <i class="pi pi-sync"></i>
                     <span>{{ editTaskForm.get('isRoutine')?.value ? 'Routine' : 'One-time' }}</span>
