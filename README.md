@@ -332,6 +332,7 @@ docker-compose -f docker-compose.prod.yml logs -f
 ```
 
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment guide including:
+
 - Docker multi-stage builds
 - Production configuration
 - Server setup
@@ -343,11 +344,13 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment guide includin
 ### CI/CD Pipelines
 
 **Continuous Integration:**
+
 - Automatic linting, type checking, and testing on every push
 - Coverage reporting
 - Production build verification
 
 **Continuous Deployment:**
+
 - Manual or tag-triggered deployment
 - Multi-platform Docker image builds (amd64, arm64)
 - Push to GitHub Container Registry

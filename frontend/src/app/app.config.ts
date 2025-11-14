@@ -25,7 +25,7 @@ const TaskerPreset = definePreset(Aura, {
       700: '{purple.700}',
       800: '{purple.800}',
       900: '{purple.900}',
-      950: '{purple.950}'
+      950: '{purple.950}',
     },
     colorScheme: {
       light: {
@@ -33,7 +33,7 @@ const TaskerPreset = definePreset(Aura, {
           color: '#8B7BB8',
           contrastColor: '#ffffff',
           hoverColor: '#7A6AA7',
-          activeColor: '#6B5996'
+          activeColor: '#6B5996',
         },
         surface: {
           0: '#ffffff',
@@ -47,11 +47,11 @@ const TaskerPreset = definePreset(Aura, {
           700: '#5D5B59',
           800: '#403E3C',
           900: '#2B2B2A',
-          950: '#1A1A19'
-        }
-      }
-    }
-  }
+          950: '#1A1A19',
+        },
+      },
+    },
+  },
 });
 
 export const appConfig: ApplicationConfig = {
@@ -66,11 +66,11 @@ export const appConfig: ApplicationConfig = {
         preset: TaskerPreset,
         options: {
           darkModeSelector: false,
-          cssLayer: false
-        }
+          cssLayer: false,
+        },
       },
-      ripple: true
+      ripple: true,
     }),
-    ConfirmationService
+    ConfirmationService,
   ],
 };

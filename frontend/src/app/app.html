@@ -7,17 +7,24 @@
         type="button"
         class="settings-btn"
         routerLink="/settings"
-        title="Settings">
+        title="Settings"
+      >
         <i class="pi pi-bars"></i>
       </button>
     </div>
 
     <!-- Status Notification Indicator -->
     @if (notification()) {
-      <div class="status-indicator" [class.success]="notification()!.type === 'success'" [class.error]="notification()!.type === 'error'">
-        <i [class]="notification()!.type === 'success' ? 'pi pi-check-circle' : 'pi pi-times-circle'"></i>
-        <span>{{ notification()!.message }}</span>
-      </div>
+    <div
+      class="status-indicator"
+      [class.success]="notification()!.type === 'success'"
+      [class.error]="notification()!.type === 'error'"
+    >
+      <i
+        [class]="notification()!.type === 'success' ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+      ></i>
+      <span>{{ notification()!.message }}</span>
+    </div>
     }
 
     <div class="context-toggle">
@@ -25,7 +32,8 @@
         type="button"
         class="context-button"
         [class.active]="currentWorkspace() === Workspace.WORK"
-        (click)="toggleWorkspace()">
+        (click)="toggleWorkspace()"
+      >
         <i class="pi pi-briefcase"></i>
         <span>Work</span>
       </button>
@@ -33,7 +41,8 @@
         type="button"
         class="context-button"
         [class.active]="currentWorkspace() === Workspace.PERSONAL"
-        (click)="toggleWorkspace()">
+        (click)="toggleWorkspace()"
+      >
         <i class="pi pi-home"></i>
         <span>Personal</span>
       </button>

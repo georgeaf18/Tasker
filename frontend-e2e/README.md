@@ -9,6 +9,7 @@ This E2E test suite covers all critical user paths in the Tasker application, en
 ## Test Coverage
 
 ### 1. Task Creation Flow (`task-creation.spec.ts`)
+
 - Opening task creation dialog
 - Creating tasks with required fields only
 - Creating tasks with all fields
@@ -19,6 +20,7 @@ This E2E test suite covers all critical user paths in the Tasker application, en
 - Special character handling
 
 ### 2. Kanban Workflow (`kanban-workflow.spec.ts`)
+
 - Moving tasks from Backlog → Today
 - Moving tasks from Today → In Progress
 - Moving tasks from In Progress → Done
@@ -29,6 +31,7 @@ This E2E test suite covers all critical user paths in the Tasker application, en
 - Backward movement (Done → In Progress)
 
 ### 3. Workspace Filtering (`workspace-filtering.spec.ts`)
+
 - Filtering by Work workspace
 - Filtering by Personal workspace
 - Showing all tasks (no filter)
@@ -39,6 +42,7 @@ This E2E test suite covers all critical user paths in the Tasker application, en
 - Empty workspace handling
 
 ### 4. Task Deletion (`task-deletion.spec.ts`)
+
 - Deleting from Backlog
 - Deleting from Today column
 - Deleting from In Progress column
@@ -50,6 +54,7 @@ This E2E test suite covers all critical user paths in the Tasker application, en
 - Multiple sequential deletions
 
 ### 5. Task Editing (`task-editing.spec.ts`)
+
 - Editing task title
 - Editing task description
 - Editing both title and description
@@ -100,6 +105,7 @@ expect(await backlogPage.hasTask('My Task')).toBe(true);
 ```
 
 **Benefits:**
+
 - **Maintainability:** UI changes only require updating page objects
 - **Reusability:** Page objects used across multiple tests
 - **Readability:** Tests read like user stories
@@ -123,6 +129,7 @@ await apiHelper.dispose();
 ```
 
 **Benefits:**
+
 - **Fast Setup:** Create test data directly via API
 - **Reliable Cleanup:** Ensure clean state between tests
 - **Backend Verification:** Verify data persistence
@@ -133,11 +140,13 @@ await apiHelper.dispose();
 ### Prerequisites
 
 1. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 2. **Ensure backend and database are running:**
+
    ```bash
    # Terminal 1: Start PostgreSQL
    docker-compose up -d postgres
@@ -246,36 +255,36 @@ projects: [
 
 ```typescript
 test.describe('Feature Name', () => {
-    let appPage: AppPage;
-    let backlogPage: BacklogPage;
-    let apiHelper: ApiHelper;
+  let appPage: AppPage;
+  let backlogPage: BacklogPage;
+  let apiHelper: ApiHelper;
 
-    test.beforeEach(async ({ page }) => {
-        // Initialize page objects
-        appPage = new AppPage(page);
-        backlogPage = new BacklogPage(page);
-        apiHelper = new ApiHelper();
+  test.beforeEach(async ({ page }) => {
+    // Initialize page objects
+    appPage = new AppPage(page);
+    backlogPage = new BacklogPage(page);
+    apiHelper = new ApiHelper();
 
-        // Setup: Clean state
-        await apiHelper.init();
-        await apiHelper.clearAllTasks();
+    // Setup: Clean state
+    await apiHelper.init();
+    await apiHelper.clearAllTasks();
 
-        // Navigate to app
-        await appPage.goto();
-        await appPage.waitForAppReady();
-    });
+    // Navigate to app
+    await appPage.goto();
+    await appPage.waitForAppReady();
+  });
 
-    test.afterEach(async () => {
-        // Cleanup
-        await apiHelper.clearAllTasks();
-        await apiHelper.dispose();
-    });
+  test.afterEach(async () => {
+    // Cleanup
+    await apiHelper.clearAllTasks();
+    await apiHelper.dispose();
+  });
 
-    test('should do something', async () => {
-        // Arrange: Setup test data
-        // Act: Perform user actions
-        // Assert: Verify expected outcomes
-    });
+  test('should do something', async () => {
+    // Arrange: Setup test data
+    // Act: Perform user actions
+    // Assert: Verify expected outcomes
+  });
 });
 ```
 
@@ -283,11 +292,13 @@ test.describe('Feature Name', () => {
 
 ```typescript
 // ✅ Good: Wait for specific element
-await page.waitForSelector('[data-testid="task-card-123"]', { state: 'visible' });
+await page.waitForSelector('[data-testid="task-card-123"]', {
+  state: 'visible',
+});
 
 // ✅ Good: Wait for API response
-await page.waitForResponse(response =>
-  response.url().includes('/api/tasks') && response.ok()
+await page.waitForResponse(
+  (response) => response.url().includes('/api/tasks') && response.ok(),
 );
 
 // ✅ Good: Use built-in waits
@@ -307,7 +318,7 @@ expect(await kanbanPage.getTaskCountInColumn('Today')).toBe(3);
 // ✅ Good: Verify both UI and backend
 expect(await backlogPage.hasTask('My Task')).toBe(true);
 const tasks = await apiHelper.getTasks();
-expect(tasks.find(t => t.title === 'My Task')).toBeDefined();
+expect(tasks.find((t) => t.title === 'My Task')).toBeDefined();
 
 // ❌ Bad: Vague assertions
 expect(await page.locator('div').count()).toBeGreaterThan(0);
@@ -326,6 +337,7 @@ npx playwright test -g "should create a task" --debug
 ```
 
 The inspector allows you to:
+
 - Step through test execution
 - Inspect page state at each step
 - Try selectors in the browser console
@@ -336,14 +348,15 @@ The inspector allows you to:
 ```typescript
 // Add console.log in tests
 test('my test', async ({ page }) => {
-    console.log('Current URL:', page.url());
-    console.log('Task count:', await backlogPage.getTaskCount());
+  console.log('Current URL:', page.url());
+  console.log('Task count:', await backlogPage.getTaskCount());
 });
 ```
 
 ### Screenshots on Failure
 
 Failed tests automatically capture screenshots. Find them in:
+
 ```
 test-results/
 └── <test-name>/
@@ -425,14 +438,16 @@ Each test should be independent and not rely on other tests:
 ```typescript
 // ✅ Good: Each test creates its own data
 test('should edit task', async () => {
-    await apiHelper.createTask({ title: 'Task to Edit' });
-    // Test logic
+  await apiHelper.createTask({ title: 'Task to Edit' });
+  // Test logic
 });
 
 // ❌ Bad: Test depends on previous test
-test('should create task', async () => { /* ... */ });
+test('should create task', async () => {
+  /* ... */
+});
 test('should edit task', async () => {
-    // Assumes task from previous test exists
+  // Assumes task from previous test exists
 });
 ```
 
@@ -455,6 +470,7 @@ test('should edit task', async () => {
 ### Tests Failing Locally
 
 1. **Ensure services are running:**
+
    ```bash
    # Check backend
    curl http://localhost:3000/api/health
@@ -464,6 +480,7 @@ test('should edit task', async () => {
    ```
 
 2. **Clear test data:**
+
    ```bash
    # Reset database
    npm run db:clean
@@ -481,20 +498,22 @@ test('should edit task', async () => {
 If tests fail intermittently:
 
 1. **Add explicit waits:**
+
    ```typescript
    await page.waitForSelector('[data-testid="task-card-123"]');
    ```
 
 2. **Wait for API calls:**
+
    ```typescript
-   await page.waitForResponse(res => res.url().includes('/api/tasks'));
+   await page.waitForResponse((res) => res.url().includes('/api/tasks'));
    ```
 
 3. **Increase timeouts:**
    ```typescript
    test('slow test', async ({ page }) => {
-       test.setTimeout(60000); // 60 seconds
-       // Test logic
+     test.setTimeout(60000); // 60 seconds
+     // Test logic
    });
    ```
 
@@ -507,17 +526,19 @@ If selectors don't work:
    - Use Playwright Inspector to verify selectors
 
 2. **Use Playwright Inspector:**
+
    ```bash
    npx playwright test --debug
    ```
 
 3. **Check selector syntax:**
+
    ```typescript
    // ✅ Good
-   page.getByTestId('add-task-button')
+   page.getByTestId('add-task-button');
 
    // ❌ Bad (old syntax)
-   page.locator('[data-testid="add-task-button"]')
+   page.locator('[data-testid="add-task-button"]');
    ```
 
 ## Contributing
@@ -557,6 +578,7 @@ If selectors don't work:
 ## Support
 
 For issues or questions:
+
 1. Check [Troubleshooting](#troubleshooting) section
 2. Review [DATA_TESTID_REQUIREMENTS.md](./DATA_TESTID_REQUIREMENTS.md)
 3. Run tests with `--debug` flag

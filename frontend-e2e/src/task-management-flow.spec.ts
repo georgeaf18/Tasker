@@ -48,10 +48,14 @@ test.describe('Complete Task Management Flow', () => {
     await page.click('p-button:has-text("Create")');
 
     // Step 7: Wait for toast notification
-    await expect(page.locator('p-toast')).toContainText('Task Created', { timeout: 5000 });
+    await expect(page.locator('p-toast')).toContainText('Task Created', {
+      timeout: 5000,
+    });
 
     // Step 8: Verify task appears in backlog sidebar
-    await expect(page.locator('.backlog-sidebar-container')).toContainText(taskTitle);
+    await expect(page.locator('.backlog-sidebar-container')).toContainText(
+      taskTitle,
+    );
 
     // Step 9: Click on the task to open details dialog
     await page.locator('.task-card-content', { hasText: taskTitle }).click();
@@ -61,13 +65,17 @@ test.describe('Complete Task Management Flow', () => {
 
     // Step 11: Verify task details are displayed correctly
     await expect(page.locator('#edit-title')).toHaveValue(taskTitle);
-    await expect(page.locator('#edit-description')).toHaveValue(taskDescription);
+    await expect(page.locator('#edit-description')).toHaveValue(
+      taskDescription,
+    );
 
     // Step 12: Close the details dialog
     await page.click('p-button:has-text("Cancel")');
   });
 
-  test('should create task in Today and move through kanban workflow', async ({ page }) => {
+  test('should create task in Today and move through kanban workflow', async ({
+    page,
+  }) => {
     const taskTitle = `Today Task ${Date.now()}`;
 
     // Step 1: Click header "Add Task" button
@@ -88,7 +96,9 @@ test.describe('Complete Task Management Flow', () => {
     await expect(page.locator('p-toast')).toContainText('Task Created');
 
     // Step 6: Verify task appears in Today column of kanban board
-    const todayColumn = page.locator('.kanban-column').filter({ hasText: 'Today' });
+    const todayColumn = page
+      .locator('.kanban-column')
+      .filter({ hasText: 'Today' });
     await expect(todayColumn).toContainText(taskTitle);
 
     // Step 7: Click on task to open details
@@ -101,19 +111,27 @@ test.describe('Complete Task Management Flow', () => {
     await expect(page.locator('p-toast')).toContainText('Task Updated');
 
     // Step 10: Verify task moved to In Progress column
-    const inProgressColumn = page.locator('.kanban-column').filter({ hasText: 'In Progress' });
+    const inProgressColumn = page
+      .locator('.kanban-column')
+      .filter({ hasText: 'In Progress' });
     await expect(inProgressColumn).toContainText(taskTitle);
 
     // Step 11: Open task again and move to Done
-    await inProgressColumn.locator('.task-card', { hasText: taskTitle }).click();
+    await inProgressColumn
+      .locator('.task-card', { hasText: taskTitle })
+      .click();
     await page.click('p-button:has-text("Done")');
 
     // Step 12: Verify task in Done column
-    const doneColumn = page.locator('.kanban-column').filter({ hasText: 'Done' });
+    const doneColumn = page
+      .locator('.kanban-column')
+      .filter({ hasText: 'Done' });
     await expect(doneColumn).toContainText(taskTitle);
   });
 
-  test('should update task details and verify changes persist', async ({ page }) => {
+  test('should update task details and verify changes persist', async ({
+    page,
+  }) => {
     const initialTitle = `Update Test ${Date.now()}`;
     const updatedTitle = `${initialTitle} - Updated`;
     const updatedDescription = 'Updated description text';
@@ -141,14 +159,18 @@ test.describe('Complete Task Management Flow', () => {
     await expect(page.locator('p-toast')).toContainText('Task Updated');
 
     // Step 7: Verify updated title in backlog
-    await expect(page.locator('.backlog-sidebar-container')).toContainText(updatedTitle);
+    await expect(page.locator('.backlog-sidebar-container')).toContainText(
+      updatedTitle,
+    );
 
     // Step 8: Reopen task to verify persistence
     await page.locator('.task-card-content', { hasText: updatedTitle }).click();
 
     // Step 9: Verify updates persisted
     await expect(page.locator('#edit-title')).toHaveValue(updatedTitle);
-    await expect(page.locator('#edit-description')).toHaveValue(updatedDescription);
+    await expect(page.locator('#edit-description')).toHaveValue(
+      updatedDescription,
+    );
   });
 
   test('should delete task and show confirmation', async ({ page }) => {
@@ -174,10 +196,14 @@ test.describe('Complete Task Management Flow', () => {
     await expect(page.locator('p-toast')).toContainText('Task Deleted');
 
     // Step 6: Verify task no longer in backlog
-    await expect(page.locator('.backlog-sidebar-container')).not.toContainText(taskTitle);
+    await expect(page.locator('.backlog-sidebar-container')).not.toContainText(
+      taskTitle,
+    );
   });
 
-  test('should switch context and create tasks in different contexts', async ({ page }) => {
+  test('should switch context and create tasks in different contexts', async ({
+    page,
+  }) => {
     const workTask = `Work Task ${Date.now()}`;
     const personalTask = `Personal Task ${Date.now()}`;
 
@@ -203,8 +229,12 @@ test.describe('Complete Task Management Flow', () => {
     await expect(page.locator('p-toast')).toContainText('Task Created');
 
     // Step 3: Verify both tasks are in backlog
-    await expect(page.locator('.backlog-sidebar-container')).toContainText(workTask);
-    await expect(page.locator('.backlog-sidebar-container')).toContainText(personalTask);
+    await expect(page.locator('.backlog-sidebar-container')).toContainText(
+      workTask,
+    );
+    await expect(page.locator('.backlog-sidebar-container')).toContainText(
+      personalTask,
+    );
   });
 
   test('should show validation error when title is empty', async ({ page }) => {
@@ -232,9 +262,11 @@ test.describe('Complete Task Management Flow', () => {
     await page.click('p-button:has-text("Cancel")');
 
     // Step 4: Verify dialog closed
-    await expect(page.locator('p-dialog')).not.toBeVisible();
+    await expect(page.locator('p-dialog')).toBeHidden();
 
     // Step 5: Verify task was not created
-    await expect(page.locator('.backlog-sidebar-container')).not.toContainText(taskTitle);
+    await expect(page.locator('.backlog-sidebar-container')).not.toContainText(
+      taskTitle,
+    );
   });
 });

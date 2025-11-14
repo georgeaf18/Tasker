@@ -16,8 +16,8 @@ describe('HomeComponent', () => {
         provideNoopAnimations(),
         provideRouter([]),
         ConfirmationService,
-        MessageService
-      ]
+        MessageService,
+      ],
     }).compileComponents();
   });
 
@@ -35,7 +35,10 @@ describe('HomeComponent', () => {
 
       // Get the BacklogSidebarComponent instance through ViewChild
       const backlogSidebar = component['backlogSidebar'];
-      const showCreateTaskDialogSpy = jest.spyOn(backlogSidebar, 'showCreateTaskDialog');
+      const showCreateTaskDialogSpy = jest.spyOn(
+        backlogSidebar,
+        'showCreateTaskDialog',
+      );
 
       component['openCreateTaskDialog']();
 

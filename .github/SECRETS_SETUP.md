@@ -165,6 +165,7 @@ command="cd /opt/tasker && docker-compose -f docker-compose.prod.yml $SSH_ORIGIN
 ### 3. Use Environment-Specific Secrets
 
 Create separate environments in GitHub:
+
 - **Settings → Environments → New environment**
 - Create "production" and "staging" environments
 - Add environment-specific secrets
@@ -191,6 +192,7 @@ cat ~/.ssh/tasker_deploy_new.pub | ssh user@server "cat >> ~/.ssh/authorized_key
 **Problem:** GitHub Actions can't SSH to server
 
 **Solutions:**
+
 1. Verify public key is in server's `~/.ssh/authorized_keys`
 2. Check SSH key format (must include BEGIN and END lines)
 3. Ensure `~/.ssh` permissions: `chmod 700 ~/.ssh`
@@ -208,6 +210,7 @@ cat ~/.ssh/tasker_deploy_new.pub | ssh user@server "cat >> ~/.ssh/authorized_key
 **Problem:** Can't pull images from GitHub Container Registry
 
 **Solutions:**
+
 1. Verify images were built successfully
 2. Check GHCR permissions: Repository → Settings → Packages
 3. Ensure packages are public or server has auth
@@ -221,6 +224,7 @@ cat ~/.ssh/tasker_deploy_new.pub | ssh user@server "cat >> ~/.ssh/authorized_key
 **Problem:** Containers start but application has errors
 
 **Solutions:**
+
 1. Check environment variables in `.env.production`
 2. View container logs: `docker-compose -f docker-compose.prod.yml logs`
 3. Verify database migrations ran: `docker-compose exec backend npx prisma migrate status`
@@ -247,7 +251,7 @@ cat ~/.ssh/tasker_deploy_new.pub | ssh user@server "cat >> ~/.ssh/authorized_key
 # .github/workflows/deploy.yml
 jobs:
   deploy:
-    environment: production  # Add this line
+    environment: production # Add this line
     steps:
       # ... existing steps
 ```
@@ -255,11 +259,13 @@ jobs:
 ### Environment-Specific Secrets
 
 Instead of repository secrets, use environment secrets:
+
 1. **Settings → Environments → production → Add secret**
 2. Add `PROD_HOST`, `PROD_USER`, `PROD_SSH_KEY` here
 3. Repeat for staging environment
 
 Benefits:
+
 - Different values per environment
 - Protection rules
 - Deployment history
@@ -294,6 +300,7 @@ After secrets are configured:
 ## Support
 
 For issues:
+
 - Check workflow logs in Actions tab
 - Review server logs: `docker-compose logs`
 - Consult DEPLOYMENT.md for server setup

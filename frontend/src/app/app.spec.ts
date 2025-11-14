@@ -17,8 +17,8 @@ describe('App', () => {
         provideNoopAnimations(),
         provideRouter([]),
         ConfirmationService,
-        MessageService
-      ]
+        MessageService,
+      ],
     }).compileComponents();
   });
 

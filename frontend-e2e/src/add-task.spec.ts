@@ -28,7 +28,10 @@ test.describe('Add Task Flow', () => {
 
     const taskInput = page.locator('.sleek-task-input');
     await expect(taskInput).toBeVisible();
-    await expect(taskInput).toHaveAttribute('placeholder', 'Task description...');
+    await expect(taskInput).toHaveAttribute(
+      'placeholder',
+      'Task description...',
+    );
 
     // Verify metadata buttons are visible
     const metadataButtons = page.locator('.metadata-btn');
@@ -41,9 +44,9 @@ test.describe('Add Task Flow', () => {
     console.log('Task title filled: Test E2E Task');
 
     // Step 4: Verify the input value
-    const inputValue = await taskInput.inputValue();
+    const inputValue = taskInput;
     console.log('Input value:', inputValue);
-    expect(inputValue).toBe('Test E2E Task');
+    await expect(inputValue).toHaveValue('Test E2E Task');
 
     // Step 5: Click the "Add task" button
     console.log('Step 5: Clicking Add task button...');
@@ -72,7 +75,9 @@ test.describe('Add Task Flow', () => {
     await page.waitForTimeout(1000); // Give time for task to be added
 
     // Look for the task in the sidebar
-    const taskCard = page.locator('.task-title', { hasText: 'Test E2E Task' }).first();
+    const taskCard = page
+      .locator('.task-title', { hasText: 'Test E2E Task' })
+      .first();
     await expect(taskCard).toBeVisible({ timeout: 5000 });
     console.log('Task found in backlog!');
 
@@ -80,6 +85,4 @@ test.describe('Add Task Flow', () => {
     const taskCardContainer = taskCard.locator('..');
     console.log('Task successfully added to backlog');
   });
-
 });
-

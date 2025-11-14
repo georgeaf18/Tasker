@@ -180,11 +180,13 @@ docker system prune -a --volumes
 ### Recommended Setup
 
 1. **Run PostgreSQL in Docker:**
+
    ```bash
    docker-compose up -d postgres
    ```
 
 2. **Run backend/frontend locally:**
+
    ```bash
    # Terminal 1
    npm run start backend
@@ -200,6 +202,7 @@ docker system prune -a --volumes
 1. **Uncomment services in `docker-compose.override.yml`**
 
 2. **Start all services:**
+
    ```bash
    docker-compose up -d
    ```
@@ -285,6 +288,7 @@ git push origin v0.1.0
 ## Support
 
 For issues:
+
 - Check logs: `docker-compose logs -f`
 - Verify health: `curl http://localhost:3000/health`
 - Review DEPLOYMENT.md troubleshooting section

@@ -177,16 +177,19 @@ Complete production deployment infrastructure for Tasker, implementing Docker co
 ### Docker Multi-Stage Builds
 
 **Benefits:**
+
 - Smaller final images (only production dependencies)
 - Faster deployments (less data to transfer)
 - Enhanced security (minimal attack surface)
 - Separation of build and runtime concerns
 
 **Backend Image Size:**
+
 - Builder stage: ~500MB (includes build tools)
 - Production stage: ~150MB (Node + app only)
 
 **Frontend Image Size:**
+
 - Builder stage: ~500MB (includes Node + build tools)
 - Production stage: ~25MB (Nginx + static files)
 
@@ -195,16 +198,19 @@ Complete production deployment infrastructure for Tasker, implementing Docker co
 All services include health checks for monitoring:
 
 **PostgreSQL:**
+
 - Command: `pg_isready`
 - Interval: 10s
 - Ensures database is accepting connections
 
 **Backend:**
+
 - Endpoint: `http://localhost:3000/health`
 - Interval: 30s
 - Start period: 40s (allows time for Prisma migrations)
 
 **Frontend:**
+
 - Endpoint: `http://localhost:80/health`
 - Interval: 30s
 - Ensures Nginx is serving files
@@ -212,23 +218,27 @@ All services include health checks for monitoring:
 ### Security Hardening
 
 **Container Security:**
+
 - Non-root users (nodejs, nginx)
 - Minimal base images (Alpine)
 - No unnecessary packages
 - Read-only file systems where possible
 
 **Network Security:**
+
 - Isolated Docker network
 - Services communicate internally
 - Only necessary ports exposed
 
 **Secrets Management:**
+
 - Environment variables via .env files
 - GitHub secrets for CI/CD
 - No hardcoded credentials
 - SSH key-based deployment
 
 **Image Security:**
+
 - Multi-platform builds
 - Signed images (via GHCR)
 - Regular base image updates
@@ -237,6 +247,7 @@ All services include health checks for monitoring:
 ### CI/CD Pipeline
 
 **Continuous Integration (on every push/PR):**
+
 1. Lint all code
 2. Type check with TypeScript
 3. Run unit tests with coverage
@@ -244,6 +255,7 @@ All services include health checks for monitoring:
 5. Upload artifacts
 
 **Continuous Deployment (manual or tag-based):**
+
 1. Build Docker images for amd64 and arm64
 2. Push to GitHub Container Registry
 3. SSH to production server
@@ -252,9 +264,10 @@ All services include health checks for monitoring:
 6. Verify health checks pass
 
 **Deployment Strategies:**
+
 - **Development:** Automatic on push to develop
 - **Staging:** Manual approval required
-- **Production:** Tag-based (v*.*.*)
+- **Production:** Tag-based (v*.*.\*)
 
 ## Environment Variables
 
@@ -280,6 +293,7 @@ See `.env.production.example` for complete list.
 ### Initial Setup
 
 1. **Server Preparation:**
+
    ```bash
    # Install Docker
    curl -fsSL https://get.docker.com | sh
@@ -296,6 +310,7 @@ See `.env.production.example` for complete list.
    - Add `PROD_SSH_KEY` (SSH private key)
 
 3. **Environment Configuration:**
+
    ```bash
    # On server
    cp .env.production.example .env.production
@@ -310,6 +325,7 @@ See `.env.production.example` for complete list.
 ### Ongoing Deployments
 
 **For hotfixes:**
+
 ```bash
 git commit -m "fix: critical bug"
 git tag v0.1.1
@@ -317,6 +333,7 @@ git push origin v0.1.1
 ```
 
 **For features:**
+
 ```bash
 # Manual deployment via GitHub UI
 # Actions → Deploy → Run workflow → Select environment
@@ -404,6 +421,7 @@ docker-compose -f docker-compose.prod.yml exec backend \
 **Symptom:** Docker build fails during npm install or build step
 
 **Solutions:**
+
 - Check Node version compatibility
 - Verify package.json syntax
 - Clear Docker build cache: `docker builder prune`
@@ -414,6 +432,7 @@ docker-compose -f docker-compose.prod.yml exec backend \
 **Symptom:** Container starts but health check fails
 
 **Solutions:**
+
 - Check application logs
 - Verify health endpoint is implemented
 - Ensure port is accessible internally
@@ -424,6 +443,7 @@ docker-compose -f docker-compose.prod.yml exec backend \
 **Symptom:** GitHub Actions deployment fails
 
 **Solutions:**
+
 - Verify SSH connection from local machine
 - Check GitHub secrets are configured
 - Ensure server has Docker installed
@@ -435,6 +455,7 @@ docker-compose -f docker-compose.prod.yml exec backend \
 ### Image Build Caching
 
 GitHub Actions uses build cache to speed up builds:
+
 - Cache type: GitHub Actions cache
 - Cache mode: max (caches all layers)
 - Typical cache hit: 2-5 minutes vs 10-15 minutes
@@ -442,18 +463,21 @@ GitHub Actions uses build cache to speed up builds:
 ### Production Optimizations
 
 **Backend:**
+
 - Prisma query optimization
 - Connection pooling
 - Environment-specific configs
 - Logging levels
 
 **Frontend:**
+
 - Gzip compression
 - Static asset caching (1 year)
 - Bundle optimization
 - Lazy loading
 
 **Database:**
+
 - Indexed queries
 - Connection limits
 - Optimized PostgreSQL config
@@ -463,12 +487,14 @@ GitHub Actions uses build cache to speed up builds:
 ### Secrets Management
 
 **Never commit:**
+
 - `.env.production`
 - SSH private keys
 - API tokens
 - Database passwords
 
 **Use GitHub secrets for:**
+
 - Production credentials
 - SSH keys
 - API tokens
@@ -477,6 +503,7 @@ GitHub Actions uses build cache to speed up builds:
 ### Container Security
 
 **Best practices implemented:**
+
 - ✅ Non-root users
 - ✅ Minimal base images (Alpine)
 - ✅ Multi-stage builds
@@ -485,6 +512,7 @@ GitHub Actions uses build cache to speed up builds:
 - ✅ Network isolation
 
 **Additional hardening (recommended):**
+
 - Container image scanning (Trivy, Snyk)
 - Runtime security monitoring (Falco)
 - Secrets management (Vault, AWS Secrets Manager)
@@ -522,6 +550,7 @@ deploy:
 ### Database Scaling
 
 For high load:
+
 - Read replicas
 - Connection pooling
 - Query optimization
@@ -597,6 +626,7 @@ docker system prune -af
 ## Support
 
 For deployment issues:
+
 1. Check logs: `docker-compose logs -f`
 2. Verify health: `curl http://localhost:3000/health`
 3. Review DEPLOYMENT.md troubleshooting section

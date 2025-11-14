@@ -8,6 +8,7 @@
 ## Context
 
 For Tasker (v0.1-v2.0+), we need:
+
 - A Node.js backend framework that's well-structured and maintainable
 - A database solution that's production-ready and scalable
 - An ORM that provides type safety and works excellently with TypeScript
@@ -17,6 +18,7 @@ For Tasker (v0.1-v2.0+), we need:
 ## Decision
 
 We will use:
+
 - **NestJS** as the backend framework
 - **Prisma** as the ORM
 - **PostgreSQL** as the database (all versions)
@@ -253,32 +255,32 @@ export class TasksController {
 
 ### ORMs
 
-| Feature | Prisma | TypeORM | MikroORM | Sequelize |
-|---------|--------|---------|----------|-----------|
-| TypeScript | Excellent | Good | Excellent | Poor |
-| Developer Experience | Excellent | Good | Good | Fair |
-| Migration System | Excellent | Good | Good | Fair |
-| Type Safety | Excellent | Good | Excellent | Weak |
-| REST API Integration | Excellent | Good | Good | Fair |
-| Documentation | Excellent | Good | Good | Good |
-| Performance | Excellent | Good | Good | Fair |
-| Learning Curve | Low | Medium | Medium | Low |
-| Active Development | High | Medium | Medium | Low |
+| Feature              | Prisma    | TypeORM | MikroORM  | Sequelize |
+| -------------------- | --------- | ------- | --------- | --------- |
+| TypeScript           | Excellent | Good    | Excellent | Poor      |
+| Developer Experience | Excellent | Good    | Good      | Fair      |
+| Migration System     | Excellent | Good    | Good      | Fair      |
+| Type Safety          | Excellent | Good    | Excellent | Weak      |
+| REST API Integration | Excellent | Good    | Good      | Fair      |
+| Documentation        | Excellent | Good    | Good      | Good      |
+| Performance          | Excellent | Good    | Good      | Fair      |
+| Learning Curve       | Low       | Medium  | Medium    | Low       |
+| Active Development   | High      | Medium  | Medium    | Low       |
 
 **Verdict:** Prisma for best DX and type safety
 
 ### Databases
 
-| Feature | PostgreSQL | MySQL | MongoDB | SQLite |
-|---------|-----------|-------|---------|--------|
-| Type System | Strong | Good | Flexible | Limited |
-| JSONB Support | Native | JSON | Native | Limited |
-| Full-Text Search | Excellent | Good | Good | Basic |
-| Scalability | Excellent | Excellent | Excellent | Poor |
-| Transactions | ACID | ACID | Limited | ACID |
-| Setup Complexity | Low (managed) | Low | Low | None |
-| Production Ready | Yes | Yes | Yes | No (multi-user) |
-| Managed Hosting | Many options | Many options | Many options | N/A |
+| Feature          | PostgreSQL    | MySQL        | MongoDB      | SQLite          |
+| ---------------- | ------------- | ------------ | ------------ | --------------- |
+| Type System      | Strong        | Good         | Flexible     | Limited         |
+| JSONB Support    | Native        | JSON         | Native       | Limited         |
+| Full-Text Search | Excellent     | Good         | Good         | Basic           |
+| Scalability      | Excellent     | Excellent    | Excellent    | Poor            |
+| Transactions     | ACID          | ACID         | Limited      | ACID            |
+| Setup Complexity | Low (managed) | Low          | Low          | None            |
+| Production Ready | Yes           | Yes          | Yes          | No (multi-user) |
+| Managed Hosting  | Many options  | Many options | Many options | N/A             |
 
 **Verdict:** PostgreSQL for production-ready features and ecosystem
 
@@ -306,13 +308,13 @@ export class TasksController {
 
 ### Risks & Mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| PostgreSQL server required | Use Neon (serverless, free tier) or Docker locally |
-| Prisma breaking changes | Pin versions, test before upgrading |
-| Vendor lock-in to PostgreSQL | PostgreSQL is industry standard, not a risk |
-| Learning curve for Prisma | Excellent docs, intuitive API |
-| Migration complexity | Prisma migrations are Git-friendly and declarative |
+| Risk                         | Mitigation                                         |
+| ---------------------------- | -------------------------------------------------- |
+| PostgreSQL server required   | Use Neon (serverless, free tier) or Docker locally |
+| Prisma breaking changes      | Pin versions, test before upgrading                |
+| Vendor lock-in to PostgreSQL | PostgreSQL is industry standard, not a risk        |
+| Learning curve for Prisma    | Excellent docs, intuitive API                      |
+| Migration complexity         | Prisma migrations are Git-friendly and declarative |
 
 ## Local Development Setup
 
@@ -464,21 +466,25 @@ model Task {
 ## Alternatives Considered
 
 ### TypeORM + SQLite
+
 **Pros:** Zero setup, single file database, portable
 **Cons:** Not production-ready for multi-user, limited features, worse TypeScript support than Prisma
 **Verdict:** SQLite is not suitable for separate server deployment
 
 ### TypeORM + PostgreSQL
+
 **Pros:** Similar to what we learned, decorators
 **Cons:** TypeScript support weaker than Prisma, less modern DX, migration system not as good
 **Verdict:** Prisma is better for TypeScript-first development
 
 ### MikroORM + PostgreSQL
+
 **Pros:** Excellent TypeScript, modern, good DX
 **Cons:** Smaller ecosystem than Prisma, less documentation
 **Verdict:** Prisma has better community and tooling
 
 ### Kysely + PostgreSQL
+
 **Pros:** Pure TypeScript query builder, no code generation
 **Cons:** More verbose, no migrations, no visual tools
 **Verdict:** Prisma provides more complete solution

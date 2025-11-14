@@ -47,6 +47,7 @@ docker-compose -f docker-compose.prod.yml down
 ### Backend (`apps/backend/Dockerfile`)
 
 **Multi-stage build:**
+
 1. **Builder stage:** Node 20 Alpine
    - Installs all dependencies
    - Generates Prisma client
@@ -58,6 +59,7 @@ docker-compose -f docker-compose.prod.yml down
    - Runs on port 3000
 
 **Security features:**
+
 - Runs as non-root user (UID 1001)
 - Uses `dumb-init` for proper signal handling
 - Minimal attack surface (Alpine base)
@@ -65,6 +67,7 @@ docker-compose -f docker-compose.prod.yml down
 ### Frontend (`apps/frontend/Dockerfile`)
 
 **Multi-stage build:**
+
 1. **Builder stage:** Node 20 Alpine
    - Installs dependencies
    - Builds Angular app with production config
@@ -76,6 +79,7 @@ docker-compose -f docker-compose.prod.yml down
    - Runs on port 80
 
 **Features:**
+
 - Gzip compression enabled
 - Security headers (X-Frame-Options, CSP, etc.)
 - Static asset caching (1 year)
@@ -95,6 +99,7 @@ DATABASE_URL=postgresql://tasker:tasker_dev@localhost:5432/tasker_dev
 ### Production (`.env.production`)
 
 **Required variables:**
+
 ```bash
 # PostgreSQL
 POSTGRES_USER=tasker
@@ -116,18 +121,21 @@ FRONTEND_PORT=80
 All services include health checks for monitoring:
 
 ### PostgreSQL
+
 - **Check:** `pg_isready`
 - **Interval:** 10s
 - **Timeout:** 5s
 - **Retries:** 5
 
 ### Backend
+
 - **Endpoint:** `http://localhost:3000/health`
 - **Interval:** 30s
 - **Timeout:** 10s
 - **Start period:** 40s (allows time for Prisma migrations)
 
 ### Frontend
+
 - **Endpoint:** `http://localhost:80/health`
 - **Interval:** 30s
 - **Timeout:** 10s
@@ -137,10 +145,12 @@ All services include health checks for monitoring:
 ### Continuous Integration (`.github/workflows/ci.yml`)
 
 **Triggers:**
+
 - Push to `main` or `develop` branches
 - Pull requests to `main` or `develop`
 
 **Jobs:**
+
 1. **Lint** - ESLint on all projects
 2. **Type Check** - TypeScript compilation check
 3. **Test** - Unit tests with PostgreSQL service
@@ -158,10 +168,12 @@ All services include health checks for monitoring:
 ### Deployment (`.github/workflows/deploy.yml`)
 
 **Triggers:**
+
 - Manual dispatch (workflow_dispatch)
 - Git tags matching `v*.*.*`
 
 **Jobs:**
+
 1. **Build and Push** - Builds Docker images
    - Matrix build (backend, frontend)
    - Pushes to GitHub Container Registry
@@ -175,6 +187,7 @@ All services include health checks for monitoring:
    - Verifies deployment
 
 **Required secrets:**
+
 - `PROD_HOST` - Production server IP/hostname
 - `PROD_USER` - SSH user
 - `PROD_SSH_KEY` - SSH private key
@@ -382,6 +395,7 @@ volumes:
 ```
 
 Recommended settings:
+
 ```conf
 shared_buffers = 256MB
 effective_cache_size = 1GB
@@ -416,8 +430,8 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
@@ -425,6 +439,7 @@ services:
 ```
 
 **Caddyfile:**
+
 ```
 yourdomain.com {
     reverse_proxy frontend:80
@@ -471,7 +486,7 @@ services:
     volumes:
       - ./nginx-lb.conf:/etc/nginx/nginx.conf
     ports:
-      - "80:80"
+      - '80:80'
 ```
 
 ### Database Connection Pooling
@@ -485,6 +500,7 @@ DATABASE_URL=postgresql://tasker:password@postgres:5432/tasker?connection_limit=
 ## Support
 
 For issues and questions:
+
 - GitHub Issues: https://github.com/georgeaf18/Tasker/issues
 - Documentation: `/docs` directory
 - Linear Project: https://linear.app/taskerapp

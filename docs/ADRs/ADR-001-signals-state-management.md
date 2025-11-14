@@ -8,6 +8,7 @@
 ## Context
 
 For v0.1 of Tasker, we need a state management solution that:
+
 - Works efficiently with Angular 20's zoneless change detection
 - Has minimal boilerplate and learning curve
 - Provides reactive updates for task lists and kanban board
@@ -50,14 +51,14 @@ We will use **Angular Signals** as the primary state management solution, avoidi
 
 ### Comparison with Alternatives
 
-| Feature | Signals | NgRx | RxJS Stores | Akita |
-|---------|---------|------|-------------|-------|
-| Learning Curve | Low | High | Medium | Medium |
-| Boilerplate | Minimal | Heavy | Medium | Medium |
-| Zoneless Support | Excellent | Good | Good | Good |
-| Built-in | Yes | No | Partial | No |
-| Derived State | `computed()` | Selectors | `map()` | Queries |
-| Bundle Size | 0 KB | ~50 KB | 0 KB | ~30 KB |
+| Feature          | Signals      | NgRx      | RxJS Stores | Akita   |
+| ---------------- | ------------ | --------- | ----------- | ------- |
+| Learning Curve   | Low          | High      | Medium      | Medium  |
+| Boilerplate      | Minimal      | Heavy     | Medium      | Medium  |
+| Zoneless Support | Excellent    | Good      | Good        | Good    |
+| Built-in         | Yes          | No        | Partial     | No      |
+| Derived State    | `computed()` | Selectors | `map()`     | Queries |
+| Bundle Size      | 0 KB         | ~50 KB    | 0 KB        | ~30 KB  |
 
 ## Implementation Pattern
 
@@ -78,19 +79,19 @@ export class TaskStateService {
 
   // Computed signals (derived state)
   readonly backlogTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === 'backlog')
+    this.tasksSignal().filter((t) => t.status === 'backlog'),
   );
 
   readonly todayTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === 'today')
+    this.tasksSignal().filter((t) => t.status === 'today'),
   );
 
   readonly inProgressTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === 'in_progress')
+    this.tasksSignal().filter((t) => t.status === 'in_progress'),
   );
 
   readonly doneTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === 'done')
+    this.tasksSignal().filter((t) => t.status === 'done'),
   );
 
   readonly taskCount = computed(() => this.tasksSignal().length);
@@ -101,17 +102,17 @@ export class TaskStateService {
   }
 
   addTask(task: Task) {
-    this.tasksSignal.update(tasks => [...tasks, task]);
+    this.tasksSignal.update((tasks) => [...tasks, task]);
   }
 
   updateTask(id: number, updates: Partial<Task>) {
-    this.tasksSignal.update(tasks =>
-      tasks.map(t => t.id === id ? { ...t, ...updates } : t)
+    this.tasksSignal.update((tasks) =>
+      tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
     );
   }
 
   deleteTask(id: number) {
-    this.tasksSignal.update(tasks => tasks.filter(t => t.id !== id));
+    this.tasksSignal.update((tasks) => tasks.filter((t) => t.id !== id));
   }
 
   setLoading(loading: boolean) {
@@ -144,24 +145,25 @@ export class TaskStateService {
         <app-kanban-column
           title="Today"
           [tasks]="taskState.todayTasks()"
-          (taskMoved)="onTaskMoved($event)" />
+          (taskMoved)="onTaskMoved($event)"
+        />
 
         <app-kanban-column
           title="In Progress"
           [tasks]="taskState.inProgressTasks()"
-          (taskMoved)="onTaskMoved($event)" />
+          (taskMoved)="onTaskMoved($event)"
+        />
 
         <app-kanban-column
           title="Done"
           [tasks]="taskState.doneTasks()"
-          (taskMoved)="onTaskMoved($event)" />
+          (taskMoved)="onTaskMoved($event)"
+        />
       </div>
 
-      <div class="task-count">
-        Total tasks: {{ taskState.taskCount() }}
-      </div>
+      <div class="task-count">Total tasks: {{ taskState.taskCount() }}</div>
     </div>
-  `
+  `,
 })
 export class KanbanBoardComponent {
   protected taskState = inject(TaskStateService);
@@ -177,6 +179,7 @@ export class KanbanBoardComponent {
 Signals replace most RxJS usage, but we'll still use RxJS for:
 
 1. **HTTP Requests** - Angular HttpClient returns Observables
+
    ```typescript
    loadTasks() {
      this.setLoading(true);
@@ -192,6 +195,7 @@ Signals replace most RxJS usage, but we'll still use RxJS for:
    ```
 
 2. **Event Streams** - User input, WebSocket messages
+
    ```typescript
    searchTerm$ = new Subject<string>();
 
@@ -234,6 +238,7 @@ Signals replace most RxJS usage, but we'll still use RxJS for:
 ### Migration Path
 
 If complexity grows in v2.0+:
+
 - Can introduce NgRx for specific features (e.g., offline sync)
 - Signals can coexist with NgRx
 - Migration is gradual, not all-or-nothing
@@ -241,21 +246,25 @@ If complexity grows in v2.0+:
 ## Alternatives Considered
 
 ### NgRx
+
 **Pros:** Battle-tested, dev tools, time-travel debugging, predictable
 **Cons:** Heavy boilerplate, steep learning curve, overkill for v0.1
 **Verdict:** Too complex for initial versions
 
 ### Akita
+
 **Pros:** Simpler than NgRx, good dev tools, active queries
 **Cons:** Third-party dependency, learning curve, not zoneless-optimized
 **Verdict:** Not necessary when Signals exist
 
 ### RxJS BehaviorSubject Stores
+
 **Pros:** Familiar, flexible, reactive
 **Cons:** Manual change detection, more boilerplate than Signals
 **Verdict:** Signals are better for this use case
 
 ### No State Management
+
 **Pros:** Simplest possible
 **Cons:** Component state gets messy, prop drilling, hard to maintain
 **Verdict:** Need at least minimal state management

@@ -1,6 +1,11 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
 import { BadgeModule } from 'primeng/badge';
@@ -51,7 +56,9 @@ export class KanbanBoardComponent implements OnInit {
 
   // Use workspace-filtered computed signals from TaskStateService
   todayTasks = computed(() => this.taskState.currentWorkspaceTodayTasks());
-  inProgressTasks = computed(() => this.taskState.currentWorkspaceInProgressTasks());
+  inProgressTasks = computed(() =>
+    this.taskState.currentWorkspaceInProgressTasks(),
+  );
   doneTasks = computed(() => this.taskState.currentWorkspaceDoneTasks());
 
   dailyProgress = computed(() => {
@@ -110,7 +117,10 @@ export class KanbanBoardComponent implements OnInit {
     } else if (date.toDateString() === tomorrow.toDateString()) {
       return 'Tomorrow';
     } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      });
     }
   }
 
@@ -126,7 +136,7 @@ export class KanbanBoardComponent implements OnInit {
       fromStatus: task.status,
       toStatus: newStatus,
       containerId: event.container.id,
-      previousContainerId: event.previousContainer.id
+      previousContainerId: event.previousContainer.id,
     });
 
     // Only update if actually moving to a different container

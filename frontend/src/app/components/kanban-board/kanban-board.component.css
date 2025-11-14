@@ -32,7 +32,11 @@
 .progress-percentage {
   font-size: var(--font-size-lg);
   font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -117,19 +121,19 @@
 
 /* Column-specific colors - Subtle solid colors */
 .today-column ::ng-deep .p-panel-header {
-  background: #3B82F6;
+  background: #3b82f6;
   color: white;
   border-bottom: none;
 }
 
 .in-progress-column ::ng-deep .p-panel-header {
-  background: #8B5CF6;
+  background: #8b5cf6;
   color: white;
   border-bottom: none;
 }
 
 .done-column ::ng-deep .p-panel-header {
-  background: #10B981;
+  background: #10b981;
   color: white;
   border-bottom: none;
 }
@@ -261,7 +265,11 @@
 
 /* Task Details Dialog */
 ::ng-deep .task-dialog .p-dialog-header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-hover) 100%
+  );
   color: white;
   padding: var(--spacing-lg);
 }
@@ -407,7 +415,12 @@
 }
 
 ::ng-deep .p-progressbar .p-progressbar-value {
-  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-success) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 50%,
+    var(--color-success) 100%
+  );
   border-radius: var(--border-radius);
   position: relative;
   overflow: hidden;
@@ -420,13 +433,22 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
   animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 ::ng-deep .p-card {
@@ -459,7 +481,9 @@
 }
 
 /* Drag and Drop Styles */
-.column-content.cdk-drop-list-dragging ::ng-deep .task-card:not(.cdk-drag-placeholder) {
+.column-content.cdk-drop-list-dragging
+  ::ng-deep
+  .task-card:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 

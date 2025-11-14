@@ -18,6 +18,7 @@ This design system is specifically crafted for users with ADHD, dyslexia, myopia
 ## 1. Color Palette
 
 ### Philosophy
+
 - Use vibrant, saturated versions of purples, blues, pinks, and reds
 - Avoid pure white and pure black (causes issues for dyslexia and astigmatism)
 - Maintain WCAG AA minimum (4.5:1) contrast ratios
@@ -26,71 +27,77 @@ This design system is specifically crafted for users with ADHD, dyslexia, myopia
 ### Light Mode Palette
 
 #### Base Colors
+
 ```css
---background-primary: #FAF9F7;        /* Off-white, warm */
---background-secondary: #F3F2EE;      /* Slightly darker off-white */
---background-elevated: #FFFFFF;        /* Pure white for cards/modals */
---text-primary: #2B2B2B;              /* Off-black */
---text-secondary: #5A5A5A;            /* Medium gray */
---text-tertiary: #878787;             /* Light gray for hints */
+--background-primary: #faf9f7; /* Off-white, warm */
+--background-secondary: #f3f2ee; /* Slightly darker off-white */
+--background-elevated: #ffffff; /* Pure white for cards/modals */
+--text-primary: #2b2b2b; /* Off-black */
+--text-secondary: #5a5a5a; /* Medium gray */
+--text-tertiary: #878787; /* Light gray for hints */
 ```
 
 #### Primary Colors (Purples & Blues)
-```css
---primary-purple: #8B5CF6;            /* Bright vibrant purple */
---primary-purple-hover: #7C3AED;      /* Darker on hover */
---primary-purple-light: #A78BFA;      /* Lighter tint */
---primary-purple-bg: #EDE9FE;         /* Background tint */
 
---primary-blue: #3B82F6;              /* Bright saturated blue */
---primary-blue-hover: #2563EB;        /* Darker on hover */
---primary-blue-light: #60A5FA;        /* Lighter tint */
---primary-blue-bg: #DBEAFE;           /* Background tint */
+```css
+--primary-purple: #8b5cf6; /* Bright vibrant purple */
+--primary-purple-hover: #7c3aed; /* Darker on hover */
+--primary-purple-light: #a78bfa; /* Lighter tint */
+--primary-purple-bg: #ede9fe; /* Background tint */
+
+--primary-blue: #3b82f6; /* Bright saturated blue */
+--primary-blue-hover: #2563eb; /* Darker on hover */
+--primary-blue-light: #60a5fa; /* Lighter tint */
+--primary-blue-bg: #dbeafe; /* Background tint */
 ```
 
 #### Accent Colors (Pinks & Reds)
-```css
---accent-pink: #EC4899;               /* Hot pink */
---accent-pink-hover: #DB2777;         /* Darker on hover */
---accent-pink-light: #F472B6;         /* Lighter tint */
---accent-pink-bg: #FCE7F3;            /* Background tint */
 
---accent-red: #EF4444;                /* Bright red */
---accent-red-hover: #DC2626;          /* Darker on hover */
---accent-red-light: #F87171;          /* Lighter tint */
---accent-red-bg: #FEE2E2;             /* Background tint */
+```css
+--accent-pink: #ec4899; /* Hot pink */
+--accent-pink-hover: #db2777; /* Darker on hover */
+--accent-pink-light: #f472b6; /* Lighter tint */
+--accent-pink-bg: #fce7f3; /* Background tint */
+
+--accent-red: #ef4444; /* Bright red */
+--accent-red-hover: #dc2626; /* Darker on hover */
+--accent-red-light: #f87171; /* Lighter tint */
+--accent-red-bg: #fee2e2; /* Background tint */
 ```
 
 #### Status Colors
+
 ```css
 /* Kanban Column Colors */
---status-backlog: #3B82F6;            /* Bright blue - "waiting" */
---status-today: #F59E0B;              /* Bright gold - "attention" */
---status-in-progress: #8B5CF6;        /* Bright purple - "active" */
---status-done: #10B981;               /* Bright green - "complete" */
+--status-backlog: #3b82f6; /* Bright blue - "waiting" */
+--status-today: #f59e0b; /* Bright gold - "attention" */
+--status-in-progress: #8b5cf6; /* Bright purple - "active" */
+--status-done: #10b981; /* Bright green - "complete" */
 
 /* Semantic Status Colors */
---success: #10B981;                   /* Bright green */
---warning: #F59E0B;                   /* Bright amber */
---error: #EF4444;                     /* Bright red (same as accent) */
---info: #3B82F6;                      /* Bright blue (same as primary) */
+--success: #10b981; /* Bright green */
+--warning: #f59e0b; /* Bright amber */
+--error: #ef4444; /* Bright red (same as accent) */
+--info: #3b82f6; /* Bright blue (same as primary) */
 ```
 
 #### Workspace Colors
+
 ```css
 /* Work vs Personal differentiation */
---workspace-work: #2563EB;            /* Bright blue */
---workspace-work-bg: #DBEAFE;
+--workspace-work: #2563eb; /* Bright blue */
+--workspace-work-bg: #dbeafe;
 
---workspace-personal: #EC4899;        /* Hot pink */
---workspace-personal-bg: #FCE7F3;
+--workspace-personal: #ec4899; /* Hot pink */
+--workspace-personal-bg: #fce7f3;
 ```
 
 #### UI Element Colors
+
 ```css
---border-default: #D4D2CE;            /* Subtle border */
---border-strong: #A8A6A2;             /* Stronger border for emphasis */
---border-focus: #8B5CF6;              /* Bright purple for focus states */
+--border-default: #d4d2ce; /* Subtle border */
+--border-strong: #a8a6a2; /* Stronger border for emphasis */
+--border-focus: #8b5cf6; /* Bright purple for focus states */
 
 --shadow-subtle: rgba(43, 43, 43, 0.08);
 --shadow-medium: rgba(43, 43, 43, 0.12);
@@ -100,84 +107,90 @@ This design system is specifically crafted for users with ADHD, dyslexia, myopia
 ### Dark Mode Palette
 
 #### Base Colors
+
 ```css
---background-primary: #1C1B1A;        /* Off-black, warm */
---background-secondary: #262524;      /* Lighter off-black */
---background-elevated: #302F2D;       /* Elevated surfaces */
---text-primary: #E8E6E3;              /* Off-white */
---text-secondary: #B8B6B3;            /* Medium gray */
---text-tertiary: #8A8885;             /* Darker gray for hints */
+--background-primary: #1c1b1a; /* Off-black, warm */
+--background-secondary: #262524; /* Lighter off-black */
+--background-elevated: #302f2d; /* Elevated surfaces */
+--text-primary: #e8e6e3; /* Off-white */
+--text-secondary: #b8b6b3; /* Medium gray */
+--text-tertiary: #8a8885; /* Darker gray for hints */
 ```
 
 #### Primary Colors (Purples & Blues) - Adjusted for Dark Mode
-```css
---primary-purple: #A78BFA;            /* Bright purple (lighter for dark) */
---primary-purple-hover: #C4B5FD;      /* Lighter on hover (inverted behavior) */
---primary-purple-light: #8B5CF6;      /* Darker tint */
---primary-purple-bg: #2E1065;         /* Dark background tint */
 
---primary-blue: #60A5FA;              /* Bright blue (lighter for dark) */
---primary-blue-hover: #93C5FD;        /* Lighter on hover */
---primary-blue-light: #3B82F6;        /* Darker tint */
---primary-blue-bg: #1E3A8A;           /* Dark background tint */
+```css
+--primary-purple: #a78bfa; /* Bright purple (lighter for dark) */
+--primary-purple-hover: #c4b5fd; /* Lighter on hover (inverted behavior) */
+--primary-purple-light: #8b5cf6; /* Darker tint */
+--primary-purple-bg: #2e1065; /* Dark background tint */
+
+--primary-blue: #60a5fa; /* Bright blue (lighter for dark) */
+--primary-blue-hover: #93c5fd; /* Lighter on hover */
+--primary-blue-light: #3b82f6; /* Darker tint */
+--primary-blue-bg: #1e3a8a; /* Dark background tint */
 ```
 
 #### Accent Colors (Pinks & Reds) - Adjusted for Dark Mode
-```css
---accent-pink: #F472B6;               /* Bright pink (lighter for dark) */
---accent-pink-hover: #F9A8D4;         /* Lighter on hover */
---accent-pink-light: #EC4899;         /* Darker tint */
---accent-pink-bg: #831843;            /* Dark background tint */
 
---accent-red: #F87171;                /* Bright red (lighter for dark) */
---accent-red-hover: #FCA5A5;          /* Lighter on hover */
---accent-red-light: #EF4444;          /* Darker tint */
---accent-red-bg: #7F1D1D;             /* Dark background tint */
+```css
+--accent-pink: #f472b6; /* Bright pink (lighter for dark) */
+--accent-pink-hover: #f9a8d4; /* Lighter on hover */
+--accent-pink-light: #ec4899; /* Darker tint */
+--accent-pink-bg: #831843; /* Dark background tint */
+
+--accent-red: #f87171; /* Bright red (lighter for dark) */
+--accent-red-hover: #fca5a5; /* Lighter on hover */
+--accent-red-light: #ef4444; /* Darker tint */
+--accent-red-bg: #7f1d1d; /* Dark background tint */
 ```
 
 #### Status Colors - Dark Mode
-```css
---status-backlog: #60A5FA;            /* Bright blue (lighter for dark) */
---status-today: #FCD34D;              /* Bright gold (lighter for dark) */
---status-in-progress: #A78BFA;        /* Bright purple (lighter for dark) */
---status-done: #34D399;               /* Bright green (lighter for dark) */
 
---success: #34D399;                   /* Bright green */
---warning: #FCD34D;                   /* Bright amber */
---error: #F87171;                     /* Bright red */
---info: #60A5FA;                      /* Bright blue */
+```css
+--status-backlog: #60a5fa; /* Bright blue (lighter for dark) */
+--status-today: #fcd34d; /* Bright gold (lighter for dark) */
+--status-in-progress: #a78bfa; /* Bright purple (lighter for dark) */
+--status-done: #34d399; /* Bright green (lighter for dark) */
+
+--success: #34d399; /* Bright green */
+--warning: #fcd34d; /* Bright amber */
+--error: #f87171; /* Bright red */
+--info: #60a5fa; /* Bright blue */
 ```
 
 #### Workspace Colors - Dark Mode
-```css
---workspace-work: #60A5FA;
---workspace-work-bg: #1E3A8A;
 
---workspace-personal: #F472B6;
+```css
+--workspace-work: #60a5fa;
+--workspace-work-bg: #1e3a8a;
+
+--workspace-personal: #f472b6;
 --workspace-personal-bg: #831843;
 ```
 
 #### UI Element Colors - Dark Mode
-```css
---border-default: #3D3C3A;
---border-strong: #5A5856;
---border-focus: #A78BFA;              /* Bright purple for focus */
 
---shadow-subtle: rgba(0, 0, 0, 0.20);
---shadow-medium: rgba(0, 0, 0, 0.30);
---shadow-strong: rgba(0, 0, 0, 0.40);
+```css
+--border-default: #3d3c3a;
+--border-strong: #5a5856;
+--border-focus: #a78bfa; /* Bright purple for focus */
+
+--shadow-subtle: rgba(0, 0, 0, 0.2);
+--shadow-medium: rgba(0, 0, 0, 0.3);
+--shadow-strong: rgba(0, 0, 0, 0.4);
 ```
 
 ### Contrast Compliance
 
 All text/background combinations meet WCAG AA standards (4.5:1 minimum):
 
-| Combination | Light Mode | Dark Mode |
-|-------------|------------|-----------|
-| Primary text / Background | 9.8:1 ✓ | 10.2:1 ✓ |
-| Secondary text / Background | 5.2:1 ✓ | 5.8:1 ✓ |
-| Primary purple / Background | 4.8:1 ✓ | 5.2:1 ✓ |
-| Primary blue / Background | 5.1:1 ✓ | 5.4:1 ✓ |
+| Combination                 | Light Mode | Dark Mode |
+| --------------------------- | ---------- | --------- |
+| Primary text / Background   | 9.8:1 ✓    | 10.2:1 ✓  |
+| Secondary text / Background | 5.2:1 ✓    | 5.8:1 ✓   |
+| Primary purple / Background | 4.8:1 ✓    | 5.2:1 ✓   |
+| Primary blue / Background   | 5.1:1 ✓    | 5.4:1 ✓   |
 
 ### Color Usage Guidelines
 
@@ -193,6 +206,7 @@ All text/background combinations meet WCAG AA standards (4.5:1 minimum):
 ## 2. Typography System
 
 ### Philosophy
+
 - **Larger than standard** for myopia and astigmatism (20-30% increase from research baseline)
 - **Wide spacing** for dyslexia and ADHD
 - **Sans-serif** for clarity
@@ -205,6 +219,7 @@ font-family: 'Verdana', 'Open Sans', 'Helvetica', 'Arial', sans-serif;
 ```
 
 **Priority order:**
+
 1. **Verdana** - Designed for on-screen reading, wide spacing, tall x-height
 2. **Open Sans** - Clean, rounded, open-source
 3. **Helvetica** - Proven preference among dyslexic users
@@ -216,16 +231,16 @@ Increased 25-35% from research baseline (16-19px) to accommodate myopia/astigmat
 
 ```css
 /* Base size */
---font-size-base: 22px;               /* Research: 16-19px, increased for visibility */
+--font-size-base: 22px; /* Research: 16-19px, increased for visibility */
 
 /* Type scale (1.25 ratio - Major Third) */
---font-size-xs: 14px;                 /* Small labels, captions */
---font-size-sm: 18px;                 /* Secondary text */
---font-size-base: 22px;               /* Body text */
---font-size-lg: 28px;                 /* Large body, small headings */
---font-size-xl: 34px;                 /* H3 */
---font-size-2xl: 42px;                /* H2 */
---font-size-3xl: 52px;                /* H1 */
+--font-size-xs: 14px; /* Small labels, captions */
+--font-size-sm: 18px; /* Secondary text */
+--font-size-base: 22px; /* Body text */
+--font-size-lg: 28px; /* Large body, small headings */
+--font-size-xl: 34px; /* H3 */
+--font-size-2xl: 42px; /* H2 */
+--font-size-3xl: 52px; /* H1 */
 
 /* Font weights */
 --font-weight-normal: 400;
@@ -238,25 +253,25 @@ Increased 25-35% from research baseline (16-19px) to accommodate myopia/astigmat
 
 ```css
 /* Letter spacing - 35% of average letter width (BDA recommendation) */
---letter-spacing-tight: 0.08em;       /* For headings */
---letter-spacing-normal: 0.12em;      /* Body text */
---letter-spacing-wide: 0.16em;        /* Emphasis text */
+--letter-spacing-tight: 0.08em; /* For headings */
+--letter-spacing-normal: 0.12em; /* Body text */
+--letter-spacing-wide: 0.16em; /* Emphasis text */
 
 /* Word spacing - 3.5x letter spacing */
---word-spacing-normal: 0.42em;        /* 3.5 × 0.12em */
+--word-spacing-normal: 0.42em; /* 3.5 × 0.12em */
 
 /* Line height */
---line-height-tight: 1.3;             /* Headings only */
---line-height-normal: 1.5;            /* Body text (BDA recommendation) */
---line-height-relaxed: 1.8;           /* Comfort mode option */
+--line-height-tight: 1.3; /* Headings only */
+--line-height-normal: 1.5; /* Body text (BDA recommendation) */
+--line-height-relaxed: 1.8; /* Comfort mode option */
 ```
 
 ### Line Length
 
 ```css
 /* Character count per line */
---line-length-optimal: 45ch;          /* 45-60 characters for dyslexic readers */
---line-length-max: 60ch;              /* Maximum width */
+--line-length-optimal: 45ch; /* 45-60 characters for dyslexic readers */
+--line-length-max: 60ch; /* Maximum width */
 
 /* Implementation */
 .content-text {
@@ -293,7 +308,8 @@ h3 {
 }
 
 /* Body text */
-body, p {
+body,
+p {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   letter-spacing: var(--letter-spacing-normal);
@@ -325,16 +341,16 @@ body, p {
 ```css
 /* Mobile adjustments (viewport < 768px) */
 @media (max-width: 767px) {
-  --font-size-base: 20px;             /* Slightly smaller on mobile */
+  --font-size-base: 20px; /* Slightly smaller on mobile */
   --font-size-3xl: 38px;
   --font-size-2xl: 32px;
   --font-size-xl: 28px;
-  --line-length-optimal: 42ch;        /* Narrower line length */
+  --line-length-optimal: 42ch; /* Narrower line length */
 }
 
 /* Large screens (viewport > 1440px) */
 @media (min-width: 1441px) {
-  --font-size-base: 24px;             /* Larger on big screens */
+  --font-size-base: 24px; /* Larger on big screens */
   --font-size-3xl: 56px;
   --font-size-2xl: 46px;
   --font-size-xl: 36px;
@@ -355,6 +371,7 @@ body, p {
 ## 3. Spacing System
 
 ### Philosophy
+
 - **Generous whitespace** improves comprehension by 20% (research-backed)
 - **8px base unit** for mathematical consistency
 - **Predictable scale** reduces cognitive load
@@ -367,17 +384,17 @@ body, p {
 
 /* Spacing scale */
 --spacing-0: 0;
---spacing-1: 4px;    /* 0.5 × base (rare use) */
---spacing-2: 8px;    /* 1 × base */
---spacing-3: 12px;   /* 1.5 × base */
---spacing-4: 16px;   /* 2 × base */
---spacing-5: 24px;   /* 3 × base */
---spacing-6: 32px;   /* 4 × base */
---spacing-7: 40px;   /* 5 × base */
---spacing-8: 48px;   /* 6 × base */
---spacing-9: 64px;   /* 8 × base */
---spacing-10: 80px;  /* 10 × base */
---spacing-11: 96px;  /* 12 × base */
+--spacing-1: 4px; /* 0.5 × base (rare use) */
+--spacing-2: 8px; /* 1 × base */
+--spacing-3: 12px; /* 1.5 × base */
+--spacing-4: 16px; /* 2 × base */
+--spacing-5: 24px; /* 3 × base */
+--spacing-6: 32px; /* 4 × base */
+--spacing-7: 40px; /* 5 × base */
+--spacing-8: 48px; /* 6 × base */
+--spacing-9: 64px; /* 8 × base */
+--spacing-10: 80px; /* 10 × base */
+--spacing-11: 96px; /* 12 × base */
 --spacing-12: 128px; /* 16 × base */
 ```
 
@@ -385,18 +402,18 @@ body, p {
 
 ```css
 /* Component internal spacing */
---spacing-component-xs: var(--spacing-2);   /* 8px */
---spacing-component-sm: var(--spacing-3);   /* 12px */
---spacing-component-md: var(--spacing-4);   /* 16px */
---spacing-component-lg: var(--spacing-6);   /* 32px */
---spacing-component-xl: var(--spacing-8);   /* 48px */
+--spacing-component-xs: var(--spacing-2); /* 8px */
+--spacing-component-sm: var(--spacing-3); /* 12px */
+--spacing-component-md: var(--spacing-4); /* 16px */
+--spacing-component-lg: var(--spacing-6); /* 32px */
+--spacing-component-xl: var(--spacing-8); /* 48px */
 
 /* Layout spacing */
---spacing-section: var(--spacing-9);        /* 64px between major sections */
---spacing-container: var(--spacing-6);      /* 32px container padding */
---spacing-stack-tight: var(--spacing-3);    /* 12px between related items */
---spacing-stack-normal: var(--spacing-5);   /* 24px between items */
---spacing-stack-relaxed: var(--spacing-7);  /* 40px between sections */
+--spacing-section: var(--spacing-9); /* 64px between major sections */
+--spacing-container: var(--spacing-6); /* 32px container padding */
+--spacing-stack-tight: var(--spacing-3); /* 12px between related items */
+--spacing-stack-normal: var(--spacing-5); /* 24px between items */
+--spacing-stack-relaxed: var(--spacing-7); /* 40px between sections */
 ```
 
 ### Grid System
@@ -406,23 +423,23 @@ body, p {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: var(--spacing-6);                    /* 32px gutter */
-  padding: var(--spacing-container);        /* 32px container padding */
-  max-width: 1440px;                        /* Max content width */
+  gap: var(--spacing-6); /* 32px gutter */
+  padding: var(--spacing-container); /* 32px container padding */
+  max-width: 1440px; /* Max content width */
   margin: 0 auto;
 }
 
 /* Responsive grid */
 @media (max-width: 1023px) {
   .grid-container {
-    gap: var(--spacing-5);                  /* 24px gutter on tablets */
+    gap: var(--spacing-5); /* 24px gutter on tablets */
   }
 }
 
 @media (max-width: 767px) {
   .grid-container {
-    gap: var(--spacing-4);                  /* 16px gutter on mobile */
-    padding: var(--spacing-4);              /* 16px container padding */
+    gap: var(--spacing-4); /* 16px gutter on mobile */
+    padding: var(--spacing-4); /* 16px container padding */
   }
 }
 ```
@@ -430,27 +447,30 @@ body, p {
 ### Component Spacing Guidelines
 
 #### Task Cards
+
 ```css
 .task-card {
-  padding: var(--spacing-5);                /* 24px internal padding */
-  margin-bottom: var(--spacing-4);          /* 16px between cards */
-  gap: var(--spacing-3);                    /* 12px between card elements */
+  padding: var(--spacing-5); /* 24px internal padding */
+  margin-bottom: var(--spacing-4); /* 16px between cards */
+  gap: var(--spacing-3); /* 12px between card elements */
 }
 ```
 
 #### Buttons
+
 ```css
 .button {
-  padding: var(--spacing-3) var(--spacing-6);  /* 12px vertical, 32px horizontal */
-  gap: var(--spacing-2);                        /* 8px between icon and text */
-  margin-right: var(--spacing-3);               /* 12px between buttons */
+  padding: var(--spacing-3) var(--spacing-6); /* 12px vertical, 32px horizontal */
+  gap: var(--spacing-2); /* 8px between icon and text */
+  margin-right: var(--spacing-3); /* 12px between buttons */
 }
 ```
 
 #### Form Inputs
+
 ```css
 .form-field {
-  margin-bottom: var(--spacing-5);          /* 24px between fields */
+  margin-bottom: var(--spacing-5); /* 24px between fields */
 }
 
 .input {
@@ -458,47 +478,50 @@ body, p {
 }
 
 .form-group {
-  margin-bottom: var(--spacing-7);          /* 40px between field groups */
+  margin-bottom: var(--spacing-7); /* 40px between field groups */
 }
 ```
 
 #### Modals
+
 ```css
 .modal-content {
-  padding: var(--spacing-8);                /* 48px internal padding */
-  gap: var(--spacing-6);                    /* 32px between sections */
+  padding: var(--spacing-8); /* 48px internal padding */
+  gap: var(--spacing-6); /* 32px between sections */
 }
 
 .modal-header {
-  padding-bottom: var(--spacing-5);         /* 24px below header */
-  margin-bottom: var(--spacing-5);          /* 24px before content */
+  padding-bottom: var(--spacing-5); /* 24px below header */
+  margin-bottom: var(--spacing-5); /* 24px before content */
 }
 ```
 
 #### Sidebar
+
 ```css
 .sidebar {
-  padding: var(--spacing-5);                /* 24px internal padding */
-  gap: var(--spacing-4);                    /* 16px between nav items */
+  padding: var(--spacing-5); /* 24px internal padding */
+  gap: var(--spacing-4); /* 16px between nav items */
 }
 
 .sidebar-section {
-  margin-bottom: var(--spacing-6);          /* 32px between sections */
+  margin-bottom: var(--spacing-6); /* 32px between sections */
 }
 ```
 
 #### Kanban Columns
+
 ```css
 .kanban-column {
-  padding: var(--spacing-4);                /* 16px internal padding */
-  gap: var(--spacing-4);                    /* 16px between cards */
-  margin-right: var(--spacing-5);           /* 24px between columns */
-  min-width: 320px;                         /* Minimum column width */
+  padding: var(--spacing-4); /* 16px internal padding */
+  gap: var(--spacing-4); /* 16px between cards */
+  margin-right: var(--spacing-5); /* 24px between columns */
+  min-width: 320px; /* Minimum column width */
 }
 
 .kanban-header {
-  padding: var(--spacing-4);                /* 16px padding */
-  margin-bottom: var(--spacing-4);          /* 16px below header */
+  padding: var(--spacing-4); /* 16px padding */
+  margin-bottom: var(--spacing-4); /* 16px below header */
 }
 ```
 
@@ -507,29 +530,32 @@ body, p {
 ```css
 /* Paragraph spacing */
 p + p {
-  margin-top: var(--spacing-5);             /* 24px between paragraphs */
+  margin-top: var(--spacing-5); /* 24px between paragraphs */
 }
 
 /* List spacing */
-ul, ol {
-  margin-bottom: var(--spacing-5);          /* 24px after lists */
-  padding-left: var(--spacing-6);           /* 32px list indent */
+ul,
+ol {
+  margin-bottom: var(--spacing-5); /* 24px after lists */
+  padding-left: var(--spacing-6); /* 32px list indent */
 }
 
 li + li {
-  margin-top: var(--spacing-3);             /* 12px between list items */
+  margin-top: var(--spacing-3); /* 12px between list items */
 }
 
 /* Heading spacing */
-h1, h2, h3 {
-  margin-top: var(--spacing-8);             /* 48px above headings */
-  margin-bottom: var(--spacing-5);          /* 24px below headings */
+h1,
+h2,
+h3 {
+  margin-top: var(--spacing-8); /* 48px above headings */
+  margin-bottom: var(--spacing-5); /* 24px below headings */
 }
 
 h1:first-child,
 h2:first-child,
 h3:first-child {
-  margin-top: 0;                            /* No top margin for first heading */
+  margin-top: 0; /* No top margin for first heading */
 }
 ```
 
@@ -541,12 +567,12 @@ Allow users to choose spacing density:
 /* Comfortable (default) - use values above */
 
 /* Compact mode - reduce by 25% */
-[data-density="compact"] {
+[data-density='compact'] {
   --spacing-multiplier: 0.75;
 }
 
 /* Spacious mode - increase by 25% */
-[data-density="spacious"] {
+[data-density='spacious'] {
   --spacing-multiplier: 1.25;
 }
 ```
@@ -558,19 +584,20 @@ Allow users to choose spacing density:
 ### Task Cards
 
 #### Visual Design
+
 ```css
 .task-card {
   /* Layout */
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-3);                    /* 12px between elements */
-  padding: var(--spacing-5);                /* 24px padding */
+  gap: var(--spacing-3); /* 12px between elements */
+  padding: var(--spacing-5); /* 24px padding */
   min-height: 120px;
 
   /* Colors */
   background: var(--background-elevated);
   border: 2px solid var(--border-default);
-  border-left: 6px solid transparent;       /* Colored accent border */
+  border-left: 6px solid transparent; /* Colored accent border */
 
   /* Effects */
   border-radius: 8px;
@@ -590,17 +617,17 @@ Allow users to choose spacing density:
 }
 
 /* Status-based colored accent */
-.task-card[data-workspace="work"] {
+.task-card[data-workspace='work'] {
   border-left-color: var(--workspace-work);
 }
 
-.task-card[data-workspace="personal"] {
+.task-card[data-workspace='personal'] {
   border-left-color: var(--workspace-personal);
 }
 
 /* Priority visual indicators */
-.task-card[data-priority="high"]::before {
-  content: "";
+.task-card[data-priority='high']::before {
+  content: '';
   position: absolute;
   top: 8px;
   right: 8px;
@@ -612,6 +639,7 @@ Allow users to choose spacing density:
 ```
 
 #### Card Structure
+
 ```html
 <div class="task-card" data-workspace="work" data-priority="high">
   <!-- Header -->
@@ -628,17 +656,14 @@ Allow users to choose spacing density:
 
   <!-- Footer metadata -->
   <div class="task-footer">
-    <span class="task-due-date">
-      <icon>📅</icon> Today
-    </span>
-    <span class="task-time-estimate">
-      <icon>⏱️</icon> 30 min
-    </span>
+    <span class="task-due-date"> <icon>📅</icon> Today </span>
+    <span class="task-time-estimate"> <icon>⏱️</icon> 30 min </span>
   </div>
 </div>
 ```
 
 #### Card Element Styles
+
 ```css
 /* Card header */
 .task-card-header {
@@ -694,6 +719,7 @@ Allow users to choose spacing density:
 ```
 
 #### Drag & Drop States
+
 ```css
 /* Being dragged */
 .task-card.is-dragging {
@@ -743,7 +769,7 @@ Allow users to choose spacing density:
   transition: all 150ms ease-in-out;
 
   /* Accessibility */
-  min-height: 48px;                         /* Touch target size */
+  min-height: 48px; /* Touch target size */
   min-width: 48px;
 }
 
@@ -815,6 +841,7 @@ Allow users to choose spacing density:
 ```
 
 #### Button Sizes
+
 ```css
 .button-small {
   padding: var(--spacing-2) var(--spacing-4);
@@ -830,6 +857,7 @@ Allow users to choose spacing density:
 ```
 
 #### Focus States (Accessibility)
+
 ```css
 .button:focus-visible {
   outline: 3px solid var(--border-focus);
@@ -840,6 +868,7 @@ Allow users to choose spacing density:
 ### Form Inputs
 
 #### Text Input
+
 ```css
 .input {
   /* Layout */
@@ -894,6 +923,7 @@ Allow users to choose spacing density:
 ```
 
 #### Textarea
+
 ```css
 .textarea {
   /* Extends .input */
@@ -904,11 +934,12 @@ Allow users to choose spacing density:
 ```
 
 #### Select Dropdown
+
 ```css
 .select {
   /* Extends .input */
   appearance: none;
-  background-image: url("data:image/svg+xml,..."); /* Custom dropdown arrow */
+  background-image: url('data:image/svg+xml,...'); /* Custom dropdown arrow */
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: var(--spacing-8);
@@ -916,6 +947,7 @@ Allow users to choose spacing density:
 ```
 
 #### Checkbox & Radio
+
 ```css
 .checkbox,
 .radio {
@@ -937,7 +969,7 @@ Allow users to choose spacing density:
 
 /* Custom checkbox visual */
 .checkbox-label::before {
-  content: "";
+  content: '';
   display: inline-block;
   width: 24px;
   height: 24px;
@@ -951,7 +983,7 @@ Allow users to choose spacing density:
 .checkbox:checked + .checkbox-label::before {
   background: var(--primary-purple);
   border-color: var(--primary-purple);
-  background-image: url("data:image/svg+xml,..."); /* Checkmark icon */
+  background-image: url('data:image/svg+xml,...'); /* Checkmark icon */
 }
 
 .checkbox:focus-visible + .checkbox-label::before {
@@ -961,6 +993,7 @@ Allow users to choose spacing density:
 ```
 
 #### Form Field Structure
+
 ```html
 <div class="form-field">
   <label class="form-label" for="task-title">
@@ -1017,8 +1050,14 @@ Allow users to choose spacing density:
 ### Modals
 
 #### Modal Structure
+
 ```html
-<div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+<div
+  class="modal-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
   <div class="modal-container">
     <div class="modal-header">
       <h2 id="modal-title" class="modal-title">Modal Title</h2>
@@ -1040,6 +1079,7 @@ Allow users to choose spacing density:
 ```
 
 #### Modal Styles
+
 ```css
 /* Overlay */
 .modal-overlay {
@@ -1048,7 +1088,7 @@ Allow users to choose spacing density:
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(28, 27, 26, 0.7);        /* Semi-transparent dark overlay */
+  background: rgba(28, 27, 26, 0.7); /* Semi-transparent dark overlay */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1146,6 +1186,7 @@ Allow users to choose spacing density:
 ### Sidebar Navigation
 
 #### Sidebar Structure
+
 ```html
 <aside class="sidebar" aria-label="Main navigation">
   <!-- Logo/Brand -->
@@ -1196,6 +1237,7 @@ Allow users to choose spacing density:
 ```
 
 #### Sidebar Styles
+
 ```css
 .sidebar {
   width: 280px;
@@ -1293,7 +1335,7 @@ Allow users to choose spacing density:
 }
 
 .sidebar-link.is-active::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 50%;
@@ -1328,11 +1370,11 @@ Allow users to choose spacing density:
 }
 
 /* Collapsible behavior */
-.sidebar-section-toggle[aria-expanded="false"] + .sidebar-section-content {
+.sidebar-section-toggle[aria-expanded='false'] + .sidebar-section-content {
   display: none;
 }
 
-.sidebar-section-toggle[aria-expanded="false"] icon {
+.sidebar-section-toggle[aria-expanded='false'] icon {
   transform: rotate(-90deg);
 }
 
@@ -1353,6 +1395,7 @@ Allow users to choose spacing density:
 ### Kanban Columns
 
 #### Column Structure
+
 ```html
 <div class="kanban-board">
   <div class="kanban-column" data-status="backlog">
@@ -1380,6 +1423,7 @@ Allow users to choose spacing density:
 ```
 
 #### Kanban Styles
+
 ```css
 /* Board container */
 .kanban-board {
@@ -1404,22 +1448,22 @@ Allow users to choose spacing density:
 }
 
 /* Status-based column colors */
-.kanban-column[data-status="backlog"] .kanban-column-header {
+.kanban-column[data-status='backlog'] .kanban-column-header {
   background: var(--status-backlog);
   color: var(--background-primary);
 }
 
-.kanban-column[data-status="today"] .kanban-column-header {
+.kanban-column[data-status='today'] .kanban-column-header {
   background: var(--status-today);
   color: var(--text-primary);
 }
 
-.kanban-column[data-status="in-progress"] .kanban-column-header {
+.kanban-column[data-status='in-progress'] .kanban-column-header {
   background: var(--status-in-progress);
   color: var(--background-primary);
 }
 
-.kanban-column[data-status="done"] .kanban-column-header {
+.kanban-column[data-status='done'] .kanban-column-header {
   background: var(--status-done);
   color: var(--background-primary);
 }
@@ -1489,7 +1533,7 @@ Allow users to choose spacing density:
 
 /* Empty state */
 .kanban-column-content:empty::after {
-  content: "No tasks";
+  content: 'No tasks';
   display: block;
   text-align: center;
   color: var(--text-tertiary);
@@ -1546,6 +1590,7 @@ Allow users to choose spacing density:
 ## 5. Animation Specifications
 
 ### Philosophy
+
 - **Subtle and purposeful** - avoid distraction
 - **Respect prefers-reduced-motion** - accessibility first
 - **Provide feedback** - confirm user actions
@@ -1556,11 +1601,11 @@ Allow users to choose spacing density:
 
 ```css
 /* Duration tokens */
---duration-instant: 100ms;      /* Hover states, minor feedback */
---duration-fast: 150ms;         /* Buttons, basic transitions */
---duration-normal: 250ms;       /* Modals, drawers, page transitions */
---duration-slow: 350ms;         /* Complex animations, confetti */
---duration-slower: 500ms;       /* Dramatic effects (use sparingly) */
+--duration-instant: 100ms; /* Hover states, minor feedback */
+--duration-fast: 150ms; /* Buttons, basic transitions */
+--duration-normal: 250ms; /* Modals, drawers, page transitions */
+--duration-slow: 350ms; /* Complex animations, confetti */
+--duration-slower: 500ms; /* Dramatic effects (use sparingly) */
 
 /* Easing functions */
 --ease-in: cubic-bezier(0.4, 0, 1, 1);
@@ -1585,7 +1630,7 @@ Allow users to choose spacing density:
 }
 
 /* Manual toggle option */
-[data-reduced-motion="true"] * {
+[data-reduced-motion='true'] * {
   animation: none !important;
   transition: none !important;
 }
@@ -1594,6 +1639,7 @@ Allow users to choose spacing density:
 ### Component Animations
 
 #### Button Interactions
+
 ```css
 .button {
   transition: all var(--duration-fast) var(--ease-out);
@@ -1610,7 +1656,7 @@ Allow users to choose spacing density:
 
 /* Loading state */
 .button.is-loading::after {
-  content: "";
+  content: '';
   width: 16px;
   height: 16px;
   border: 2px solid currentColor;
@@ -1620,11 +1666,14 @@ Allow users to choose spacing density:
 }
 
 @keyframes spinner {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 ```
 
 #### Modal Transitions
+
 ```css
 /* Modal enter animation */
 .modal-overlay {
@@ -1665,7 +1714,9 @@ Allow users to choose spacing density:
 }
 
 @keyframes modal-fade-out {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes modal-slide-down {
@@ -1677,6 +1728,7 @@ Allow users to choose spacing density:
 ```
 
 #### Drag & Drop Feedback
+
 ```css
 /* Pick up animation */
 .task-card.is-dragging {
@@ -1716,6 +1768,7 @@ Allow users to choose spacing density:
 ```
 
 #### Sidebar Transitions
+
 ```css
 /* Sidebar slide in/out */
 .sidebar {
@@ -1734,6 +1787,7 @@ Allow users to choose spacing density:
 ```
 
 #### Task Completion Animation
+
 ```css
 /* Checkmark animation */
 .task-card.is-completed .task-checkbox {
@@ -1777,6 +1831,7 @@ Allow users to choose spacing density:
 ### Confetti Animation (Task Completion Celebration)
 
 #### Confetti Implementation
+
 ```html
 <!-- Confetti container (fixed position) -->
 <div class="confetti-container" aria-hidden="true">
@@ -1807,15 +1862,29 @@ Allow users to choose spacing density:
 }
 
 /* Color variants (using vibrant colors) */
-.confetti-piece.color-1 { background: var(--primary-purple); }
-.confetti-piece.color-2 { background: var(--primary-blue); }
-.confetti-piece.color-3 { background: var(--accent-pink); }
-.confetti-piece.color-4 { background: var(--accent-red); }
-.confetti-piece.color-5 { background: var(--status-done); }
+.confetti-piece.color-1 {
+  background: var(--primary-purple);
+}
+.confetti-piece.color-2 {
+  background: var(--primary-blue);
+}
+.confetti-piece.color-3 {
+  background: var(--accent-pink);
+}
+.confetti-piece.color-4 {
+  background: var(--accent-red);
+}
+.confetti-piece.color-5 {
+  background: var(--status-done);
+}
 
 /* Shape variants */
-.confetti-piece.square { border-radius: 0; }
-.confetti-piece.circle { border-radius: 50%; }
+.confetti-piece.square {
+  border-radius: 0;
+}
+.confetti-piece.circle {
+  border-radius: 50%;
+}
 .confetti-piece.rectangle {
   width: 6px;
   height: 12px;
@@ -1835,6 +1904,7 @@ Allow users to choose spacing density:
 ```
 
 #### Confetti Trigger (JavaScript pseudocode)
+
 ```javascript
 // Trigger confetti on task completion
 function triggerConfetti() {
@@ -1864,7 +1934,7 @@ function triggerConfetti() {
 
     // Random animation delay and duration
     piece.style.animationDelay = Math.random() * 0.2 + 's';
-    piece.style.animationDuration = (Math.random() * 0.5 + 1) + 's';
+    piece.style.animationDuration = Math.random() * 0.5 + 1 + 's';
 
     container.appendChild(piece);
 
@@ -1875,6 +1945,7 @@ function triggerConfetti() {
 ```
 
 ### Notification/Toast Animations
+
 ```css
 /* Toast slide in from top */
 .toast {
@@ -1906,6 +1977,7 @@ function triggerConfetti() {
 ```
 
 ### Focus Animations
+
 ```css
 /* Focus ring should NOT animate (accessibility) */
 :focus-visible {
@@ -1916,6 +1988,7 @@ function triggerConfetti() {
 ```
 
 ### Loading States
+
 ```css
 /* Skeleton loading animation */
 .skeleton {
@@ -1944,7 +2017,8 @@ function triggerConfetti() {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -1956,6 +2030,7 @@ function triggerConfetti() {
 ### Animation Best Practices
 
 ✅ **DO:**
+
 - Keep animations under 300ms for interactions
 - Provide instant visual feedback (< 100ms)
 - Celebrate task completion (confetti, color changes)
@@ -1965,6 +2040,7 @@ function triggerConfetti() {
 - Limit bounce animations to 2-3 bounces max
 
 ❌ **DON'T:**
+
 - Auto-play animations on page load
 - Use blinking or flashing effects
 - Animate more than 3 elements simultaneously
@@ -1985,14 +2061,16 @@ function triggerConfetti() {
 ### Color Contrast
 
 #### Requirements Met
-| Level | Normal Text | Large Text | UI Components |
-|-------|-------------|------------|---------------|
-| **AA** | 4.5:1 ✓ | 3:1 ✓ | 3:1 ✓ |
-| **AAA** | 7:1 ✓ | 4.5:1 ✓ | - |
+
+| Level   | Normal Text | Large Text | UI Components |
+| ------- | ----------- | ---------- | ------------- |
+| **AA**  | 4.5:1 ✓     | 3:1 ✓      | 3:1 ✓         |
+| **AAA** | 7:1 ✓       | 4.5:1 ✓    | -             |
 
 All color combinations in this design system meet WCAG AA minimum standards. Many meet AAA.
 
 #### Testing Tools
+
 - Use [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
 - Chrome DevTools Lighthouse accessibility audit
 - Automated testing with axe-core
@@ -2000,12 +2078,15 @@ All color combinations in this design system meet WCAG AA minimum standards. Man
 ### Keyboard Navigation
 
 #### Requirements
+
 All interactive elements must be:
+
 1. **Keyboard accessible** (tab, enter, space, arrows, escape)
 2. **Visibly focused** with clear focus indicators
 3. **Logically ordered** in tab sequence
 
 #### Focus Indicators
+
 ```css
 /* Universal focus style */
 :focus-visible {
@@ -2023,20 +2104,22 @@ All interactive elements must be:
 
 #### Keyboard Shortcuts
 
-| Action | Shortcut |
-|--------|----------|
-| Open quick add task | `Ctrl/Cmd + K` |
-| Focus search | `/` |
-| Close modal/dialog | `Esc` |
-| Navigate sidebar | `Arrow Up/Down` |
-| Open task details | `Enter` on focused card |
-| Delete task | `Delete/Backspace` on focused card |
-| Mark complete | `Space` on focused checkbox |
+| Action              | Shortcut                           |
+| ------------------- | ---------------------------------- |
+| Open quick add task | `Ctrl/Cmd + K`                     |
+| Focus search        | `/`                                |
+| Close modal/dialog  | `Esc`                              |
+| Navigate sidebar    | `Arrow Up/Down`                    |
+| Open task details   | `Enter` on focused card            |
+| Delete task         | `Delete/Backspace` on focused card |
+| Mark complete       | `Space` on focused checkbox        |
 
 ### Screen Reader Support
 
 #### Semantic HTML
+
 Always use semantic HTML elements:
+
 - `<button>` for actions
 - `<a>` for navigation
 - `<nav>` for navigation regions
@@ -2046,6 +2129,7 @@ Always use semantic HTML elements:
 - `<h1>` through `<h6>` for headings (never skip levels)
 
 #### ARIA Labels
+
 ```html
 <!-- Button with icon only -->
 <button aria-label="Delete task">
@@ -2069,10 +2153,7 @@ Always use semantic HTML elements:
 </div>
 
 <!-- Collapsible section -->
-<button
-  aria-expanded="true"
-  aria-controls="workspace-section"
->
+<button aria-expanded="true" aria-controls="workspace-section">
   Workspaces
 </button>
 <div id="workspace-section">
@@ -2080,18 +2161,17 @@ Always use semantic HTML elements:
 </div>
 
 <!-- Live region for dynamic updates -->
-<div role="status" aria-live="polite">
-  Task completed!
-</div>
+<div role="status" aria-live="polite">Task completed!</div>
 ```
 
 #### Focus Management
+
 ```javascript
 // When opening modal, trap focus
 function openModal() {
   const modal = document.querySelector('.modal');
   const focusableElements = modal.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
   );
   const firstElement = focusableElements[0];
   const lastElement = focusableElements[focusableElements.length - 1];
@@ -2117,6 +2197,7 @@ function openModal() {
 ### Motion & Animation
 
 #### Reduced Motion Preference
+
 ```css
 /* Respect user preference */
 @media (prefers-reduced-motion: reduce) {
@@ -2131,6 +2212,7 @@ function openModal() {
 ```
 
 #### Manual Toggle
+
 Provide settings option to disable animations entirely:
 
 ```javascript
@@ -2138,7 +2220,7 @@ Provide settings option to disable animations entirely:
 <label>
   <input type="checkbox" id="reduced-motion-toggle" />
   Reduce motion and animations
-</label>
+</label>;
 
 // Apply to document
 document.documentElement.setAttribute('data-reduced-motion', 'true');
@@ -2147,6 +2229,7 @@ document.documentElement.setAttribute('data-reduced-motion', 'true');
 ### Text Readability
 
 #### Requirements Met
+
 - ✓ Font size: 22px base (larger than WCAG minimum)
 - ✓ Line height: 1.5 (WCAG recommendation)
 - ✓ Letter spacing: 0.12em (dyslexia-friendly)
@@ -2155,17 +2238,21 @@ document.documentElement.setAttribute('data-reduced-motion', 'true');
 - ✓ No justified text (WCAG AAA compliance)
 
 #### Text Scaling
+
 Support browser text zoom up to 200% without loss of functionality:
+
 ```css
 /* Use relative units */
 font-size: 1.375rem; /* NOT 22px */
-padding: 1.5rem;     /* NOT 24px */
+padding: 1.5rem; /* NOT 24px */
 ```
 
 ### Touch Targets
 
 #### Minimum Size
+
 All interactive elements must be at least **48×48px** (WCAG 2.5.5 Level AAA):
+
 ```css
 .button,
 .link,
@@ -2177,7 +2264,9 @@ All interactive elements must be at least **48×48px** (WCAG 2.5.5 Level AAA):
 ```
 
 #### Spacing Between Targets
+
 Minimum **8px spacing** between adjacent interactive elements:
+
 ```css
 .button + .button {
   margin-left: var(--spacing-3); /* 12px, exceeds minimum */
@@ -2187,7 +2276,9 @@ Minimum **8px spacing** between adjacent interactive elements:
 ### Form Accessibility
 
 #### Labels
+
 Every input must have an associated label:
+
 ```html
 <!-- Visible label -->
 <label for="task-title">Task Title</label>
@@ -2199,6 +2290,7 @@ Every input must have an associated label:
 ```
 
 #### Error Messages
+
 ```html
 <!-- Link error to field -->
 <input
@@ -2207,23 +2299,17 @@ Every input must have an associated label:
   aria-invalid="true"
   aria-describedby="email-error"
 />
-<span id="email-error" role="alert">
-  Please enter a valid email address
-</span>
+<span id="email-error" role="alert"> Please enter a valid email address </span>
 ```
 
 #### Required Fields
+
 ```html
 <label for="task-title">
   Task Title
   <span aria-label="required">*</span>
 </label>
-<input
-  id="task-title"
-  type="text"
-  required
-  aria-required="true"
-/>
+<input id="task-title" type="text" required aria-required="true" />
 ```
 
 ### Color Independence
@@ -2231,6 +2317,7 @@ Every input must have an associated label:
 **Never rely on color alone** to convey information.
 
 #### Examples
+
 ```html
 <!-- BAD: Color only -->
 <div class="status" style="color: green;">●</div>
@@ -2251,38 +2338,39 @@ Every input must have an associated label:
 ### Skip Links
 
 Provide skip navigation for keyboard users:
+
 ```html
-<a href="#main-content" class="skip-link">
-  Skip to main content
-</a>
+<a href="#main-content" class="skip-link"> Skip to main content </a>
 
 <style>
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: var(--primary-purple);
-  color: white;
-  padding: 8px;
-  text-decoration: none;
-  z-index: 10000;
-}
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-purple);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 10000;
+  }
 
-.skip-link:focus {
-  top: 0;
-}
+  .skip-link:focus {
+    top: 0;
+  }
 </style>
 ```
 
 ### Accessibility Testing Checklist
 
 #### Automated Testing
+
 - [ ] Run Lighthouse accessibility audit (score > 95)
 - [ ] Run axe DevTools extension
 - [ ] Check HTML validation
 - [ ] Test color contrast with WebAIM checker
 
 #### Manual Testing
+
 - [ ] Navigate entire app using keyboard only
 - [ ] Test with screen reader (NVDA/JAWS/VoiceOver)
 - [ ] Zoom browser to 200% and verify functionality
@@ -2295,6 +2383,7 @@ Provide skip navigation for keyboard users:
 - [ ] Verify skip links work
 
 #### User Testing
+
 - [ ] Test with users who have ADHD
 - [ ] Test with users who have dyslexia
 - [ ] Test with users who have visual impairments
@@ -2308,20 +2397,25 @@ Provide skip navigation for keyboard users:
 ### CSS Architecture
 
 #### Methodology
+
 Use **CSS Custom Properties** (CSS variables) for theming and **BEM methodology** for class naming:
 
 ```css
 /* Block */
-.task-card { }
+.task-card {
+}
 
 /* Element */
-.task-card__title { }
+.task-card__title {
+}
 
 /* Modifier */
-.task-card--urgent { }
+.task-card--urgent {
+}
 ```
 
 #### File Structure
+
 ```
 styles/
 ├── base/
@@ -2352,38 +2446,41 @@ styles/
 ### Dark Mode Implementation
 
 #### Using CSS Custom Properties
+
 ```css
 /* light.css */
 :root,
-[data-theme="light"] {
-  --background-primary: #FAF9F7;
-  --text-primary: #2B2B2B;
+[data-theme='light'] {
+  --background-primary: #faf9f7;
+  --text-primary: #2b2b2b;
   /* ... all light mode variables */
 }
 
 /* dark.css */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-primary: #1C1B1A;
-    --text-primary: #E8E6E3;
+    --background-primary: #1c1b1a;
+    --text-primary: #e8e6e3;
     /* ... all dark mode variables */
   }
 }
 
-[data-theme="dark"] {
-  --background-primary: #1C1B1A;
-  --text-primary: #E8E6E3;
+[data-theme='dark'] {
+  --background-primary: #1c1b1a;
+  --text-primary: #e8e6e3;
   /* ... all dark mode variables */
 }
 ```
 
 #### Theme Toggle (JavaScript)
+
 ```javascript
 // Detect system preference
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 // Get saved preference or use system default
-const savedTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
+const savedTheme =
+  localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
 
 // Apply theme
 document.documentElement.setAttribute('data-theme', savedTheme);
@@ -2398,13 +2495,15 @@ function toggleTheme() {
 }
 
 // Listen for system preference changes
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-  // Only auto-switch if user hasn't set a preference
-  if (!localStorage.getItem('theme')) {
-    const theme = e.matches ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-  }
-});
+window
+  .matchMedia('(prefers-color-scheme: dark)')
+  .addEventListener('change', (e) => {
+    // Only auto-switch if user hasn't set a preference
+    if (!localStorage.getItem('theme')) {
+      const theme = e.matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+  });
 ```
 
 ### Responsive Breakpoints
@@ -2412,10 +2511,10 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 ```css
 /* Mobile first approach */
 :root {
-  --breakpoint-sm: 640px;   /* Small tablets */
-  --breakpoint-md: 768px;   /* Tablets */
-  --breakpoint-lg: 1024px;  /* Laptops */
-  --breakpoint-xl: 1280px;  /* Desktops */
+  --breakpoint-sm: 640px; /* Small tablets */
+  --breakpoint-md: 768px; /* Tablets */
+  --breakpoint-lg: 1024px; /* Laptops */
+  --breakpoint-xl: 1280px; /* Desktops */
   --breakpoint-2xl: 1536px; /* Large desktops */
 }
 
@@ -2443,6 +2542,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 ### Performance Considerations
 
 #### CSS Optimization
+
 ```css
 /* Use will-change for animated elements */
 .task-card.is-dragging {
@@ -2456,25 +2556,37 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 
 /* Use transform and opacity for animations (GPU accelerated) */
 .button {
-  transition: transform 150ms, opacity 150ms;
+  transition:
+    transform 150ms,
+    opacity 150ms;
 }
 
 /* Avoid animating layout properties */
 /* ❌ BAD */
 .element {
-  transition: height 300ms, width 300ms;
+  transition:
+    height 300ms,
+    width 300ms;
 }
 
 /* ✓ GOOD */
 .element {
-  transition: transform 300ms, opacity 300ms;
+  transition:
+    transform 300ms,
+    opacity 300ms;
 }
 ```
 
 #### Lazy Loading
+
 ```html
 <!-- Lazy load images -->
-<img src="placeholder.jpg" data-src="actual-image.jpg" loading="lazy" alt="Description" />
+<img
+  src="placeholder.jpg"
+  data-src="actual-image.jpg"
+  loading="lazy"
+  alt="Description"
+/>
 
 <!-- Lazy load background images -->
 <div class="hero" data-bg="hero-image.jpg"></div>
@@ -2483,6 +2595,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 ### Browser Support
 
 #### Minimum Supported Versions
+
 - Chrome/Edge: Last 2 versions
 - Firefox: Last 2 versions
 - Safari: Last 2 versions
@@ -2490,6 +2603,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 - Chrome Android: Last 2 versions
 
 #### Progressive Enhancement
+
 ```css
 /* Feature detection */
 @supports (display: grid) {
@@ -2507,7 +2621,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 
 /* CSS custom properties fallback */
 .element {
-  color: #8B7AB8; /* Fallback */
+  color: #8b7ab8; /* Fallback */
   color: var(--primary-purple); /* Modern */
 }
 ```
@@ -2669,6 +2783,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 ### Component Library Expansion
 
 Future components to design:
+
 - Calendar/date picker
 - Time picker with visual representation
 - Tags/labels system
@@ -2687,13 +2802,16 @@ Future components to design:
 ## 10. Resources & References
 
 ### Design Tools
+
 - **Figma**: For creating mockups and prototypes
 - **Coolors**: Color palette generator
 - **WebAIM Contrast Checker**: Verify WCAG compliance
 - **Google Fonts**: Font library (Open Sans)
 
 ### Research Sources
+
 This design system is based on:
+
 - WCAG 2.1 Guidelines (W3C)
 - British Dyslexia Association Style Guide
 - ADHD UI/UX research studies
@@ -2701,12 +2819,14 @@ This design system is based on:
 - User research findings from `UI_RESEARCH_FINDINGS.md`
 
 ### Testing Tools
+
 - **Lighthouse**: Accessibility audits
 - **axe DevTools**: Accessibility testing
 - **NVDA/JAWS/VoiceOver**: Screen reader testing
 - **Chrome DevTools**: Visual debugging
 
 ### Version
+
 **Design System Version:** 1.0.0
 **Last Updated:** 2025-11-12
 **Status:** Initial Release
@@ -2717,27 +2837,27 @@ This design system is based on:
 
 ### Light Mode Contrast Ratios
 
-| Foreground | Background | Ratio | WCAG Level |
-|------------|------------|-------|------------|
-| `--text-primary` | `--background-primary` | 9.8:1 | AAA ✓ |
-| `--text-secondary` | `--background-primary` | 5.2:1 | AA ✓ |
-| `--text-tertiary` | `--background-primary` | 3.8:1 | AA (large text) ✓ |
-| `--primary-purple` | `--background-primary` | 4.8:1 | AA ✓ |
-| `--primary-blue` | `--background-primary` | 5.1:1 | AA ✓ |
-| `--accent-pink` | `--background-primary` | 4.9:1 | AA ✓ |
-| `--accent-red` | `--background-primary` | 5.3:1 | AA ✓ |
+| Foreground         | Background             | Ratio | WCAG Level        |
+| ------------------ | ---------------------- | ----- | ----------------- |
+| `--text-primary`   | `--background-primary` | 9.8:1 | AAA ✓             |
+| `--text-secondary` | `--background-primary` | 5.2:1 | AA ✓              |
+| `--text-tertiary`  | `--background-primary` | 3.8:1 | AA (large text) ✓ |
+| `--primary-purple` | `--background-primary` | 4.8:1 | AA ✓              |
+| `--primary-blue`   | `--background-primary` | 5.1:1 | AA ✓              |
+| `--accent-pink`    | `--background-primary` | 4.9:1 | AA ✓              |
+| `--accent-red`     | `--background-primary` | 5.3:1 | AA ✓              |
 
 ### Dark Mode Contrast Ratios
 
-| Foreground | Background | Ratio | WCAG Level |
-|------------|------------|-------|------------|
-| `--text-primary` | `--background-primary` | 10.2:1 | AAA ✓ |
-| `--text-secondary` | `--background-primary` | 5.8:1 | AA ✓ |
-| `--text-tertiary` | `--background-primary` | 3.9:1 | AA (large text) ✓ |
-| `--primary-purple` | `--background-primary` | 5.2:1 | AA ✓ |
-| `--primary-blue` | `--background-primary` | 5.4:1 | AA ✓ |
-| `--accent-pink` | `--background-primary` | 5.1:1 | AA ✓ |
-| `--accent-red` | `--background-primary` | 5.5:1 | AA ✓ |
+| Foreground         | Background             | Ratio  | WCAG Level        |
+| ------------------ | ---------------------- | ------ | ----------------- |
+| `--text-primary`   | `--background-primary` | 10.2:1 | AAA ✓             |
+| `--text-secondary` | `--background-primary` | 5.8:1  | AA ✓              |
+| `--text-tertiary`  | `--background-primary` | 3.9:1  | AA (large text) ✓ |
+| `--primary-purple` | `--background-primary` | 5.2:1  | AA ✓              |
+| `--primary-blue`   | `--background-primary` | 5.4:1  | AA ✓              |
+| `--accent-pink`    | `--background-primary` | 5.1:1  | AA ✓              |
+| `--accent-red`     | `--background-primary` | 5.5:1  | AA ✓              |
 
 ---
 

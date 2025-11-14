@@ -30,7 +30,6 @@ const { chromium } = require('playwright');
     } else {
       console.log('✗ Add button not found');
     }
-
   } catch (error) {
     console.error('Error during test:', error.message);
     await page.screenshot({ path: '/tmp/error-screenshot.png' });

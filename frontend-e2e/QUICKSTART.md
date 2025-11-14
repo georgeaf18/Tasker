@@ -55,7 +55,8 @@ The tests require `data-testid` attributes on components. See [DATA_TESTID_REQUI
 <p-progressBar
   [value]="dailyProgress()"
   data-testid="daily-progress-bar"
-  [attr.aria-valuenow]="dailyProgress()">
+  [attr.aria-valuenow]="dailyProgress()"
+>
 </p-progressBar>
 ```
 
@@ -63,9 +64,19 @@ The tests require `data-testid` attributes on components. See [DATA_TESTID_REQUI
 
 ```html
 <input pInputText formControlName="title" data-testid="task-title-input" />
-<textarea pTextarea formControlName="description" data-testid="task-description-input"></textarea>
-<p-select formControlName="workspace" data-testid="task-workspace-select"></p-select>
-<p-select formControlName="channelId" data-testid="task-channel-select"></p-select>
+<textarea
+  pTextarea
+  formControlName="description"
+  data-testid="task-description-input"
+></textarea>
+<p-select
+  formControlName="workspace"
+  data-testid="task-workspace-select"
+></p-select>
+<p-select
+  formControlName="channelId"
+  data-testid="task-channel-select"
+></p-select>
 <button type="submit" data-testid="task-submit-button">Save</button>
 <button type="button" data-testid="task-cancel-button">Cancel</button>
 <button type="button" data-testid="task-delete-button">Delete</button>
@@ -74,8 +85,18 @@ The tests require `data-testid` attributes on components. See [DATA_TESTID_REQUI
 **Confirmation Dialog**:
 
 ```html
-<button data-testid="confirm-delete-button" (click)="confirmationService.accept()">Yes</button>
-<button data-testid="cancel-delete-button" (click)="confirmationService.close()">No</button>
+<button
+  data-testid="confirm-delete-button"
+  (click)="confirmationService.accept()"
+>
+  Yes
+</button>
+<button
+  data-testid="cancel-delete-button"
+  (click)="confirmationService.close()"
+>
+  No
+</button>
 ```
 
 **Workspace Filters**:
@@ -84,14 +105,16 @@ The tests require `data-testid` attributes on components. See [DATA_TESTID_REQUI
 <button
   data-testid="workspace-toggle-work"
   [attr.aria-pressed]="isWorkFilterActive()"
-  (click)="toggleWorkspaceFilter('WORK')">
+  (click)="toggleWorkspaceFilter('WORK')"
+>
   Work
 </button>
 
 <button
   data-testid="workspace-toggle-personal"
   [attr.aria-pressed]="isPersonalFilterActive()"
-  (click)="toggleWorkspaceFilter('PERSONAL')">
+  (click)="toggleWorkspaceFilter('PERSONAL')"
+>
   Personal
 </button>
 ```
@@ -110,6 +133,7 @@ npm run dev:frontend
 ```
 
 Verify services are running:
+
 - Backend: http://localhost:3000/api/health
 - Frontend: http://localhost:4200
 
@@ -301,6 +325,7 @@ npx playwright test --timeout=60000
 ## Support
 
 Issues? Check:
+
 1. [Troubleshooting](#troubleshooting) section
 2. [README.md](./README.md) for detailed docs
 3. Playwright Inspector: `npx playwright test --debug`

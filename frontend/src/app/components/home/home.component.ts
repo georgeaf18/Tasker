@@ -14,7 +14,7 @@ import { BacklogSidebarComponent } from '../backlog-sidebar/backlog-sidebar.comp
   standalone: true,
   imports: [CommonModule, KanbanBoardComponent, BacklogSidebarComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent {
   @ViewChild(BacklogSidebarComponent) backlogSidebar!: BacklogSidebarComponent;

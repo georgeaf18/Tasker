@@ -1,4 +1,4 @@
 export enum Workspace {
-    WORK = 'WORK',
-    PERSONAL = 'PERSONAL'
+  WORK = 'WORK',
+  PERSONAL = 'PERSONAL',
 }

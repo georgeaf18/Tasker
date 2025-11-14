@@ -8,6 +8,7 @@
 ## Prerequisites
 
 ### System Requirements
+
 - Node.js 20+ LTS
 - npm 10+ or pnpm 8+
 - Git 2.40+
@@ -18,6 +19,7 @@
   - Prettier
 
 ### Knowledge Assumed
+
 - TypeScript basics
 - Angular fundamentals
 - NestJS basics (can learn as you go)
@@ -46,15 +48,13 @@ npm init -y
 ```
 
 **Edit `package.json`:**
+
 ```json
 {
   "name": "tasker-monorepo",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
+  "workspaces": ["frontend", "backend"],
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:frontend": "cd frontend && npm run start",
@@ -74,6 +74,7 @@ npm install
 ```
 
 **Create `.gitignore`:**
+
 ```
 node_modules/
 dist/
@@ -95,6 +96,7 @@ temp/
 ```
 
 **Create `.editorconfig`:**
+
 ```ini
 root = true
 
@@ -111,6 +113,7 @@ trim_trailing_whitespace = false
 ```
 
 **Commit:**
+
 ```bash
 git add .
 git commit -m "chore: initialize monorepo structure"
@@ -133,6 +136,7 @@ npm install -D @types/node
 ```
 
 **Create `backend/.env`:**
+
 ```
 PORT=3000
 NODE_ENV=development
@@ -140,11 +144,13 @@ DATABASE_PATH=../database/tasker.db
 ```
 
 **Create database directory:**
+
 ```bash
 mkdir -p ../database
 ```
 
 **Create `backend/src/config/database.config.ts`:**
+
 ```typescript
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
@@ -159,6 +165,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
 ```
 
 **Generate modules:**
+
 ```bash
 cd backend
 
@@ -174,10 +181,12 @@ nest g service channels
 ```
 
 **Create entities** (copy from DATABASE_SCHEMA.md):
+
 - `backend/src/tasks/entities/task.entity.ts`
 - `backend/src/channels/entities/channel.entity.ts`
 
 **Update `backend/src/app.module.ts`:**
+
 ```typescript
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -198,6 +207,7 @@ export class AppModule {}
 ```
 
 **Update `backend/src/main.ts`:**
+
 ```typescript
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
@@ -228,6 +238,7 @@ bootstrap();
 ```
 
 **Test backend:**
+
 ```bash
 cd backend
 npm run start:dev
@@ -236,6 +247,7 @@ npm run start:dev
 Should see: "Backend running on http://localhost:3000"
 
 **Commit:**
+
 ```bash
 git add .
 git commit -m "feat(backend): setup NestJS with TypeORM and SQLite"
@@ -263,6 +275,7 @@ npx tailwindcss init
 **Update `tailwind.config.js`:** (copy from TECHNICAL_ARCHITECTURE.md)
 
 **Create `frontend/src/styles/tailwind.css`:**
+
 ```css
 @tailwind base;
 @tailwind components;
@@ -270,28 +283,29 @@ npx tailwindcss init
 ```
 
 **Update `frontend/src/styles.css`:**
+
 ```css
 @import './styles/tailwind.css';
 @import 'primeicons/primeicons.css';
 
 /* Design tokens */
 :root {
-  --color-bg-primary: #FAF9F7;
-  --color-bg-secondary: #F0EEE9;
-  --color-text-primary: #2B2B2A;
+  --color-bg-primary: #faf9f7;
+  --color-bg-secondary: #f0eee9;
+  --color-text-primary: #2b2b2a;
   --color-text-secondary: #595959;
-  --color-primary: #8B7BB8;
+  --color-primary: #8b7bb8;
   --font-family-base: Verdana, 'Open Sans', Helvetica, Arial, sans-serif;
   --font-size-base: 22px;
   --line-height: 1.5;
   --letter-spacing: 0.12em;
 }
 
-[data-theme="dark"] {
-  --color-bg-primary: #1C1B1A;
-  --color-bg-secondary: #2B2A28;
-  --color-text-primary: #E8E6E1;
-  --color-text-secondary: #B8B6B1;
+[data-theme='dark'] {
+  --color-bg-primary: #1c1b1a;
+  --color-bg-secondary: #2b2a28;
+  --color-text-primary: #e8e6e1;
+  --color-text-secondary: #b8b6b1;
 }
 
 body {
@@ -307,6 +321,7 @@ body {
 ```
 
 **Update `frontend/src/main.ts`:**
+
 ```typescript
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideExperimentalZonelessChangeDetection } from '@angular/core';
@@ -335,6 +350,7 @@ bootstrapApplication(AppComponent, {
 ```
 
 **Create `frontend/proxy.conf.json`:**
+
 ```json
 {
   "/api": {
@@ -347,6 +363,7 @@ bootstrapApplication(AppComponent, {
 ```
 
 **Update `angular.json` serve options:**
+
 ```json
 "serve": {
   "options": {
@@ -356,6 +373,7 @@ bootstrapApplication(AppComponent, {
 ```
 
 **Test frontend:**
+
 ```bash
 cd frontend
 npm start
@@ -364,6 +382,7 @@ npm start
 Should see Angular running on http://localhost:4200
 
 **Commit:**
+
 ```bash
 git add .
 git commit -m "feat(frontend): setup Angular 20 with Tailwind and PrimeNG"
@@ -376,8 +395,16 @@ git commit -m "feat(frontend): setup Angular 20 with Tailwind and PrimeNG"
 ### Create DTOs
 
 **`backend/src/tasks/dto/create-task.dto.ts`:**
+
 ```typescript
-import { IsString, IsEnum, IsOptional, IsBoolean, IsDateString, IsNumber } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsBoolean,
+  IsDateString,
+  IsNumber,
+} from 'class-validator';
 import { TaskStatus, Workspace } from '../entities/task.entity';
 
 export class CreateTaskDto {
@@ -410,6 +437,7 @@ export class CreateTaskDto {
 ```
 
 **`backend/src/tasks/dto/update-task.dto.ts`:**
+
 ```typescript
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateTaskDto } from './create-task.dto';
@@ -422,6 +450,7 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {}
 **`backend/src/tasks/tasks.service.ts`:** (copy from DATABASE_SCHEMA.md queries)
 
 **`backend/src/tasks/tasks.controller.ts`:**
+
 ```typescript
 import {
   Controller,
@@ -502,6 +531,7 @@ Content-Type: application/json
 ```
 
 **Commit:**
+
 ```bash
 git add .
 git commit -m "feat(backend): implement tasks CRUD API"
@@ -529,6 +559,7 @@ mkdir -p guards
 ### Create Models
 
 **`frontend/src/app/models/task.model.ts`:**
+
 ```typescript
 export enum TaskStatus {
   BACKLOG = 'backlog',
@@ -566,6 +597,7 @@ export interface Channel {
 ### Create API Service
 
 **`frontend/src/app/core/services/task-api.service.ts`:**
+
 ```typescript
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -577,7 +609,10 @@ export class TaskApiService {
   private http = inject(HttpClient);
   private apiUrl = '/api/tasks';
 
-  getTasks(filters?: { status?: string; workspace?: string }): Observable<Task[]> {
+  getTasks(filters?: {
+    status?: string;
+    workspace?: string;
+  }): Observable<Task[]> {
     return this.http.get<Task[]>(this.apiUrl, { params: { ...filters } });
   }
 
@@ -602,6 +637,7 @@ export class TaskApiService {
 ### Create Task State Service
 
 **`frontend/src/app/features/tasks/services/task-state.service.ts`:**
+
 ```typescript
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Task, TaskStatus } from '../../../models/task.model';
@@ -620,67 +656,68 @@ export class TaskStateService {
   readonly error = this.errorSignal.asReadonly();
 
   readonly backlogTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === TaskStatus.BACKLOG)
+    this.tasksSignal().filter((t) => t.status === TaskStatus.BACKLOG),
   );
 
   readonly todayTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === TaskStatus.TODAY)
+    this.tasksSignal().filter((t) => t.status === TaskStatus.TODAY),
   );
 
   readonly inProgressTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === TaskStatus.IN_PROGRESS)
+    this.tasksSignal().filter((t) => t.status === TaskStatus.IN_PROGRESS),
   );
 
   readonly doneTasks = computed(() =>
-    this.tasksSignal().filter(t => t.status === TaskStatus.DONE)
+    this.tasksSignal().filter((t) => t.status === TaskStatus.DONE),
   );
 
   loadTasks() {
     this.loadingSignal.set(true);
     this.api.getTasks().subscribe({
-      next: tasks => {
+      next: (tasks) => {
         this.tasksSignal.set(tasks);
         this.loadingSignal.set(false);
       },
-      error: err => {
+      error: (err) => {
         this.errorSignal.set(err.message);
         this.loadingSignal.set(false);
-      }
+      },
     });
   }
 
   addTask(task: Partial<Task>) {
     this.api.createTask(task).subscribe({
-      next: newTask => {
-        this.tasksSignal.update(tasks => [...tasks, newTask]);
+      next: (newTask) => {
+        this.tasksSignal.update((tasks) => [...tasks, newTask]);
       },
-      error: err => this.errorSignal.set(err.message)
+      error: (err) => this.errorSignal.set(err.message),
     });
   }
 
   updateTask(id: number, updates: Partial<Task>) {
     this.api.updateTask(id, updates).subscribe({
-      next: updated => {
-        this.tasksSignal.update(tasks =>
-          tasks.map(t => t.id === id ? updated : t)
+      next: (updated) => {
+        this.tasksSignal.update((tasks) =>
+          tasks.map((t) => (t.id === id ? updated : t)),
         );
       },
-      error: err => this.errorSignal.set(err.message)
+      error: (err) => this.errorSignal.set(err.message),
     });
   }
 
   deleteTask(id: number) {
     this.api.deleteTask(id).subscribe({
       next: () => {
-        this.tasksSignal.update(tasks => tasks.filter(t => t.id !== id));
+        this.tasksSignal.update((tasks) => tasks.filter((t) => t.id !== id));
       },
-      error: err => this.errorSignal.set(err.message)
+      error: (err) => this.errorSignal.set(err.message),
     });
   }
 }
 ```
 
 **Test:**
+
 ```bash
 # Run both servers
 npm run dev
@@ -691,6 +728,7 @@ npm run dev
 ```
 
 **Commit:**
+
 ```bash
 git add .
 git commit -m "feat(frontend): create API service and state management"

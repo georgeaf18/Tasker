@@ -3,6 +3,7 @@
 ## What We've Created
 
 ### Project Structure
+
 ```
 tasker/
 ├── README.md                           # Project overview, tech stack, roadmap
@@ -19,6 +20,7 @@ tasker/
 ```
 
 ### Design System Highlights
+
 - **Colors:** Purples (primary), blues (secondary), pinks/reds (accents)
 - **Typography:** Verdana 22px base (optimized for myopia/astigmatism)
 - **Spacing:** 8px base unit, generous whitespace
@@ -26,6 +28,7 @@ tasker/
 - **Accessibility:** WCAG AA compliant, reduced motion support
 
 ### Version Roadmap Summary
+
 - **v0.1 (1 week):** Backlog sidebar + basic kanban
 - **v0.2 (3-4 days):** Confetti, streaks, routines
 - **v0.3 (3-4 days):** Subtasks, weekly planning, search
@@ -87,6 +90,7 @@ npm init -y
 ```
 
 **Create `.gitignore`:**
+
 ```
 node_modules/
 dist/
@@ -103,6 +107,7 @@ coverage/
 ```
 
 **Create `EditorConfig` (.editorconfig):**
+
 ```ini
 root = true
 
@@ -144,6 +149,7 @@ npm install dotenv
 ```
 
 **Create initial structure:**
+
 ```
 backend/
 ├── src/
@@ -176,6 +182,7 @@ npm install
 ```
 
 **proxy.conf.json:**
+
 ```json
 {
   "/api": {
@@ -186,6 +193,7 @@ npm install
 ```
 
 **Update angular.json to use proxy:**
+
 ```json
 "serve": {
   "options": {
@@ -197,6 +205,7 @@ npm install
 ### 6. Database Schema (TASK-5) - 1-2 hours
 
 Create `backend/src/database/schema.sql`:
+
 ```sql
 -- v0.1 Schema
 CREATE TABLE IF NOT EXISTS tasks (
@@ -229,22 +238,23 @@ CREATE INDEX idx_tasks_channel ON tasks(channel_id);
 ### 7. Design System Implementation (TASK-6) - 3-4 hours
 
 Create `frontend/src/styles/tokens.css`:
+
 ```css
 :root {
   /* Colors - Light Mode */
-  --color-bg-primary: #FAF9F7;
-  --color-bg-secondary: #F0EEE9;
-  --color-text-primary: #2B2B2A;
+  --color-bg-primary: #faf9f7;
+  --color-bg-secondary: #f0eee9;
+  --color-text-primary: #2b2b2a;
   --color-text-secondary: #595959;
 
-  --color-primary: #8B7BB8;
-  --color-secondary: #6B9AC4;
-  --color-accent: #C89FA7;
-  --color-destructive: #C97064;
-  --color-success: #7A9B76;
+  --color-primary: #8b7bb8;
+  --color-secondary: #6b9ac4;
+  --color-accent: #c89fa7;
+  --color-destructive: #c97064;
+  --color-success: #7a9b76;
 
   /* Typography */
-  --font-family-base: Verdana, "Open Sans", Helvetica, Arial, sans-serif;
+  --font-family-base: Verdana, 'Open Sans', Helvetica, Arial, sans-serif;
   --font-size-base: 22px;
   --font-size-lg: 26px;
   --font-size-xl: 33px;
@@ -260,11 +270,11 @@ Create `frontend/src/styles/tokens.css`:
   --space-2xl: 64px;
 }
 
-[data-theme="dark"] {
-  --color-bg-primary: #1C1B1A;
-  --color-bg-secondary: #2B2A28;
-  --color-text-primary: #E8E6E1;
-  --color-text-secondary: #B8B6B1;
+[data-theme='dark'] {
+  --color-bg-primary: #1c1b1a;
+  --color-bg-secondary: #2b2a28;
+  --color-text-primary: #e8e6e1;
+  --color-text-secondary: #b8b6b1;
 }
 ```
 
@@ -326,6 +336,7 @@ cd database
    - Deploy locally
 
 **Success Criteria:**
+
 - Can create a task
 - Can see it in backlog sidebar
 - Can drag to "Today"
@@ -336,16 +347,19 @@ cd database
 ## Recommended Work Sessions
 
 ### Morning (2-3 hours)
+
 - Check Linear, move card to "In Progress"
 - Focus on one issue
 - Commit progress
 
 ### Afternoon (2-3 hours)
+
 - Continue or start next issue
 - Update Linear status
 - Commit + push
 
 ### End of Day
+
 - Update Linear (move to "In Review" or "Done")
 - Plan tomorrow
 - Git push

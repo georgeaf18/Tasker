@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
   const page = await browser.newPage();
 
   // Capture console messages
-  page.on('console', msg => {
+  page.on('console', (msg) => {
     const type = msg.type();
     if (type === 'error' || type === 'warning') {
       console.log(`[BROWSER ${type.toUpperCase()}]`, msg.text());
@@ -13,7 +13,7 @@ import { chromium } from 'playwright';
   });
 
   // Capture page errors
-  page.on('pageerror', err => {
+  page.on('pageerror', (err) => {
     console.log('[PAGE ERROR]', err.message);
   });
 

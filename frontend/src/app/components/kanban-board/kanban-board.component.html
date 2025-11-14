@@ -5,16 +5,16 @@
       <h2>Daily Progress</h2>
       <span class="progress-percentage">{{ dailyProgress() }}%</span>
     </div>
-    <p-progressBar 
-      [value]="dailyProgress()" 
+    <p-progressBar
+      [value]="dailyProgress()"
       [showValue]="false"
-      styleClass="custom-progress-bar">
+      styleClass="custom-progress-bar"
+    >
     </p-progressBar>
   </div>
 
   <!-- Three-Column Kanban Board -->
   <div class="kanban-board">
-    
     <!-- TODAY Column -->
     <div class="kanban-column today-column">
       <p-panel styleClass="kanban-panel">
@@ -24,9 +24,7 @@
               <i class="pi pi-calendar"></i>
               <span>Today</span>
             </div>
-            <p-badge
-              [value]="todayTasks().length.toString()"
-              severity="info">
+            <p-badge [value]="todayTasks().length.toString()" severity="info">
             </p-badge>
           </div>
         </ng-template>
@@ -35,14 +33,21 @@
           class="column-content"
           cdkDropList
           [cdkDropListData]="todayTasks()"
-          [cdkDropListConnectedTo]="['work-backlog-list', 'personal-backlog-list', 'in-progress-list', 'done-list']"
+          [cdkDropListConnectedTo]="[
+            'work-backlog-list',
+            'personal-backlog-list',
+            'in-progress-list',
+            'done-list',
+          ]"
           (cdkDropListDropped)="onDrop($event, TaskStatus.TODAY)"
-          id="today-list">
+          id="today-list"
+        >
           @if (todayTasks().length === 0) {
             <p-message
               severity="info"
               text="No tasks scheduled for today"
-              styleClass="empty-message">
+              styleClass="empty-message"
+            >
             </p-message>
           } @else {
             @for (task of todayTasks(); track task.id) {
@@ -50,19 +55,23 @@
                 styleClass="task-card"
                 cdkDrag
                 [cdkDragData]="task"
-                (click)="openTaskDetails(task)">
+                (click)="openTaskDetails(task)"
+              >
                 <ng-template pTemplate="header">
                   <div class="task-card-header">
                     @if (task.channel) {
-                      <p-chip 
+                      <p-chip
                         [label]="task.channel.name"
-                        styleClass="channel-chip">
+                        styleClass="channel-chip"
+                      >
                       </p-chip>
                     }
                     @if (task.isRoutine) {
-                      <i class="pi pi-refresh routine-icon" 
-                         pTooltip="Routine Task"
-                         tooltipPosition="top">
+                      <i
+                        class="pi pi-refresh routine-icon"
+                        pTooltip="Routine Task"
+                        tooltipPosition="top"
+                      >
                       </i>
                     }
                   </div>
@@ -70,14 +79,15 @@
 
                 <div class="task-card-body">
                   <h3 class="task-title">{{ task.title }}</h3>
-                  
+
                   <div class="task-meta">
-                    <p-tag 
+                    <p-tag
                       [value]="task.workspace"
                       [severity]="getWorkspaceSeverity(task.workspace)"
-                      styleClass="workspace-tag">
+                      styleClass="workspace-tag"
+                    >
                     </p-tag>
-                    
+
                     @if (task.dueDate) {
                       <span class="due-date">
                         <i class="pi pi-calendar"></i>
@@ -104,7 +114,8 @@
             </div>
             <p-badge
               [value]="inProgressTasks().length.toString()"
-              severity="warn">
+              severity="warn"
+            >
             </p-badge>
           </div>
         </ng-template>
@@ -113,14 +124,21 @@
           class="column-content"
           cdkDropList
           [cdkDropListData]="inProgressTasks()"
-          [cdkDropListConnectedTo]="['work-backlog-list', 'personal-backlog-list', 'today-list', 'done-list']"
+          [cdkDropListConnectedTo]="[
+            'work-backlog-list',
+            'personal-backlog-list',
+            'today-list',
+            'done-list',
+          ]"
           (cdkDropListDropped)="onDrop($event, TaskStatus.IN_PROGRESS)"
-          id="in-progress-list">
+          id="in-progress-list"
+        >
           @if (inProgressTasks().length === 0) {
             <p-message
               severity="info"
               text="No tasks in progress"
-              styleClass="empty-message">
+              styleClass="empty-message"
+            >
             </p-message>
           } @else {
             @for (task of inProgressTasks(); track task.id) {
@@ -128,19 +146,23 @@
                 styleClass="task-card"
                 cdkDrag
                 [cdkDragData]="task"
-                (click)="openTaskDetails(task)">
+                (click)="openTaskDetails(task)"
+              >
                 <ng-template pTemplate="header">
                   <div class="task-card-header">
                     @if (task.channel) {
-                      <p-chip 
+                      <p-chip
                         [label]="task.channel.name"
-                        styleClass="channel-chip">
+                        styleClass="channel-chip"
+                      >
                       </p-chip>
                     }
                     @if (task.isRoutine) {
-                      <i class="pi pi-refresh routine-icon" 
-                         pTooltip="Routine Task"
-                         tooltipPosition="top">
+                      <i
+                        class="pi pi-refresh routine-icon"
+                        pTooltip="Routine Task"
+                        tooltipPosition="top"
+                      >
                       </i>
                     }
                   </div>
@@ -148,14 +170,15 @@
 
                 <div class="task-card-body">
                   <h3 class="task-title">{{ task.title }}</h3>
-                  
+
                   <div class="task-meta">
-                    <p-tag 
+                    <p-tag
                       [value]="task.workspace"
                       [severity]="getWorkspaceSeverity(task.workspace)"
-                      styleClass="workspace-tag">
+                      styleClass="workspace-tag"
+                    >
                     </p-tag>
-                    
+
                     @if (task.dueDate) {
                       <span class="due-date">
                         <i class="pi pi-calendar"></i>
@@ -180,9 +203,7 @@
               <i class="pi pi-check-circle"></i>
               <span>Done</span>
             </div>
-            <p-badge
-              [value]="doneTasks().length.toString()"
-              severity="success">
+            <p-badge [value]="doneTasks().length.toString()" severity="success">
             </p-badge>
           </div>
         </ng-template>
@@ -191,14 +212,21 @@
           class="column-content"
           cdkDropList
           [cdkDropListData]="doneTasks()"
-          [cdkDropListConnectedTo]="['work-backlog-list', 'personal-backlog-list', 'today-list', 'in-progress-list']"
+          [cdkDropListConnectedTo]="[
+            'work-backlog-list',
+            'personal-backlog-list',
+            'today-list',
+            'in-progress-list',
+          ]"
           (cdkDropListDropped)="onDrop($event, TaskStatus.DONE)"
-          id="done-list">
+          id="done-list"
+        >
           @if (doneTasks().length === 0) {
             <p-message
               severity="info"
               text="No completed tasks"
-              styleClass="empty-message">
+              styleClass="empty-message"
+            >
             </p-message>
           } @else {
             @for (task of doneTasks(); track task.id) {
@@ -206,19 +234,23 @@
                 styleClass="task-card"
                 cdkDrag
                 [cdkDragData]="task"
-                (click)="openTaskDetails(task)">
+                (click)="openTaskDetails(task)"
+              >
                 <ng-template pTemplate="header">
                   <div class="task-card-header">
                     @if (task.channel) {
-                      <p-chip 
+                      <p-chip
                         [label]="task.channel.name"
-                        styleClass="channel-chip">
+                        styleClass="channel-chip"
+                      >
                       </p-chip>
                     }
                     @if (task.isRoutine) {
-                      <i class="pi pi-refresh routine-icon" 
-                         pTooltip="Routine Task"
-                         tooltipPosition="top">
+                      <i
+                        class="pi pi-refresh routine-icon"
+                        pTooltip="Routine Task"
+                        tooltipPosition="top"
+                      >
                       </i>
                     }
                   </div>
@@ -226,14 +258,15 @@
 
                 <div class="task-card-body">
                   <h3 class="task-title">{{ task.title }}</h3>
-                  
+
                   <div class="task-meta">
-                    <p-tag 
+                    <p-tag
                       [value]="task.workspace"
                       [severity]="getWorkspaceSeverity(task.workspace)"
-                      styleClass="workspace-tag">
+                      styleClass="workspace-tag"
+                    >
                     </p-tag>
-                    
+
                     @if (task.dueDate) {
                       <span class="due-date">
                         <i class="pi pi-calendar"></i>
@@ -248,13 +281,12 @@
         </div>
       </p-panel>
     </div>
-
   </div>
 </div>
 
 <!-- Task Details Dialog -->
 @if (selectedTask()) {
-  <p-dialog 
+  <p-dialog
     [(visible)]="showTaskDialog"
     [header]="selectedTask()?.title"
     [modal]="true"
@@ -262,8 +294,8 @@
     [draggable]="false"
     [resizable]="false"
     styleClass="task-dialog"
-    [style]="{ width: '600px', maxWidth: '90vw' }">
-    
+    [style]="{ width: '600px', maxWidth: '90vw' }"
+  >
     <div class="task-details">
       <!-- Task Info -->
       <div class="detail-section">
@@ -281,9 +313,10 @@
         <div class="metadata-grid">
           <div class="metadata-item">
             <span class="metadata-label">Workspace:</span>
-            <p-tag 
+            <p-tag
               [value]="selectedTask()?.workspace"
-              [severity]="getWorkspaceSeverity(selectedTask()!.workspace)">
+              [severity]="getWorkspaceSeverity(selectedTask()!.workspace)"
+            >
             </p-tag>
           </div>
 
@@ -318,11 +351,12 @@
         <h4>Move Task</h4>
         <div class="status-buttons">
           @if (selectedTask()?.status !== TaskStatus.TODAY) {
-            <p-button 
+            <p-button
               label="Move to Today"
               icon="pi pi-calendar"
               severity="info"
-              (onClick)="moveToStatus(selectedTask()!.id, TaskStatus.TODAY)">
+              (onClick)="moveToStatus(selectedTask()!.id, TaskStatus.TODAY)"
+            >
             </p-button>
           }
 
@@ -331,16 +365,20 @@
               label="Move to In Progress"
               icon="pi pi-spinner"
               severity="warn"
-              (onClick)="moveToStatus(selectedTask()!.id, TaskStatus.IN_PROGRESS)">
+              (onClick)="
+                moveToStatus(selectedTask()!.id, TaskStatus.IN_PROGRESS)
+              "
+            >
             </p-button>
           }
 
           @if (selectedTask()?.status !== TaskStatus.DONE) {
-            <p-button 
+            <p-button
               label="Mark as Done"
               icon="pi pi-check-circle"
               severity="success"
-              (onClick)="moveToStatus(selectedTask()!.id, TaskStatus.DONE)">
+              (onClick)="moveToStatus(selectedTask()!.id, TaskStatus.DONE)"
+            >
             </p-button>
           }
         </div>
@@ -349,18 +387,20 @@
 
     <ng-template pTemplate="footer">
       <div class="dialog-footer">
-        <p-button 
+        <p-button
           label="Delete"
           icon="pi pi-trash"
           severity="danger"
           [text]="true"
-          (onClick)="deleteTask(selectedTask()!.id)">
+          (onClick)="deleteTask(selectedTask()!.id)"
+        >
         </p-button>
-        <p-button 
+        <p-button
           label="Close"
           icon="pi pi-times"
           [text]="true"
-          (onClick)="closeTaskDialog()">
+          (onClick)="closeTaskDialog()"
+        >
         </p-button>
       </div>
     </ng-template>

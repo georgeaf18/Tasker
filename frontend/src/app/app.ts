@@ -24,7 +24,9 @@ export class App {
   protected readonly title = 'Tasker';
   protected readonly currentWorkspace = signal<Workspace>(Workspace.WORK);
   protected readonly Workspace = Workspace;
-  protected readonly notification = computed(() => this.notificationService.notification());
+  protected readonly notification = computed(() =>
+    this.notificationService.notification(),
+  );
 
   constructor() {
     // Sync currentWorkspace changes to TaskStateService
@@ -34,8 +36,8 @@ export class App {
   }
 
   protected toggleWorkspace(): void {
-    this.currentWorkspace.update(current =>
-      current === Workspace.WORK ? Workspace.PERSONAL : Workspace.WORK
+    this.currentWorkspace.update((current) =>
+      current === Workspace.WORK ? Workspace.PERSONAL : Workspace.WORK,
     );
   }
 }

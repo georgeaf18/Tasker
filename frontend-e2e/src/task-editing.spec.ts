@@ -17,427 +17,434 @@ import { ApiHelper } from './support/api-helper';
  * 6. Verify changes persisted to backend
  */
 test.describe('Task Editing', () => {
-    let appPage: AppPage;
-    let backlogPage: BacklogPage;
-    let kanbanPage: KanbanPage;
-    let taskDialogPage: TaskDialogPage;
-    let apiHelper: ApiHelper;
+  let appPage: AppPage;
+  let backlogPage: BacklogPage;
+  let kanbanPage: KanbanPage;
+  let taskDialogPage: TaskDialogPage;
+  let apiHelper: ApiHelper;
 
-    test.beforeEach(async ({ page }) => {
-        // Initialize page objects
-        appPage = new AppPage(page);
-        backlogPage = new BacklogPage(page);
-        kanbanPage = new KanbanPage(page);
-        taskDialogPage = new TaskDialogPage(page);
-        apiHelper = new ApiHelper();
+  test.beforeEach(async ({ page }) => {
+    // Initialize page objects
+    appPage = new AppPage(page);
+    backlogPage = new BacklogPage(page);
+    kanbanPage = new KanbanPage(page);
+    taskDialogPage = new TaskDialogPage(page);
+    apiHelper = new ApiHelper();
 
-        // Initialize API helper and clear test data
-        await apiHelper.init();
-        await apiHelper.clearAllTasks();
+    // Initialize API helper and clear test data
+    await apiHelper.init();
+    await apiHelper.clearAllTasks();
 
-        // Navigate to app
-        await appPage.goto();
-        await appPage.waitForAppReady();
+    // Navigate to app
+    await appPage.goto();
+    await appPage.waitForAppReady();
+  });
+
+  test.afterEach(async () => {
+    // Clean up test data
+    await apiHelper.clearAllTasks();
+    await apiHelper.dispose();
+  });
+
+  test('should edit task title', async ({ page }) => {
+    const originalTitle = 'Original Task Title';
+    const newTitle = 'Updated Task Title';
+
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: originalTitle,
+      status: 'BACKLOG',
     });
 
-    test.afterEach(async () => {
-        // Clean up test data
-        await apiHelper.clearAllTasks();
-        await apiHelper.dispose();
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
+
+    // Open task
+    await backlogPage.openTaskDetails(originalTitle);
+
+    // Edit title
+    await taskDialogPage.fillTitle(newTitle);
+
+    // Save changes
+    await taskDialogPage.submitForm();
+
+    // Verify new title appears in UI
+    expect(await backlogPage.hasTask(newTitle)).toBe(true);
+    expect(await backlogPage.hasTask(originalTitle)).toBe(false);
+
+    // Verify backend
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.title).toBe(newTitle);
+  });
+
+  test('should edit task description', async ({ page }) => {
+    const taskTitle = 'Task with Description';
+    const originalDescription = 'Original description';
+    const newDescription = 'Updated description with more details';
+
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      description: originalDescription,
+      status: 'BACKLOG',
     });
 
-    test('should edit task title', async ({ page }) => {
-        const originalTitle = 'Original Task Title';
-        const newTitle = 'Updated Task Title';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: originalTitle,
-            status: 'BACKLOG',
-        });
+    // Open task
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Verify original description is shown
+    const currentDescription = await taskDialogPage.getDescriptionValue();
+    expect(currentDescription).toBe(originalDescription);
 
-        // Open task
-        await backlogPage.openTaskDetails(originalTitle);
+    // Edit description
+    await taskDialogPage.fillDescription(newDescription);
 
-        // Edit title
-        await taskDialogPage.fillTitle(newTitle);
+    // Save
+    await taskDialogPage.submitForm();
 
-        // Save changes
-        await taskDialogPage.submitForm();
+    // Verify backend
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.description).toBe(newDescription);
+  });
 
-        // Verify new title appears in UI
-        expect(await backlogPage.hasTask(newTitle)).toBe(true);
-        expect(await backlogPage.hasTask(originalTitle)).toBe(false);
+  test('should edit both title and description', async ({ page }) => {
+    const taskData = {
+      title: 'Original Title',
+      description: 'Original description',
+    };
 
-        // Verify backend
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.title).toBe(newTitle);
+    const updatedData = {
+      title: 'New Title',
+      description: 'New description',
+    };
+
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      ...taskData,
+      status: 'BACKLOG',
     });
 
-    test('should edit task description', async ({ page }) => {
-        const taskTitle = 'Task with Description';
-        const originalDescription = 'Original description';
-        const newDescription = 'Updated description with more details';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            description: originalDescription,
-            status: 'BACKLOG',
-        });
+    // Open and edit
+    await backlogPage.openTaskDetails(taskData.title);
+    await taskDialogPage.fillTitle(updatedData.title);
+    await taskDialogPage.fillDescription(updatedData.description);
+    await taskDialogPage.submitForm();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Verify UI
+    expect(await backlogPage.hasTask(updatedData.title)).toBe(true);
 
-        // Open task
-        await backlogPage.openTaskDetails(taskTitle);
+    // Verify backend
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.title).toBe(updatedData.title);
+    expect(task.description).toBe(updatedData.description);
+  });
 
-        // Verify original description is shown
-        const currentDescription = await taskDialogPage.getDescriptionValue();
-        expect(currentDescription).toBe(originalDescription);
+  test('should edit task workspace', async ({ page }) => {
+    const taskTitle = 'Workspace Change Task';
 
-        // Edit description
-        await taskDialogPage.fillDescription(newDescription);
-
-        // Save
-        await taskDialogPage.submitForm();
-
-        // Verify backend
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.description).toBe(newDescription);
+    // Create Personal task
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      workspace: 'PERSONAL',
+      status: 'BACKLOG',
     });
 
-    test('should edit both title and description', async ({ page }) => {
-        const taskData = {
-            title: 'Original Title',
-            description: 'Original description',
-        };
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        const updatedData = {
-            title: 'New Title',
-            description: 'New description',
-        };
+    // Open task
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            ...taskData,
-            status: 'BACKLOG',
-        });
+    // Change workspace to Work
+    await taskDialogPage.selectWorkspace('WORK');
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Save
+    await taskDialogPage.submitForm();
 
-        // Open and edit
-        await backlogPage.openTaskDetails(taskData.title);
-        await taskDialogPage.fillTitle(updatedData.title);
-        await taskDialogPage.fillDescription(updatedData.description);
-        await taskDialogPage.submitForm();
+    // Verify backend
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.workspace).toBe('WORK');
+  });
 
-        // Verify UI
-        expect(await backlogPage.hasTask(updatedData.title)).toBe(true);
+  test('should cancel edit without saving changes', async ({ page }) => {
+    const originalTitle = 'Original Title';
+    const attemptedNewTitle = 'This Should Not Save';
 
-        // Verify backend
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.title).toBe(updatedData.title);
-        expect(task.description).toBe(updatedData.description);
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: originalTitle,
+      status: 'BACKLOG',
     });
 
-    test('should edit task workspace', async ({ page }) => {
-        const taskTitle = 'Workspace Change Task';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create Personal task
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            workspace: 'PERSONAL',
-            status: 'BACKLOG',
-        });
+    // Open task
+    await backlogPage.openTaskDetails(originalTitle);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Make changes
+    await taskDialogPage.fillTitle(attemptedNewTitle);
 
-        // Open task
-        await backlogPage.openTaskDetails(taskTitle);
+    // Cancel instead of save
+    await taskDialogPage.cancel();
 
-        // Change workspace to Work
-        await taskDialogPage.selectWorkspace('WORK');
+    // Verify original title still in UI
+    expect(await backlogPage.hasTask(originalTitle)).toBe(true);
+    expect(await backlogPage.hasTask(attemptedNewTitle)).toBe(false);
 
-        // Save
-        await taskDialogPage.submitForm();
+    // Verify backend unchanged
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.title).toBe(originalTitle);
+  });
 
-        // Verify backend
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.workspace).toBe('WORK');
+  test('should validate required fields when editing', async ({ page }) => {
+    const taskTitle = 'Task to Edit';
+
+    // Create task
+    await apiHelper.createTask({
+      title: taskTitle,
+      status: 'BACKLOG',
     });
 
-    test('should cancel edit without saving changes', async ({ page }) => {
-        const originalTitle = 'Original Title';
-        const attemptedNewTitle = 'This Should Not Save';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: originalTitle,
-            status: 'BACKLOG',
-        });
+    // Open task
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Clear required title field
+    await taskDialogPage.getTitleInput().clear();
 
-        // Open task
-        await backlogPage.openTaskDetails(originalTitle);
+    // Try to submit
+    await taskDialogPage.getSubmitButton().click();
 
-        // Make changes
-        await taskDialogPage.fillTitle(attemptedNewTitle);
+    // Dialog should still be visible (validation failed)
+    await expect(taskDialogPage).toBeVisible();
 
-        // Cancel instead of save
-        await taskDialogPage.cancel();
-
-        // Verify original title still in UI
-        expect(await backlogPage.hasTask(originalTitle)).toBe(true);
-        expect(await backlogPage.hasTask(attemptedNewTitle)).toBe(false);
-
-        // Verify backend unchanged
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.title).toBe(originalTitle);
+    // Title should be marked invalid
+    const titleInput = taskDialogPage.getTitleInput();
+    const isInvalid = await titleInput.evaluate((el: HTMLElement) => {
+      return (
+        el.classList.contains('ng-invalid') ||
+        el.getAttribute('aria-invalid') === 'true' ||
+        el.classList.contains('p-invalid')
+      );
     });
 
-    test('should validate required fields when editing', async ({ page }) => {
-        const taskTitle = 'Task to Edit';
+    expect(isInvalid).toBe(true);
+  });
 
-        // Create task
-        await apiHelper.createTask({
-            title: taskTitle,
-            status: 'BACKLOG',
-        });
+  test('should edit task from kanban column', async ({ page }) => {
+    const originalTitle = 'Task in Today';
+    const newTitle = 'Updated Task in Today';
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
-
-        // Open task
-        await backlogPage.openTaskDetails(taskTitle);
-
-        // Clear required title field
-        await taskDialogPage.getTitleInput().clear();
-
-        // Try to submit
-        await taskDialogPage.getSubmitButton().click();
-
-        // Dialog should still be visible (validation failed)
-        expect(await taskDialogPage.isVisible()).toBe(true);
-
-        // Title should be marked invalid
-        const titleInput = taskDialogPage.getTitleInput();
-        const isInvalid = await titleInput.evaluate((el: HTMLElement) => {
-            return el.classList.contains('ng-invalid') ||
-                   el.getAttribute('aria-invalid') === 'true' ||
-                   el.classList.contains('p-invalid');
-        });
-
-        expect(isInvalid).toBe(true);
+    // Create task in Today column
+    const createdTask = await apiHelper.createTask({
+      title: originalTitle,
+      status: 'TODAY',
     });
 
-    test('should edit task from kanban column', async ({ page }) => {
-        const originalTitle = 'Task in Today';
-        const newTitle = 'Updated Task in Today';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task in Today column
-        const createdTask = await apiHelper.createTask({
-            title: originalTitle,
-            status: 'TODAY',
-        });
+    // Open from kanban
+    await kanbanPage.openTaskDetails('Today', originalTitle);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Edit
+    await taskDialogPage.fillTitle(newTitle);
+    await taskDialogPage.submitForm();
 
-        // Open from kanban
-        await kanbanPage.openTaskDetails('Today', originalTitle);
+    // Verify in kanban column
+    expect(await kanbanPage.hasTaskInColumn('Today', newTitle)).toBe(true);
 
-        // Edit
-        await taskDialogPage.fillTitle(newTitle);
-        await taskDialogPage.submitForm();
+    // Verify backend
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.title).toBe(newTitle);
+    expect(task.status).toBe('TODAY'); // Status unchanged
+  });
 
-        // Verify in kanban column
-        expect(await kanbanPage.hasTaskInColumn('Today', newTitle)).toBe(true);
+  test('should preserve status when editing other fields', async ({ page }) => {
+    const taskTitle = 'Status Preservation Test';
 
-        // Verify backend
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.title).toBe(newTitle);
-        expect(task.status).toBe('TODAY'); // Status unchanged
+    // Create task in In Progress
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      status: 'IN_PROGRESS',
     });
 
-    test('should preserve status when editing other fields', async ({ page }) => {
-        const taskTitle = 'Status Preservation Test';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task in In Progress
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            status: 'IN_PROGRESS',
-        });
+    // Edit task
+    await kanbanPage.openTaskDetails('In Progress', taskTitle);
+    await taskDialogPage.fillDescription('New description');
+    await taskDialogPage.submitForm();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Verify still in In Progress
+    expect(await kanbanPage.hasTaskInColumn('In Progress', taskTitle)).toBe(
+      true,
+    );
 
-        // Edit task
-        await kanbanPage.openTaskDetails('In Progress', taskTitle);
-        await taskDialogPage.fillDescription('New description');
-        await taskDialogPage.submitForm();
+    // Verify backend
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.status).toBe('IN_PROGRESS');
+  });
 
-        // Verify still in In Progress
-        expect(await kanbanPage.hasTaskInColumn('In Progress', taskTitle)).toBe(true);
+  test('should handle editing with special characters', async ({ page }) => {
+    const originalTitle = 'Simple Title';
+    const newTitle = 'Title with "quotes" & <tags> and emojis 🚀';
+    const newDescription =
+      'Multi\nLine\nDescription\nWith special chars: @#$%^&*()';
 
-        // Verify backend
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.status).toBe('IN_PROGRESS');
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: originalTitle,
+      status: 'BACKLOG',
     });
 
-    test('should handle editing with special characters', async ({ page }) => {
-        const originalTitle = 'Simple Title';
-        const newTitle = 'Title with "quotes" & <tags> and emojis 🚀';
-        const newDescription = 'Multi\nLine\nDescription\nWith special chars: @#$%^&*()';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: originalTitle,
-            status: 'BACKLOG',
-        });
+    // Edit with special characters
+    await backlogPage.openTaskDetails(originalTitle);
+    await taskDialogPage.fillTitle(newTitle);
+    await taskDialogPage.fillDescription(newDescription);
+    await taskDialogPage.submitForm();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Verify backend
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.title).toBe(newTitle);
+    expect(task.description).toBe(newDescription);
+  });
 
-        // Edit with special characters
-        await backlogPage.openTaskDetails(originalTitle);
-        await taskDialogPage.fillTitle(newTitle);
-        await taskDialogPage.fillDescription(newDescription);
-        await taskDialogPage.submitForm();
+  test('should edit task multiple times', async ({ page }) => {
+    const taskTitle = 'Multiple Edits Task';
 
-        // Verify backend
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.title).toBe(newTitle);
-        expect(task.description).toBe(newDescription);
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      description: 'Version 1',
+      status: 'BACKLOG',
     });
 
-    test('should edit task multiple times', async ({ page }) => {
-        const taskTitle = 'Multiple Edits Task';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            description: 'Version 1',
-            status: 'BACKLOG',
-        });
+    // First edit
+    await backlogPage.openTaskDetails(taskTitle);
+    await taskDialogPage.fillDescription('Version 2');
+    await taskDialogPage.submitForm();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Second edit
+    await backlogPage.openTaskDetails(taskTitle);
+    await taskDialogPage.fillDescription('Version 3');
+    await taskDialogPage.submitForm();
 
-        // First edit
-        await backlogPage.openTaskDetails(taskTitle);
-        await taskDialogPage.fillDescription('Version 2');
-        await taskDialogPage.submitForm();
+    // Third edit
+    await backlogPage.openTaskDetails(taskTitle);
+    await taskDialogPage.fillDescription('Final Version');
+    await taskDialogPage.submitForm();
 
-        // Second edit
-        await backlogPage.openTaskDetails(taskTitle);
-        await taskDialogPage.fillDescription('Version 3');
-        await taskDialogPage.submitForm();
+    // Verify final state
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.description).toBe('Final Version');
+  });
 
-        // Third edit
-        await backlogPage.openTaskDetails(taskTitle);
-        await taskDialogPage.fillDescription('Final Version');
-        await taskDialogPage.submitForm();
+  test('should reflect edits immediately in UI', async ({ page }) => {
+    const taskTitle = 'Immediate Update Test';
+    const newTitle = 'Updated Immediately';
 
-        // Verify final state
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.description).toBe('Final Version');
+    // Create task
+    await apiHelper.createTask({
+      title: taskTitle,
+      status: 'BACKLOG',
     });
 
-    test('should reflect edits immediately in UI', async ({ page }) => {
-        const taskTitle = 'Immediate Update Test';
-        const newTitle = 'Updated Immediately';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        await apiHelper.createTask({
-            title: taskTitle,
-            status: 'BACKLOG',
-        });
+    // Edit
+    await backlogPage.openTaskDetails(taskTitle);
+    await taskDialogPage.fillTitle(newTitle);
+    await taskDialogPage.submitForm();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // New title should appear within 2 seconds
+    await expect(backlogPage.getTaskByTitle(newTitle)).toBeVisible({
+      timeout: 2000,
+    });
+  });
 
-        // Edit
-        await backlogPage.openTaskDetails(taskTitle);
-        await taskDialogPage.fillTitle(newTitle);
-        await taskDialogPage.submitForm();
+  test('should handle concurrent edits gracefully', async ({ page }) => {
+    // This test simulates editing the same task through UI
+    // while backend data might be changing
+    const taskTitle = 'Concurrent Edit Test';
 
-        // New title should appear within 2 seconds
-        await expect(backlogPage.getTaskByTitle(newTitle)).toBeVisible({ timeout: 2000 });
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      description: 'Original',
+      status: 'BACKLOG',
     });
 
-    test('should handle concurrent edits gracefully', async ({ page }) => {
-        // This test simulates editing the same task through UI
-        // while backend data might be changing
-        const taskTitle = 'Concurrent Edit Test';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            description: 'Original',
-            status: 'BACKLOG',
-        });
+    // Open task in UI
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
-
-        // Open task in UI
-        await backlogPage.openTaskDetails(taskTitle);
-
-        // Update via API while dialog is open
-        await apiHelper.updateTask(createdTask.id, {
-            description: 'Changed via API',
-        });
-
-        // Make edit in UI
-        await taskDialogPage.fillDescription('Changed via UI');
-        await taskDialogPage.submitForm();
-
-        // UI edit should win (last write wins)
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.description).toBe('Changed via UI');
+    // Update via API while dialog is open
+    await apiHelper.updateTask(createdTask.id, {
+      description: 'Changed via API',
     });
 
-    test('should clear description when editing to empty', async ({ page }) => {
-        const taskTitle = 'Task with Description to Clear';
+    // Make edit in UI
+    await taskDialogPage.fillDescription('Changed via UI');
+    await taskDialogPage.submitForm();
 
-        // Create task with description
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            description: 'This will be cleared',
-            status: 'BACKLOG',
-        });
+    // UI edit should win (last write wins)
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.description).toBe('Changed via UI');
+  });
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+  test('should clear description when editing to empty', async ({ page }) => {
+    const taskTitle = 'Task with Description to Clear';
 
-        // Edit and clear description
-        await backlogPage.openTaskDetails(taskTitle);
-        await taskDialogPage.getDescriptionInput().clear();
-        await taskDialogPage.submitForm();
-
-        // Verify description cleared
-        const task = await apiHelper.getTask(createdTask.id);
-        expect(task.description).toBe('');
+    // Create task with description
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      description: 'This will be cleared',
+      status: 'BACKLOG',
     });
+
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
+
+    // Edit and clear description
+    await backlogPage.openTaskDetails(taskTitle);
+    await taskDialogPage.getDescriptionInput().clear();
+    await taskDialogPage.submitForm();
+
+    // Verify description cleared
+    const task = await apiHelper.getTask(createdTask.id);
+    expect(task.description).toBe('');
+  });
 });
