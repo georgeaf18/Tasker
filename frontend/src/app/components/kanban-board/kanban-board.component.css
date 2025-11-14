@@ -77,7 +77,6 @@
 ::ng-deep .done-column .kanban-panel {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-}
   overflow: hidden;
   box-shadow: none;
   background: var(--color-bg-primary);

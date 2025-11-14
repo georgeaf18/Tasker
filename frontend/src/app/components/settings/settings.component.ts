@@ -5,7 +5,7 @@ import { ChannelApiService } from '../../services/channel-api.service';
 import { Channel } from '../../models/channel.model';
 import { Workspace } from '../../models/workspace.enum';
 import { ButtonModule } from 'primeng/button';
-import { TabViewModule } from 'primeng/tabview';
+import { TabsModule } from 'primeng/tabs';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ColorPickerModule } from 'primeng/colorpicker';
@@ -37,7 +37,7 @@ import { ToastModule } from 'primeng/toast';
         CommonModule,
         ReactiveFormsModule,
         ButtonModule,
-        TabViewModule,
+        TabsModule,
         DialogModule,
         InputTextModule,
         ColorPickerModule,
