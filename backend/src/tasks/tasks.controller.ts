@@ -39,7 +39,9 @@ export class TasksController {
    * Returns: Array of tasks with channel relation, sorted by createdAt DESC
    */
   @Get()
-  findAll(@Query(new ValidationPipe({ transform: true })) filters: TaskFilterDto) {
+  findAll(
+    @Query(new ValidationPipe({ transform: true })) filters: TaskFilterDto,
+  ) {
     return this.tasksService.findAll(filters);
   }
 
@@ -76,7 +78,7 @@ export class TasksController {
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateTaskDto: UpdateTaskDto
+    @Body() updateTaskDto: UpdateTaskDto,
   ) {
     return this.tasksService.update(id, updateTaskDto);
   }

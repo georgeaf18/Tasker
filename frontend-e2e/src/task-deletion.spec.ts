@@ -17,370 +17,378 @@ import { ApiHelper } from './support/api-helper';
  * 6. Verify task deleted from backend
  */
 test.describe('Task Deletion', () => {
-    let appPage: AppPage;
-    let backlogPage: BacklogPage;
-    let kanbanPage: KanbanPage;
-    let taskDialogPage: TaskDialogPage;
-    let apiHelper: ApiHelper;
+  let appPage: AppPage;
+  let backlogPage: BacklogPage;
+  let kanbanPage: KanbanPage;
+  let taskDialogPage: TaskDialogPage;
+  let apiHelper: ApiHelper;
 
-    test.beforeEach(async ({ page }) => {
-        // Initialize page objects
-        appPage = new AppPage(page);
-        backlogPage = new BacklogPage(page);
-        kanbanPage = new KanbanPage(page);
-        taskDialogPage = new TaskDialogPage(page);
-        apiHelper = new ApiHelper();
+  test.beforeEach(async ({ page }) => {
+    // Initialize page objects
+    appPage = new AppPage(page);
+    backlogPage = new BacklogPage(page);
+    kanbanPage = new KanbanPage(page);
+    taskDialogPage = new TaskDialogPage(page);
+    apiHelper = new ApiHelper();
 
-        // Initialize API helper and clear test data
-        await apiHelper.init();
-        await apiHelper.clearAllTasks();
+    // Initialize API helper and clear test data
+    await apiHelper.init();
+    await apiHelper.clearAllTasks();
 
-        // Navigate to app
-        await appPage.goto();
-        await appPage.waitForAppReady();
+    // Navigate to app
+    await appPage.goto();
+    await appPage.waitForAppReady();
+  });
+
+  test.afterEach(async () => {
+    // Clean up test data
+    await apiHelper.clearAllTasks();
+    await apiHelper.dispose();
+  });
+
+  test('should delete task from backlog', async ({ page }) => {
+    const taskTitle = 'Task to Delete from Backlog';
+
+    // Create task in backlog
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      status: 'BACKLOG',
     });
 
-    test.afterEach(async () => {
-        // Clean up test data
-        await apiHelper.clearAllTasks();
-        await apiHelper.dispose();
+    // Refresh to load task
+    await page.reload();
+    await appPage.waitForAppReady();
+
+    // Verify task exists
+    expect(await backlogPage.hasTask(taskTitle)).toBe(true);
+
+    // Open task details
+    await backlogPage.openTaskDetails(taskTitle);
+
+    // Delete task
+    await taskDialogPage.deleteTask();
+
+    // Verify task removed from UI
+    expect(await backlogPage.hasTask(taskTitle)).toBe(false);
+
+    // Verify task deleted from backend
+    const tasks = await apiHelper.getTasks();
+    const deletedTask = tasks.find((t) => t.id === createdTask.id);
+    expect(deletedTask).toBeUndefined();
+  });
+
+  test('should delete task from Today column', async ({ page }) => {
+    const taskTitle = 'Delete from Today';
+
+    // Create task in Today
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      status: 'TODAY',
     });
 
-    test('should delete task from backlog', async ({ page }) => {
-        const taskTitle = 'Task to Delete from Backlog';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task in backlog
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            status: 'BACKLOG',
-        });
+    // Verify task exists in Today column
+    expect(await kanbanPage.hasTaskInColumn('Today', taskTitle)).toBe(true);
 
-        // Refresh to load task
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Open and delete
+    await kanbanPage.openTaskDetails('Today', taskTitle);
+    await taskDialogPage.deleteTask();
 
-        // Verify task exists
-        expect(await backlogPage.hasTask(taskTitle)).toBe(true);
+    // Verify removed from UI
+    expect(await kanbanPage.hasTaskInColumn('Today', taskTitle)).toBe(false);
 
-        // Open task details
-        await backlogPage.openTaskDetails(taskTitle);
+    // Verify deleted from backend
+    const tasks = await apiHelper.getTasks();
+    expect(tasks.find((t) => t.id === createdTask.id)).toBeUndefined();
+  });
 
-        // Delete task
-        await taskDialogPage.deleteTask();
+  test('should delete task from In Progress column', async ({ page }) => {
+    const taskTitle = 'Delete from In Progress';
 
-        // Verify task removed from UI
-        expect(await backlogPage.hasTask(taskTitle)).toBe(false);
-
-        // Verify task deleted from backend
-        const tasks = await apiHelper.getTasks();
-        const deletedTask = tasks.find((t) => t.id === createdTask.id);
-        expect(deletedTask).toBeUndefined();
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      status: 'IN_PROGRESS',
     });
 
-    test('should delete task from Today column', async ({ page }) => {
-        const taskTitle = 'Delete from Today';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task in Today
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            status: 'TODAY',
-        });
+    // Delete task
+    await kanbanPage.openTaskDetails('In Progress', taskTitle);
+    await taskDialogPage.deleteTask();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Verify removed
+    expect(await kanbanPage.hasTaskInColumn('In Progress', taskTitle)).toBe(
+      false,
+    );
 
-        // Verify task exists in Today column
-        expect(await kanbanPage.hasTaskInColumn('Today', taskTitle)).toBe(true);
+    // Verify backend
+    const tasks = await apiHelper.getTasks();
+    expect(tasks.find((t) => t.id === createdTask.id)).toBeUndefined();
+  });
 
-        // Open and delete
-        await kanbanPage.openTaskDetails('Today', taskTitle);
-        await taskDialogPage.deleteTask();
+  test('should delete task from Done column', async ({ page }) => {
+    const taskTitle = 'Delete from Done';
 
-        // Verify removed from UI
-        expect(await kanbanPage.hasTaskInColumn('Today', taskTitle)).toBe(false);
-
-        // Verify deleted from backend
-        const tasks = await apiHelper.getTasks();
-        expect(tasks.find((t) => t.id === createdTask.id)).toBeUndefined();
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      status: 'DONE',
     });
 
-    test('should delete task from In Progress column', async ({ page }) => {
-        const taskTitle = 'Delete from In Progress';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            status: 'IN_PROGRESS',
-        });
+    // Delete task
+    await kanbanPage.openTaskDetails('Done', taskTitle);
+    await taskDialogPage.deleteTask();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Verify removed
+    expect(await kanbanPage.hasTaskInColumn('Done', taskTitle)).toBe(false);
 
-        // Delete task
-        await kanbanPage.openTaskDetails('In Progress', taskTitle);
-        await taskDialogPage.deleteTask();
+    // Verify backend
+    const tasks = await apiHelper.getTasks();
+    expect(tasks.find((t) => t.id === createdTask.id)).toBeUndefined();
+  });
 
-        // Verify removed
-        expect(await kanbanPage.hasTaskInColumn('In Progress', taskTitle)).toBe(false);
+  test('should cancel deletion when clicking cancel', async ({ page }) => {
+    const taskTitle = 'Task Not to Delete';
 
-        // Verify backend
-        const tasks = await apiHelper.getTasks();
-        expect(tasks.find((t) => t.id === createdTask.id)).toBeUndefined();
+    // Create task
+    await apiHelper.createTask({
+      title: taskTitle,
+      status: 'BACKLOG',
     });
 
-    test('should delete task from Done column', async ({ page }) => {
-        const taskTitle = 'Delete from Done';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            status: 'DONE',
-        });
+    // Open task
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Click delete but then cancel
+    await taskDialogPage.clickDelete();
+    await taskDialogPage.cancelDelete();
 
-        // Delete task
-        await kanbanPage.openTaskDetails('Done', taskTitle);
-        await taskDialogPage.deleteTask();
+    // Verify task still exists in UI
+    // Dialog might still be open after canceling confirmation
+    await taskDialogPage.cancel();
 
-        // Verify removed
-        expect(await kanbanPage.hasTaskInColumn('Done', taskTitle)).toBe(false);
+    expect(await backlogPage.hasTask(taskTitle)).toBe(true);
 
-        // Verify backend
-        const tasks = await apiHelper.getTasks();
-        expect(tasks.find((t) => t.id === createdTask.id)).toBeUndefined();
+    // Verify task still exists in backend
+    const tasks = await apiHelper.getTasks();
+    expect(tasks.find((t) => t.title === taskTitle)).toBeDefined();
+  });
+
+  test('should show confirmation dialog before deleting', async ({ page }) => {
+    const taskTitle = 'Confirm Before Delete';
+
+    // Create task
+    await apiHelper.createTask({
+      title: taskTitle,
+      status: 'BACKLOG',
     });
 
-    test('should cancel deletion when clicking cancel', async ({ page }) => {
-        const taskTitle = 'Task Not to Delete';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        await apiHelper.createTask({
-            title: taskTitle,
-            status: 'BACKLOG',
-        });
+    // Open task
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Click delete
+    await taskDialogPage.clickDelete();
 
-        // Open task
-        await backlogPage.openTaskDetails(taskTitle);
+    // Verify confirmation dialog appears
+    // PrimeNG confirmation dialog should be visible
+    const confirmDialog = page.locator(
+      '.p-confirm-dialog, [role="alertdialog"]',
+    );
+    await expect(confirmDialog).toBeVisible();
 
-        // Click delete but then cancel
-        await taskDialogPage.clickDelete();
-        await taskDialogPage.cancelDelete();
+    // Verify confirmation message mentions the task
+    const dialogText = await confirmDialog.textContent();
+    expect(dialogText).toContain(taskTitle);
 
-        // Verify task still exists in UI
-        // Dialog might still be open after canceling confirmation
-        await taskDialogPage.cancel();
+    // Cancel for cleanup
+    await taskDialogPage.cancelDelete();
+  });
 
-        expect(await backlogPage.hasTask(taskTitle)).toBe(true);
+  test('should update task count after deletion', async ({ page }) => {
+    // Create 3 tasks in backlog
+    await apiHelper.createTasks([
+      { title: 'Task 1', status: 'BACKLOG' },
+      { title: 'Task 2', status: 'BACKLOG' },
+      { title: 'Task 3', status: 'BACKLOG' },
+    ]);
 
-        // Verify task still exists in backend
-        const tasks = await apiHelper.getTasks();
-        expect(tasks.find((t) => t.title === taskTitle)).toBeDefined();
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
+
+    // Verify initial count
+    expect(await backlogPage.getTaskCount()).toBe(3);
+
+    // Delete one task
+    await backlogPage.openTaskDetails('Task 2');
+    await taskDialogPage.deleteTask();
+
+    // Verify count updated
+    expect(await backlogPage.getTaskCount()).toBe(2);
+
+    // Delete another
+    await backlogPage.openTaskDetails('Task 1');
+    await taskDialogPage.deleteTask();
+
+    // Verify count
+    expect(await backlogPage.getTaskCount()).toBe(1);
+  });
+
+  test('should update daily progress after deleting done task', async ({
+    page,
+  }) => {
+    // Create tasks: 1 done, 2 not done
+    await apiHelper.createTasks([
+      { title: 'Today Task', status: 'TODAY' },
+      { title: 'In Progress Task', status: 'IN_PROGRESS' },
+      { title: 'Done Task', status: 'DONE' },
+    ]);
+
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
+
+    // Initial progress: 1/3 = 33%
+    let progress = await kanbanPage.getDailyProgressPercentage();
+    expect(progress).toBe(33);
+
+    // Delete the done task
+    await kanbanPage.openTaskDetails('Done', 'Done Task');
+    await taskDialogPage.deleteTask();
+
+    // Progress should now be 0/2 = 0%
+    progress = await kanbanPage.getDailyProgressPercentage();
+    expect(progress).toBe(0);
+  });
+
+  test('should handle deleting last task in a column', async ({ page }) => {
+    // Create only one task in Today
+    await apiHelper.createTask({
+      title: 'Only Today Task',
+      status: 'TODAY',
     });
 
-    test('should show confirmation dialog before deleting', async ({ page }) => {
-        const taskTitle = 'Confirm Before Delete';
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Create task
-        await apiHelper.createTask({
-            title: taskTitle,
-            status: 'BACKLOG',
-        });
+    // Verify task exists
+    expect(await kanbanPage.getTaskCountInColumn('Today')).toBe(1);
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Delete the task
+    await kanbanPage.openTaskDetails('Today', 'Only Today Task');
+    await taskDialogPage.deleteTask();
 
-        // Open task
-        await backlogPage.openTaskDetails(taskTitle);
+    // Column should be empty
+    expect(await kanbanPage.getTaskCountInColumn('Today')).toBe(0);
 
-        // Click delete
-        await taskDialogPage.clickDelete();
+    // Verify backend
+    const tasks = await apiHelper.getTasks();
+    expect(tasks.filter((t) => t.status === 'TODAY')).toHaveLength(0);
+  });
 
-        // Verify confirmation dialog appears
-        // PrimeNG confirmation dialog should be visible
-        const confirmDialog = page.locator('.p-confirm-dialog, [role="alertdialog"]');
-        await expect(confirmDialog).toBeVisible();
+  test('should delete multiple tasks in sequence', async ({ page }) => {
+    const taskTitles = ['Task A', 'Task B', 'Task C'];
 
-        // Verify confirmation message mentions the task
-        const dialogText = await confirmDialog.textContent();
-        expect(dialogText).toContain(taskTitle);
+    // Create tasks
+    await apiHelper.createTasks(
+      taskTitles.map((title) => ({ title, status: 'BACKLOG' })),
+    );
 
-        // Cancel for cleanup
-        await taskDialogPage.cancelDelete();
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
+
+    // Delete all tasks one by one
+    for (const title of taskTitles) {
+      await backlogPage.openTaskDetails(title);
+      await taskDialogPage.deleteTask();
+
+      // Verify each task is deleted
+      expect(await backlogPage.hasTask(title)).toBe(false);
+    }
+
+    // Verify all tasks deleted from backend
+    const tasks = await apiHelper.getTasks();
+    expect(tasks).toHaveLength(0);
+  });
+
+  test('should handle API errors gracefully during deletion', async ({
+    page,
+  }) => {
+    const taskTitle = 'Task to Delete with Error';
+
+    // Create task
+    const createdTask = await apiHelper.createTask({
+      title: taskTitle,
+      status: 'BACKLOG',
     });
 
-    test('should update task count after deletion', async ({ page }) => {
-        // Create 3 tasks in backlog
-        await apiHelper.createTasks([
-            { title: 'Task 1', status: 'BACKLOG' },
-            { title: 'Task 2', status: 'BACKLOG' },
-            { title: 'Task 3', status: 'BACKLOG' },
-        ]);
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Delete the task via API first to simulate 404
+    await apiHelper.deleteTask(createdTask.id);
 
-        // Verify initial count
-        expect(await backlogPage.getTaskCount()).toBe(3);
+    // Try to delete from UI (should handle 404)
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Delete one task
-        await backlogPage.openTaskDetails('Task 2');
-        await taskDialogPage.deleteTask();
+    // This might show an error message or handle gracefully
+    // The exact behavior depends on implementation
+    await taskDialogPage.clickDelete();
+    await taskDialogPage.confirmDelete();
 
-        // Verify count updated
-        expect(await backlogPage.getTaskCount()).toBe(2);
+    // Task should be removed from UI even if backend returns error
+    // (optimistic update) or error message should be shown
+    // This test documents the expected behavior
+  });
 
-        // Delete another
-        await backlogPage.openTaskDetails('Task 1');
-        await taskDialogPage.deleteTask();
+  test('should not allow deletion without confirmation', async ({ page }) => {
+    const taskTitle = 'Protected Task';
 
-        // Verify count
-        expect(await backlogPage.getTaskCount()).toBe(1);
+    // Create task
+    await apiHelper.createTask({
+      title: taskTitle,
+      status: 'BACKLOG',
     });
 
-    test('should update daily progress after deleting done task', async ({ page }) => {
-        // Create tasks: 1 done, 2 not done
-        await apiHelper.createTasks([
-            { title: 'Today Task', status: 'TODAY' },
-            { title: 'In Progress Task', status: 'IN_PROGRESS' },
-            { title: 'Done Task', status: 'DONE' },
-        ]);
+    // Refresh
+    await page.reload();
+    await appPage.waitForAppReady();
 
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
+    // Open task
+    await backlogPage.openTaskDetails(taskTitle);
 
-        // Initial progress: 1/3 = 33%
-        let progress = await kanbanPage.getDailyProgressPercentage();
-        expect(progress).toBe(33);
+    // Click delete button
+    await taskDialogPage.clickDelete();
 
-        // Delete the done task
-        await kanbanPage.openTaskDetails('Done', 'Done Task');
-        await taskDialogPage.deleteTask();
+    // Close confirmation dialog without confirming (e.g., click outside or ESC)
+    await page.keyboard.press('Escape');
 
-        // Progress should now be 0/2 = 0%
-        progress = await kanbanPage.getDailyProgressPercentage();
-        expect(progress).toBe(0);
-    });
+    // Wait a bit for any actions to complete
+    await page.waitForTimeout(500);
 
-    test('should handle deleting last task in a column', async ({ page }) => {
-        // Create only one task in Today
-        await apiHelper.createTask({
-            title: 'Only Today Task',
-            status: 'TODAY',
-        });
-
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
-
-        // Verify task exists
-        expect(await kanbanPage.getTaskCountInColumn('Today')).toBe(1);
-
-        // Delete the task
-        await kanbanPage.openTaskDetails('Today', 'Only Today Task');
-        await taskDialogPage.deleteTask();
-
-        // Column should be empty
-        expect(await kanbanPage.getTaskCountInColumn('Today')).toBe(0);
-
-        // Verify backend
-        const tasks = await apiHelper.getTasks();
-        expect(tasks.filter((t) => t.status === 'TODAY')).toHaveLength(0);
-    });
-
-    test('should delete multiple tasks in sequence', async ({ page }) => {
-        const taskTitles = ['Task A', 'Task B', 'Task C'];
-
-        // Create tasks
-        await apiHelper.createTasks(
-            taskTitles.map((title) => ({ title, status: 'BACKLOG' }))
-        );
-
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
-
-        // Delete all tasks one by one
-        for (const title of taskTitles) {
-            await backlogPage.openTaskDetails(title);
-            await taskDialogPage.deleteTask();
-
-            // Verify each task is deleted
-            expect(await backlogPage.hasTask(title)).toBe(false);
-        }
-
-        // Verify all tasks deleted from backend
-        const tasks = await apiHelper.getTasks();
-        expect(tasks).toHaveLength(0);
-    });
-
-    test('should handle API errors gracefully during deletion', async ({ page }) => {
-        const taskTitle = 'Task to Delete with Error';
-
-        // Create task
-        const createdTask = await apiHelper.createTask({
-            title: taskTitle,
-            status: 'BACKLOG',
-        });
-
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
-
-        // Delete the task via API first to simulate 404
-        await apiHelper.deleteTask(createdTask.id);
-
-        // Try to delete from UI (should handle 404)
-        await backlogPage.openTaskDetails(taskTitle);
-
-        // This might show an error message or handle gracefully
-        // The exact behavior depends on implementation
-        await taskDialogPage.clickDelete();
-        await taskDialogPage.confirmDelete();
-
-        // Task should be removed from UI even if backend returns error
-        // (optimistic update) or error message should be shown
-        // This test documents the expected behavior
-    });
-
-    test('should not allow deletion without confirmation', async ({ page }) => {
-        const taskTitle = 'Protected Task';
-
-        // Create task
-        await apiHelper.createTask({
-            title: taskTitle,
-            status: 'BACKLOG',
-        });
-
-        // Refresh
-        await page.reload();
-        await appPage.waitForAppReady();
-
-        // Open task
-        await backlogPage.openTaskDetails(taskTitle);
-
-        // Click delete button
-        await taskDialogPage.clickDelete();
-
-        // Close confirmation dialog without confirming (e.g., click outside or ESC)
-        await page.keyboard.press('Escape');
-
-        // Wait a bit for any actions to complete
-        await page.waitForTimeout(500);
-
-        // Task should still exist
-        const tasks = await apiHelper.getTasks();
-        expect(tasks.find((t) => t.title === taskTitle)).toBeDefined();
-    });
+    // Task should still exist
+    const tasks = await apiHelper.getTasks();
+    expect(tasks.find((t) => t.title === taskTitle)).toBeDefined();
+  });
 });

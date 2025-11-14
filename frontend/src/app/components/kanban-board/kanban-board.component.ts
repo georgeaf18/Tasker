@@ -1,5 +1,11 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
 import { BadgeModule } from 'primeng/badge';
@@ -25,6 +31,7 @@ import { Task, TaskStatus, Workspace } from '../../models/task.model';
   selector: 'app-kanban-board',
   imports: [
     CommonModule,
+    DragDropModule,
     PanelModule,
     CardModule,
     BadgeModule,
@@ -47,9 +54,12 @@ export class KanbanBoardComponent implements OnInit {
   selectedTask = signal<Task | null>(null);
   showTaskDialog = signal<boolean>(false);
 
-  todayTasks = computed(() => this.taskState.todayTasks());
-  inProgressTasks = computed(() => this.taskState.inProgressTasks());
-  doneTasks = computed(() => this.taskState.doneTasks());
+  // Use workspace-filtered computed signals from TaskStateService
+  todayTasks = computed(() => this.taskState.currentWorkspaceTodayTasks());
+  inProgressTasks = computed(() =>
+    this.taskState.currentWorkspaceInProgressTasks(),
+  );
+  doneTasks = computed(() => this.taskState.currentWorkspaceDoneTasks());
 
   dailyProgress = computed(() => {
     const today = this.todayTasks().length;
@@ -107,7 +117,31 @@ export class KanbanBoardComponent implements OnInit {
     } else if (date.toDateString() === tomorrow.toDateString()) {
       return 'Tomorrow';
     } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      });
+    }
+  }
+
+  /**
+   * Handles drag and drop events between kanban columns.
+   * Updates task status based on which column the task was dropped into.
+   */
+  onDrop(event: CdkDragDrop<Task[]>, newStatus: TaskStatus): void {
+    const task = event.item.data as Task;
+
+    console.log('Drop event:', {
+      task: task.title,
+      fromStatus: task.status,
+      toStatus: newStatus,
+      containerId: event.container.id,
+      previousContainerId: event.previousContainer.id,
+    });
+
+    // Only update if actually moving to a different container
+    if (event.previousContainer !== event.container) {
+      this.taskState.updateTask(task.id, { status: newStatus });
     }
   }
 }

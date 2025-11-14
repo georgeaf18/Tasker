@@ -10,9 +10,11 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS for frontend (localhost:4200)
+  // Enable CORS for frontend with dynamic origins from environment
   app.enableCors({
-    origin: ['http://localhost:4200'],
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || [
+      'http://localhost:4200',
+    ],
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
@@ -23,7 +25,7 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-    })
+    }),
   );
 
   const globalPrefix = 'api';
@@ -31,7 +33,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
   );
 }
 

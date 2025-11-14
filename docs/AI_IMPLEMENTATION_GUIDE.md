@@ -46,6 +46,7 @@ git status
 ### TASK-30: Setup PostgreSQL with Docker Compose (15 min)
 
 **Acceptance Criteria:**
+
 - [ ] docker-compose.yml created with postgres:16-alpine
 - [ ] Environment variables configured
 - [ ] Volume mapping for data persistence
@@ -125,6 +126,7 @@ Linear: TASK-30"
 ### TASK-31: Initialize Prisma and Create Database Schema (20 min)
 
 **Acceptance Criteria:**
+
 - [ ] Prisma installed and initialized
 - [ ] Schema defines Task, Channel, TaskStatus, Workspace enums
 - [ ] Proper indexes on frequently queried fields
@@ -236,6 +238,7 @@ Linear: TASK-31"
 ### TASK-32: Create Prisma Service and Module in NestJS (10 min)
 
 **Acceptance Criteria:**
+
 - [ ] PrismaService extends PrismaClient
 - [ ] Implements OnModuleInit for connection
 - [ ] Implements enableShutdownHooks for cleanup
@@ -324,6 +327,7 @@ Linear: TASK-32"
 ### TASK-33: Implement Tasks REST API Endpoints (25 min)
 
 **Acceptance Criteria:**
+
 - [ ] CRUD endpoints: GET /api/tasks, POST, PUT, DELETE
 - [ ] Filter by status, workspace, channelId
 - [ ] DTOs with class-validator decorators
@@ -335,7 +339,14 @@ Linear: TASK-32"
 
 ```typescript
 // apps/tasker-backend/src/tasks/dto/create-task.dto.ts
-import { IsString, IsOptional, IsEnum, IsBoolean, IsDateString, IsInt } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsBoolean,
+  IsDateString,
+  IsInt,
+} from 'class-validator';
 import { TaskStatus, Workspace } from '@prisma/client';
 
 export class CreateTaskDto {
@@ -388,7 +399,11 @@ import { TaskStatus, Workspace } from '@prisma/client';
 export class TasksService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(filters?: { status?: TaskStatus; workspace?: Workspace; channelId?: number }) {
+  async findAll(filters?: {
+    status?: TaskStatus;
+    workspace?: Workspace;
+    channelId?: number;
+  }) {
     return this.prisma.task.findMany({
       where: {
         status: filters?.status,
@@ -436,7 +451,9 @@ export class TasksService {
       where: { id },
       data: {
         ...updateTaskDto,
-        dueDate: updateTaskDto.dueDate ? new Date(updateTaskDto.dueDate) : undefined,
+        dueDate: updateTaskDto.dueDate
+          ? new Date(updateTaskDto.dueDate)
+          : undefined,
       },
       include: {
         channel: true,
@@ -492,7 +509,8 @@ export class TasksController {
   findAll(
     @Query('status') status?: TaskStatus,
     @Query('workspace') workspace?: Workspace,
-    @Query('channelId', new ParseIntPipe({ optional: true })) channelId?: number,
+    @Query('channelId', new ParseIntPipe({ optional: true }))
+    channelId?: number,
   ) {
     return this.tasksService.findAll({ status, workspace, channelId });
   }
@@ -613,6 +631,7 @@ Linear: TASK-33"
 ### TASK-34: Implement Channels REST API Endpoints (15 min)
 
 **Acceptance Criteria:**
+
 - [ ] CRUD endpoints: GET /api/channels, POST, PUT, DELETE
 - [ ] Include task count in response
 - [ ] Unique constraint on channel name
@@ -651,7 +670,11 @@ export class UpdateChannelDto extends PartialType(CreateChannelDto) {}
 
 ```typescript
 // apps/tasker-backend/src/channels/channels.service.ts
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
@@ -704,7 +727,9 @@ export class ChannelsService {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ConflictException(`Channel with name "${createChannelDto.name}" already exists`);
+          throw new ConflictException(
+            `Channel with name "${createChannelDto.name}" already exists`,
+          );
         }
       }
       throw error;
@@ -727,7 +752,9 @@ export class ChannelsService {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ConflictException(`Channel with name "${updateChannelDto.name}" already exists`);
+          throw new ConflictException(
+            `Channel with name "${updateChannelDto.name}" already exists`,
+          );
         }
       }
       throw error;
@@ -870,6 +897,7 @@ Linear: TASK-34"
 ### TASK-35: Create Database Seed Script with Test Data (15 min)
 
 **Acceptance Criteria:**
+
 - [ ] Seed script creates 3-5 channels
 - [ ] Creates 20+ tasks across different statuses
 - [ ] Tasks distributed across channels
@@ -1184,6 +1212,7 @@ Linear: TASK-35"
 ### TASK-36: Configure Angular 20 with Zoneless and Tailwind CSS (30 min)
 
 **Acceptance Criteria:**
+
 - [ ] Angular 20 configured with zoneless change detection
 - [ ] Tailwind CSS integrated and working
 - [ ] PrimeNG installed and theme configured
@@ -1206,9 +1235,7 @@ npm install primeng primeicons
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './apps/tasker-frontend/src/**/*.{html,ts}',
-  ],
+  content: ['./apps/tasker-frontend/src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
@@ -1269,9 +1296,15 @@ module.exports = {
 
 ```typescript
 // apps/tasker-frontend/src/app/app.config.ts
-import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { appRoutes } from './app.routes';
@@ -1325,9 +1358,7 @@ import { ButtonModule } from 'primeng/button';
   template: `
     <div class="min-h-screen bg-gray-50 flex items-center justify-center">
       <div class="bg-white p-8 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold text-primary-600 mb-4">
-          Tasker v0.1
-        </h1>
+        <h1 class="text-3xl font-bold text-primary-600 mb-4">Tasker v0.1</h1>
         <p class="text-gray-600 mb-6">
           Angular 20 + Zoneless + Tailwind CSS + PrimeNG
         </p>
@@ -1377,6 +1408,7 @@ Linear: TASK-36"
 ### TASK-37: Create Task API Service with HttpClient (20 min)
 
 **Acceptance Criteria:**
+
 - [ ] TaskApiService with full CRUD methods
 - [ ] Type-safe interfaces matching backend DTOs
 - [ ] Observable-based API
@@ -1457,7 +1489,13 @@ export interface TaskFilters {
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Task, CreateTaskDto, UpdateTaskDto, TaskFilters, TaskStatus } from '../models/task.model';
+import {
+  Task,
+  CreateTaskDto,
+  UpdateTaskDto,
+  TaskFilters,
+  TaskStatus,
+} from '../models/task.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskApiService {
@@ -1619,6 +1657,7 @@ Linear: TASK-37"
 ### TASK-38: Create Signal-Based Task State Service (25 min)
 
 **Acceptance Criteria:**
+
 - [ ] TaskStateService uses signals for state management
 - [ ] Computed signals for filtered views (by status, workspace)
 - [ ] CRUD operations update signals reactively
@@ -1633,7 +1672,14 @@ import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TaskApiService } from './task-api.service';
 import { ChannelApiService } from './channel-api.service';
-import { Task, TaskStatus, Workspace, CreateTaskDto, UpdateTaskDto, Channel } from '../models/task.model';
+import {
+  Task,
+  TaskStatus,
+  Workspace,
+  CreateTaskDto,
+  UpdateTaskDto,
+  Channel,
+} from '../models/task.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskStateService {
@@ -1689,7 +1735,8 @@ export class TaskStateService {
       total: tasks.length,
       backlog: tasks.filter((t) => t.status === TaskStatus.BACKLOG).length,
       today: tasks.filter((t) => t.status === TaskStatus.TODAY).length,
-      inProgress: tasks.filter((t) => t.status === TaskStatus.IN_PROGRESS).length,
+      inProgress: tasks.filter((t) => t.status === TaskStatus.IN_PROGRESS)
+        .length,
       done: tasks.filter((t) => t.status === TaskStatus.DONE).length,
     };
   });
@@ -1740,7 +1787,7 @@ export class TaskStateService {
     this.taskApi.updateTask(id, taskDto).subscribe({
       next: (updatedTask) => {
         this.tasksSignal.update((tasks) =>
-          tasks.map((task) => (task.id === id ? updatedTask : task))
+          tasks.map((task) => (task.id === id ? updatedTask : task)),
         );
       },
       error: (error) => {
@@ -1754,7 +1801,7 @@ export class TaskStateService {
     this.taskApi.updateTaskStatus(id, status).subscribe({
       next: (updatedTask) => {
         this.tasksSignal.update((tasks) =>
-          tasks.map((task) => (task.id === id ? updatedTask : task))
+          tasks.map((task) => (task.id === id ? updatedTask : task)),
         );
       },
       error: (error) => {
@@ -1767,7 +1814,9 @@ export class TaskStateService {
   deleteTask(id: number) {
     this.taskApi.deleteTask(id).subscribe({
       next: () => {
-        this.tasksSignal.update((tasks) => tasks.filter((task) => task.id !== id));
+        this.tasksSignal.update((tasks) =>
+          tasks.filter((task) => task.id !== id),
+        );
       },
       error: (error) => {
         this.errorSignal.set('Failed to delete task');
@@ -1835,13 +1884,17 @@ import { TaskStatus } from './core/models/task.model';
         </div>
       </div>
 
-      <h2 class="text-xl font-bold mb-2">Channels ({{ taskState.channels().length }})</h2>
+      <h2 class="text-xl font-bold mb-2">
+        Channels ({{ taskState.channels().length }})
+      </h2>
       <div class="space-y-2">
         @for (channel of taskState.channels(); track channel.id) {
           <div class="flex items-center gap-2">
             <span>{{ channel.icon }}</span>
             <span>{{ channel.name }}</span>
-            <span class="text-sm text-gray-500">({{ channel._count?.tasks }} tasks)</span>
+            <span class="text-sm text-gray-500"
+              >({{ channel._count?.tasks }} tasks)</span
+            >
           </div>
         }
       </div>
@@ -1911,6 +1964,7 @@ This guide continues with detailed implementation for each remaining task follow
 ## Quality Standards (Apply to ALL Tasks)
 
 ### TypeScript
+
 ```typescript
 // ✅ Always fully typed, never 'any'
 getTasks(filters?: TaskFilters): Observable<Task[]>
@@ -1920,6 +1974,7 @@ getTasks(filters: any): Observable<any>
 ```
 
 ### Signals
+
 ```typescript
 // ✅ Use signals for component state
 private tasksSignal = signal<Task[]>([]);
@@ -1930,10 +1985,11 @@ readonly taskCount = computed(() => this.tasks().length);
 ```
 
 ### Prisma
+
 ```typescript
 // ✅ Include relations to prevent N+1
 await prisma.task.findMany({
-  include: { channel: true }
+  include: { channel: true },
 });
 
 // ❌ Don't fetch separately
@@ -1942,11 +1998,12 @@ const channels = await prisma.channel.findMany(); // N+1 problem
 ```
 
 ### Testing
+
 ```typescript
 // ✅ Test services with realistic data
 it('should update task status', () => {
   service.updateTaskStatus(1, TaskStatus.DONE);
-  expect(service.tasks().find(t => t.id === 1)?.status).toBe(TaskStatus.DONE);
+  expect(service.tasks().find((t) => t.id === 1)?.status).toBe(TaskStatus.DONE);
 });
 ```
 
@@ -1955,6 +2012,7 @@ it('should update task status', () => {
 ## Troubleshooting
 
 ### Database Connection Issues
+
 ```bash
 # Check PostgreSQL is running
 docker-compose ps
@@ -1967,6 +2025,7 @@ docker-compose restart postgres
 ```
 
 ### Prisma Migration Issues
+
 ```bash
 # Reset database (dev only)
 npx prisma migrate reset
@@ -1976,6 +2035,7 @@ npx prisma migrate dev
 ```
 
 ### Frontend Build Issues
+
 ```bash
 # Clear cache
 rm -rf .angular
@@ -1986,6 +2046,7 @@ npm run build:frontend
 ```
 
 ### CORS Issues
+
 ```typescript
 // Add CORS in main.ts (backend)
 import { NestFactory } from '@nestjs/core';

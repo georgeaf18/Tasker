@@ -147,6 +147,7 @@ tasker/
 - Node.js 20+ (LTS)
 - npm or pnpm
 - Git
+- Docker and Docker Compose (optional, for containerized development)
 
 **Setup (TBD - will be documented after scaffolding):**
 
@@ -164,6 +165,24 @@ npm run db:setup
 # Run development servers
 npm run dev
 ```
+
+### Docker Development (Recommended)
+
+```bash
+# Start PostgreSQL only (recommended for local development)
+docker-compose up -d postgres
+
+# Or start all services in containers
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+See [DOCKER_QUICK_START.md](./DOCKER_QUICK_START.md) for detailed Docker commands.
 
 ## Security: Database Access Control
 
@@ -292,6 +311,52 @@ See [Database Setup Guide](./docs/database-setup.md#security-postgresql-access-c
 - **Scale:** 8, 16, 24, 32, 48, 64, 96
 
 See `docs/DESIGN_SYSTEM.md` for complete specifications.
+
+## Deployment
+
+### Production Deployment with Docker
+
+```bash
+# Copy and configure environment
+cp .env.production.example .env.production
+nano .env.production
+
+# Build and start production services
+docker-compose -f docker-compose.prod.yml up -d
+
+# Run database migrations
+docker-compose -f docker-compose.prod.yml exec backend npx prisma migrate deploy
+
+# View logs
+docker-compose -f docker-compose.prod.yml logs -f
+```
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment guide including:
+
+- Docker multi-stage builds
+- Production configuration
+- Server setup
+- CI/CD pipelines
+- Monitoring and maintenance
+- Security hardening
+- Troubleshooting
+
+### CI/CD Pipelines
+
+**Continuous Integration:**
+
+- Automatic linting, type checking, and testing on every push
+- Coverage reporting
+- Production build verification
+
+**Continuous Deployment:**
+
+- Manual or tag-triggered deployment
+- Multi-platform Docker image builds (amd64, arm64)
+- Push to GitHub Container Registry
+- SSH deployment to production/staging servers
+
+See [.github/SECRETS_SETUP.md](./.github/SECRETS_SETUP.md) for CI/CD configuration.
 
 ## Contributing
 

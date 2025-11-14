@@ -21,13 +21,13 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 
 ### Required TestIDs
 
-| Element | TestID | Description |
-|---------|--------|-------------|
-| Add Task Button | `add-task-button` | The "+" button to create a new task |
-| Task Card (Backlog) | `task-card-${task.id}` | Individual task cards in backlog (dynamic ID) |
-| Task Card Title | `task-card-title` | Title text within a task card |
-| Workspace Section | `workspace-section-${workspace}` | Container for each workspace group (work/personal) |
-| Channel Section | `channel-section-${channelId}` | Container for each channel group |
+| Element             | TestID                           | Description                                        |
+| ------------------- | -------------------------------- | -------------------------------------------------- |
+| Add Task Button     | `add-task-button`                | The "+" button to create a new task                |
+| Task Card (Backlog) | `task-card-${task.id}`           | Individual task cards in backlog (dynamic ID)      |
+| Task Card Title     | `task-card-title`                | Title text within a task card                      |
+| Workspace Section   | `workspace-section-${workspace}` | Container for each workspace group (work/personal) |
+| Channel Section     | `channel-section-${channelId}`   | Container for each channel group                   |
 
 ### Example Implementation
 
@@ -36,7 +36,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 <button
   (click)="showCreateTaskDialog()"
   data-testid="add-task-button"
-  class="p-button">
+  class="p-button"
+>
   <i class="pi pi-plus"></i>
 </button>
 
@@ -44,14 +45,16 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 <div
   *ngFor="let task of tasks"
   [attr.data-testid]="'task-card-' + task.id"
-  (click)="showTaskDetails(task)">
+  (click)="showTaskDetails(task)"
+>
   <h3 [attr.data-testid]="'task-card-title'">{{ task.title }}</h3>
 </div>
 
 <!-- Workspace Section -->
 <div
   *ngFor="let group of groupedByWorkspace()"
-  [attr.data-testid]="'workspace-section-' + group.workspace.toLowerCase()">
+  [attr.data-testid]="'workspace-section-' + group.workspace.toLowerCase()"
+>
   <!-- Content -->
 </div>
 ```
@@ -64,13 +67,13 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 
 ### Required TestIDs
 
-| Element | TestID | Description |
-|---------|--------|-------------|
-| Today Column | `kanban-column-today` | The "Today" status column |
-| In Progress Column | `kanban-column-in-progress` | The "In Progress" status column |
-| Done Column | `kanban-column-done` | The "Done" status column |
-| Task Card | `task-card-${task.id}` | Individual task cards (same as backlog) |
-| Daily Progress Bar | `daily-progress-bar` | Progress bar showing daily completion |
+| Element            | TestID                      | Description                             |
+| ------------------ | --------------------------- | --------------------------------------- |
+| Today Column       | `kanban-column-today`       | The "Today" status column               |
+| In Progress Column | `kanban-column-in-progress` | The "In Progress" status column         |
+| Done Column        | `kanban-column-done`        | The "Done" status column                |
+| Task Card          | `task-card-${task.id}`      | Individual task cards (same as backlog) |
+| Daily Progress Bar | `daily-progress-bar`        | Progress bar showing daily completion   |
 
 ### Example Implementation
 
@@ -83,7 +86,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
     <div *ngFor="let task of todayTasks()">
       <div
         [attr.data-testid]="'task-card-' + task.id"
-        (click)="openTaskDetails(task)">
+        (click)="openTaskDetails(task)"
+      >
         {{ task.title }}
       </div>
     </div>
@@ -93,9 +97,7 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
   <div class="kanban-column" data-testid="kanban-column-in-progress">
     <h2>In Progress</h2>
     <div *ngFor="let task of inProgressTasks()">
-      <div [attr.data-testid]="'task-card-' + task.id">
-        {{ task.title }}
-      </div>
+      <div [attr.data-testid]="'task-card-' + task.id">{{ task.title }}</div>
     </div>
   </div>
 
@@ -103,9 +105,7 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
   <div class="kanban-column" data-testid="kanban-column-done">
     <h2>Done</h2>
     <div *ngFor="let task of doneTasks()">
-      <div [attr.data-testid]="'task-card-' + task.id">
-        {{ task.title }}
-      </div>
+      <div [attr.data-testid]="'task-card-' + task.id">{{ task.title }}</div>
     </div>
   </div>
 </div>
@@ -114,7 +114,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 <p-progressBar
   [value]="dailyProgress()"
   data-testid="daily-progress-bar"
-  [attr.aria-valuenow]="dailyProgress()">
+  [attr.aria-valuenow]="dailyProgress()"
+>
 </p-progressBar>
 ```
 
@@ -126,16 +127,16 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 
 ### Required TestIDs
 
-| Element | TestID | Description |
-|---------|--------|-------------|
-| Dialog Container | `task-dialog` | Main dialog element |
-| Title Input | `task-title-input` | Task title input field |
-| Description Input | `task-description-input` | Task description textarea |
-| Workspace Select | `task-workspace-select` | Workspace dropdown |
-| Channel Select | `task-channel-select` | Channel dropdown |
-| Submit Button | `task-submit-button` | Save/Create button |
-| Cancel Button | `task-cancel-button` | Cancel button |
-| Delete Button | `task-delete-button` | Delete button (edit mode only) |
+| Element           | TestID                   | Description                    |
+| ----------------- | ------------------------ | ------------------------------ |
+| Dialog Container  | `task-dialog`            | Main dialog element            |
+| Title Input       | `task-title-input`       | Task title input field         |
+| Description Input | `task-description-input` | Task description textarea      |
+| Workspace Select  | `task-workspace-select`  | Workspace dropdown             |
+| Channel Select    | `task-channel-select`    | Channel dropdown               |
+| Submit Button     | `task-submit-button`     | Save/Create button             |
+| Cancel Button     | `task-cancel-button`     | Cancel button                  |
+| Delete Button     | `task-delete-button`     | Delete button (edit mode only) |
 
 ### Example Implementation
 
@@ -144,10 +145,9 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 <p-dialog
   [(visible)]="createTaskDialogVisible()"
   [modal]="true"
-  data-testid="task-dialog">
-
+  data-testid="task-dialog"
+>
   <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()">
-
     <!-- Title Input -->
     <label for="title">Title *</label>
     <input
@@ -155,7 +155,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
       id="title"
       formControlName="title"
       data-testid="task-title-input"
-      placeholder="Enter task title" />
+      placeholder="Enter task title"
+    />
 
     <!-- Description Input -->
     <label for="description">Description</label>
@@ -164,7 +165,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
       id="description"
       formControlName="description"
       data-testid="task-description-input"
-      rows="4">
+      rows="4"
+    >
     </textarea>
 
     <!-- Workspace Select -->
@@ -173,7 +175,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
       id="workspace"
       formControlName="workspace"
       data-testid="task-workspace-select"
-      [options]="workspaceOptions">
+      [options]="workspaceOptions"
+    >
     </p-select>
 
     <!-- Channel Select -->
@@ -182,7 +185,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
       id="channel"
       formControlName="channelId"
       data-testid="task-channel-select"
-      [options]="filteredChannels()">
+      [options]="filteredChannels()"
+    >
     </p-select>
 
     <!-- Action Buttons -->
@@ -192,15 +196,15 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
         pButton
         label="Cancel"
         data-testid="task-cancel-button"
-        (click)="hideCreateTaskDialog()">
-      </button>
+        (click)="hideCreateTaskDialog()"
+      ></button>
 
       <button
         type="submit"
         pButton
         label="Create Task"
-        data-testid="task-submit-button">
-      </button>
+        data-testid="task-submit-button"
+      ></button>
     </div>
   </form>
 </p-dialog>
@@ -209,8 +213,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 <p-dialog
   [(visible)]="taskDetailsDialogVisible()"
   [modal]="true"
-  data-testid="task-dialog">
-
+  data-testid="task-dialog"
+>
   <form [formGroup]="editTaskForm">
     <!-- Same form fields as above -->
 
@@ -222,24 +226,24 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
         label="Delete"
         severity="danger"
         data-testid="task-delete-button"
-        (click)="confirmDeleteTask()">
-      </button>
+        (click)="confirmDeleteTask()"
+      ></button>
 
       <button
         type="button"
         pButton
         label="Cancel"
         data-testid="task-cancel-button"
-        (click)="hideTaskDetailsDialog()">
-      </button>
+        (click)="hideTaskDetailsDialog()"
+      ></button>
 
       <button
         type="button"
         pButton
         label="Save Changes"
         data-testid="task-submit-button"
-        (click)="submitEditTask()">
-      </button>
+        (click)="submitEditTask()"
+      ></button>
     </div>
   </form>
 </p-dialog>
@@ -253,11 +257,11 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 
 ### Required TestIDs
 
-| Element | TestID | Description |
-|---------|--------|-------------|
-| Move to Today Button | `move-to-today-button` | Button to change status to TODAY |
+| Element                    | TestID                       | Description                            |
+| -------------------------- | ---------------------------- | -------------------------------------- |
+| Move to Today Button       | `move-to-today-button`       | Button to change status to TODAY       |
 | Move to In Progress Button | `move-to-in-progress-button` | Button to change status to IN_PROGRESS |
-| Move to Done Button | `move-to-done-button` | Button to change status to DONE |
+| Move to Done Button        | `move-to-done-button`        | Button to change status to DONE        |
 
 ### Example Implementation
 
@@ -273,22 +277,22 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
         pButton
         label="Move to Today"
         data-testid="move-to-today-button"
-        (click)="moveToStatus(selectedTask()!.id, TaskStatus.TODAY)">
-      </button>
+        (click)="moveToStatus(selectedTask()!.id, TaskStatus.TODAY)"
+      ></button>
 
       <button
         pButton
         label="Move to In Progress"
         data-testid="move-to-in-progress-button"
-        (click)="moveToStatus(selectedTask()!.id, TaskStatus.IN_PROGRESS)">
-      </button>
+        (click)="moveToStatus(selectedTask()!.id, TaskStatus.IN_PROGRESS)"
+      ></button>
 
       <button
         pButton
         label="Move to Done"
         data-testid="move-to-done-button"
-        (click)="moveToStatus(selectedTask()!.id, TaskStatus.DONE)">
-      </button>
+        (click)="moveToStatus(selectedTask()!.id, TaskStatus.DONE)"
+      ></button>
     </div>
 
     <!-- Delete Button -->
@@ -297,8 +301,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
       label="Delete"
       severity="danger"
       data-testid="task-delete-button"
-      (click)="deleteTask(selectedTask()!.id)">
-    </button>
+      (click)="deleteTask(selectedTask()!.id)"
+    ></button>
   </div>
 </p-dialog>
 ```
@@ -311,10 +315,10 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 
 ### Required TestIDs
 
-| Element | TestID | Description |
-|---------|--------|-------------|
+| Element               | TestID                  | Description                |
+| --------------------- | ----------------------- | -------------------------- |
 | Confirm Delete Button | `confirm-delete-button` | Button to confirm deletion |
-| Cancel Delete Button | `cancel-delete-button` | Button to cancel deletion |
+| Cancel Delete Button  | `cancel-delete-button`  | Button to cancel deletion  |
 
 ### Example Implementation
 
@@ -327,8 +331,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
       pButton
       label="No"
       data-testid="cancel-delete-button"
-      (click)="confirmationService.close()">
-    </button>
+      (click)="confirmationService.close()"
+    ></button>
 
     <button
       type="button"
@@ -336,8 +340,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
       label="Yes"
       severity="danger"
       data-testid="confirm-delete-button"
-      (click)="confirmationService.accept()">
-    </button>
+      (click)="confirmationService.accept()"
+    ></button>
   </ng-template>
 </p-confirmDialog>
 ```
@@ -350,9 +354,9 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 
 ### Required TestIDs
 
-| Element | TestID | Description |
-|---------|--------|-------------|
-| Work Toggle | `workspace-toggle-work` | Toggle button for Work workspace |
+| Element         | TestID                      | Description                          |
+| --------------- | --------------------------- | ------------------------------------ |
+| Work Toggle     | `workspace-toggle-work`     | Toggle button for Work workspace     |
 | Personal Toggle | `workspace-toggle-personal` | Toggle button for Personal workspace |
 
 ### Example Implementation
@@ -365,8 +369,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
     [outlined]="!isWorkFilterActive()"
     data-testid="workspace-toggle-work"
     [attr.aria-pressed]="isWorkFilterActive()"
-    (click)="toggleWorkspaceFilter('WORK')">
-  </button>
+    (click)="toggleWorkspaceFilter('WORK')"
+  ></button>
 
   <button
     pButton
@@ -374,8 +378,8 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
     [outlined]="!isPersonalFilterActive()"
     data-testid="workspace-toggle-personal"
     [attr.aria-pressed]="isPersonalFilterActive()"
-    (click)="toggleWorkspaceFilter('PERSONAL')">
-  </button>
+    (click)="toggleWorkspaceFilter('PERSONAL')"
+  ></button>
 </div>
 ```
 
@@ -384,12 +388,14 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 ## Implementation Checklist
 
 ### Backlog Sidebar Component
+
 - [ ] Add `data-testid="add-task-button"` to add button
 - [ ] Add `[attr.data-testid]="'task-card-' + task.id"` to task cards
 - [ ] Add `data-testid="task-card-title"` to task titles
 - [ ] Add workspace section test IDs
 
 ### Kanban Board Component
+
 - [ ] Add `data-testid="kanban-column-today"` to Today column
 - [ ] Add `data-testid="kanban-column-in-progress"` to In Progress column
 - [ ] Add `data-testid="kanban-column-done"` to Done column
@@ -398,6 +404,7 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 - [ ] Add `[attr.aria-valuenow]` to progress bar
 
 ### Task Dialog
+
 - [ ] Add `data-testid="task-title-input"` to title input
 - [ ] Add `data-testid="task-description-input"` to description textarea
 - [ ] Add `data-testid="task-workspace-select"` to workspace dropdown
@@ -407,16 +414,19 @@ Data test IDs provide stable, semantic selectors for E2E tests that are independ
 - [ ] Add `data-testid="task-delete-button"` to delete button
 
 ### Task Detail Dialog (Kanban)
+
 - [ ] Add `data-testid="move-to-today-button"` to move button
 - [ ] Add `data-testid="move-to-in-progress-button"` to move button
 - [ ] Add `data-testid="move-to-done-button"` to move button
 - [ ] Add `data-testid="task-delete-button"` to delete button
 
 ### Confirmation Dialog
+
 - [ ] Add `data-testid="confirm-delete-button"` to confirm button
 - [ ] Add `data-testid="cancel-delete-button"` to cancel button
 
 ### Workspace Filters
+
 - [ ] Add `data-testid="workspace-toggle-work"` to Work toggle
 - [ ] Add `data-testid="workspace-toggle-personal"` to Personal toggle
 - [ ] Add `[attr.aria-pressed]` to toggle buttons for state tracking
@@ -442,16 +452,19 @@ These ARIA attributes can also be used as fallback selectors in E2E tests.
 After adding test IDs, verify they work:
 
 1. **Run a single test:**
+
    ```bash
    npx playwright test task-creation.spec.ts
    ```
 
 2. **Run all tests:**
+
    ```bash
    npx playwright test
    ```
 
 3. **Debug mode (with browser):**
+
    ```bash
    npx playwright test --debug
    ```
@@ -467,15 +480,17 @@ After adding test IDs, verify they work:
 ## Common Issues
 
 ### Dynamic IDs Not Working
+
 ```html
 <!-- ❌ Wrong: String concatenation in template -->
 <div data-testid="task-card-{{ task.id }}">
-
-<!-- ✅ Correct: Use attribute binding -->
-<div [attr.data-testid]="'task-card-' + task.id">
+  <!-- ✅ Correct: Use attribute binding -->
+  <div [attr.data-testid]="'task-card-' + task.id"></div>
+</div>
 ```
 
 ### PrimeNG Components
+
 ```html
 <!-- PrimeNG components may need wrapper divs -->
 <div data-testid="task-workspace-select">
@@ -487,18 +502,16 @@ After adding test IDs, verify they work:
 <p-select
   formControlName="workspace"
   [options]="workspaceOptions"
-  [attr.data-testid]="'task-workspace-select'">
+  [attr.data-testid]="'task-workspace-select'"
+>
 </p-select>
 ```
 
 ### Conditional TestIDs
+
 ```html
 <!-- For elements that appear conditionally -->
-<button
-  *ngIf="isEditMode()"
-  data-testid="task-delete-button">
-  Delete
-</button>
+<button *ngIf="isEditMode()" data-testid="task-delete-button">Delete</button>
 ```
 
 ---

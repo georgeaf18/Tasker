@@ -7,43 +7,43 @@ import { Channel } from './channel.model';
  * Tasks move through different statuses from BACKLOG to DONE.
  */
 export interface Task {
-    id: number;
-    title: string;
-    description: string | null;
-    workspace: Workspace;
-    channelId: number | null;
-    channel?: Channel;
-    status: TaskStatus;
-    dueDate: Date | null;
-    isRoutine: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+  id: number;
+  title: string;
+  description: string | null;
+  workspace: Workspace;
+  channelId: number | null;
+  channel?: Channel;
+  status: TaskStatus;
+  dueDate: Date | null;
+  isRoutine: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CreateTaskDto {
-    title: string;
-    description?: string;
-    workspace: Workspace;
-    channelId?: number;
-    status?: TaskStatus;
-    dueDate?: Date;
-    isRoutine?: boolean;
+  title: string;
+  description?: string;
+  workspace: Workspace;
+  channelId?: number;
+  status?: TaskStatus;
+  dueDate?: Date;
+  isRoutine?: boolean;
 }
 
 export interface UpdateTaskDto {
-    title?: string;
-    description?: string;
-    workspace?: Workspace;
-    channelId?: number;
-    status?: TaskStatus;
-    dueDate?: Date;
-    isRoutine?: boolean;
+  title?: string;
+  description?: string;
+  workspace?: Workspace;
+  channelId?: number;
+  status?: TaskStatus;
+  dueDate?: Date;
+  isRoutine?: boolean;
 }
 
 export interface TaskFilters {
-    workspace?: Workspace;
-    status?: TaskStatus;
-    channelId?: number;
+  workspace?: Workspace;
+  status?: TaskStatus;
+  channelId?: number;
 }
 
 // Re-export enums for convenience

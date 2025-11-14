@@ -3,6 +3,7 @@
 ## Overview
 
 This project is built by AI coding agents (Claude Code). Every commit is tied to a Linear issue for:
+
 - **Traceability:** Know which agent did what and why
 - **Context:** Full issue description guides agent behavior
 - **Automation:** Linear automatically links commits to issues
@@ -78,6 +79,7 @@ Follow conventional commits:
 ### How AI Agents Use Linear
 
 **1. Orchestrator (Claude Code) picks issues to delegate:**
+
 ```typescript
 // Launch multiple agents in parallel for independent tasks
 Task: Launch code-implementer for TASK-30 (PostgreSQL setup)
@@ -86,6 +88,7 @@ Task: Launch code-implementer for TASK-36 (Angular config)
 ```
 
 **2. Each agent:**
+
 - Reads the Linear issue for acceptance criteria
 - Implements the solution
 - Writes tests
@@ -93,6 +96,7 @@ Task: Launch code-implementer for TASK-36 (Angular config)
 - Reports completion back to orchestrator
 
 **3. Orchestrator verifies:**
+
 - All acceptance criteria met
 - Tests passing
 - Type safety ensured
@@ -103,11 +107,13 @@ Task: Launch code-implementer for TASK-36 (Angular config)
 ### Parallel Execution Pattern
 
 **Traditional (human): Sequential - 7 days**
+
 ```
 Day 1: Backend setup → Day 2: API → Day 3: Frontend...
 ```
 
 **AI-Accelerated: Parallel - 4 hours**
+
 ```
 Hour 1: Backend Agent + Frontend Agent (parallel)
 Hour 2: UI Agent 1 + UI Agent 2 + UI Agent 3 (parallel)
@@ -122,6 +128,7 @@ Hour 4: Deployment Agent + Docs Agent (parallel)
 ### 1. Orchestrator Reviews Linear Issue
 
 **Claude Code (orchestrator) examines:**
+
 - Issue TASK-30: Setup PostgreSQL with Docker Compose
 - Acceptance criteria (5 checkboxes)
 - Dependencies (none - can start immediately)
@@ -153,6 +160,7 @@ Return: File contents and verification commands."
 ### 3. Agent Executes Task
 
 **code-implementer agent:**
+
 1. Creates `docker-compose.yml`
 2. Creates `.env.example`
 3. Verifies syntax
@@ -177,6 +185,7 @@ git push origin main
 ```
 
 **Orchestrator then:**
+
 - Updates TASK-30 status to "Done" in Linear
 - Linear auto-links the commit
 - Moves to next issue (TASK-31)
@@ -202,12 +211,12 @@ Linear automatically detects:
 
 ## Quick Reference Table
 
-| Scenario | Branch Name | Commit Message |
-|----------|-------------|----------------|
-| New feature | `feature/task-33-tasks-api` | `feat: implement Tasks REST API (TASK-33)` |
-| Bug fix | `fix/task-33-status-update` | `fix: correct task status update (TASK-33)` |
-| Multiple issues | `feature/task-39-40-ui` | `feat: build kanban and sidebar (TASK-39, TASK-40)` |
-| Work in progress | `wip/task-42-layout` | `wip: scaffold main layout (TASK-42)` |
+| Scenario         | Branch Name                 | Commit Message                                      |
+| ---------------- | --------------------------- | --------------------------------------------------- |
+| New feature      | `feature/task-33-tasks-api` | `feat: implement Tasks REST API (TASK-33)`          |
+| Bug fix          | `fix/task-33-status-update` | `fix: correct task status update (TASK-33)`         |
+| Multiple issues  | `feature/task-39-40-ui`     | `feat: build kanban and sidebar (TASK-39, TASK-40)` |
+| Work in progress | `wip/task-42-layout`        | `wip: scaffold main layout (TASK-42)`               |
 
 ---
 
@@ -243,6 +252,7 @@ This ensures logical progression and avoids blockers.
 ## v0.1 Issue List (Created)
 
 ### Backend Infrastructure
+
 - **TASK-30:** Setup PostgreSQL with Docker Compose
 - **TASK-31:** Initialize Prisma and create database schema
 - **TASK-32:** Create Prisma service and module in NestJS
@@ -251,11 +261,13 @@ This ensures logical progression and avoids blockers.
 - **TASK-35:** Create database seed script with test data
 
 ### Frontend Infrastructure
+
 - **TASK-36:** Configure Angular 20 with zoneless and Tailwind CSS ⭐ (Critical)
 - **TASK-37:** Create Task API service with HttpClient
 - **TASK-38:** Create signal-based Task state service ⭐ (Critical)
 
 ### Frontend Features
+
 - **TASK-39:** Build Kanban board component with drag-and-drop ⭐ (Critical)
 - **TASK-40:** Build backlog sidebar component ⭐ (Critical)
 - **TASK-41:** Create task creation and edit form
@@ -263,6 +275,7 @@ This ensures logical progression and avoids blockers.
 - **TASK-43:** Apply design system styling and accessibility
 
 ### Testing & Deployment
+
 - **TASK-44:** Write E2E tests for critical user flows
 - **TASK-45:** Create Docker setup and GitHub Actions deployment ⭐ (Critical)
 - **TASK-46:** Update README and project documentation
@@ -275,6 +288,7 @@ This ensures logical progression and avoids blockers.
 ## Tips
 
 ### 1. Small, Focused Commits
+
 Better to have multiple small commits per issue than one giant commit.
 
 ```bash
@@ -288,6 +302,7 @@ git commit -m "feat: complete all Prisma setup (TASK-31)"
 ```
 
 ### 2. Verify Before Committing
+
 Check the issue's acceptance criteria before committing:
 
 ```bash
@@ -298,13 +313,16 @@ Check the issue's acceptance criteria before committing:
 ```
 
 ### 3. Update Issue Comments
+
 Add comments to Linear issues with:
+
 - Implementation notes
 - Challenges encountered
 - Decisions made
 - Screenshots (for UI work)
 
 ### 4. Close Issues When Done
+
 Don't leave issues in "In Progress" if they're complete. Update status to "Done".
 
 ---
@@ -378,6 +396,7 @@ Commits generated:
 ## Questions?
 
 Check:
+
 - [Linear Documentation](https://linear.app/docs)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - Project docs: `docs/VERSION_ROADMAP.md`

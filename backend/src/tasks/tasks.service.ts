@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskFilterDto } from './dto/task-filter.dto';
-import { Task } from '@prisma/client';
+import { Task, Prisma } from '@prisma/client';
 
 /**
  * TasksService
@@ -23,7 +23,7 @@ export class TasksService {
    * @returns Array of tasks with channel relation, sorted by createdAt DESC
    */
   async findAll(filters: TaskFilterDto): Promise<Task[]> {
-    const where: any = {};
+    const where: Prisma.TaskWhereInput = {};
 
     if (filters.workspace) {
       where.workspace = filters.workspace;
@@ -77,7 +77,8 @@ export class TasksService {
    * @returns Created task with channel relation
    */
   async create(createTaskDto: CreateTaskDto): Promise<Task> {
-    const taskData: any = {
+    // Use Record to avoid strict Prisma type issues with optional channel relation
+    const taskData: Record<string, unknown> = {
       title: createTaskDto.title,
       workspace: createTaskDto.workspace,
     };
@@ -86,7 +87,10 @@ export class TasksService {
       taskData.description = createTaskDto.description;
     }
 
-    if (createTaskDto.channelId !== undefined) {
+    if (
+      createTaskDto.channelId !== undefined &&
+      createTaskDto.channelId !== null
+    ) {
       taskData.channelId = createTaskDto.channelId;
     }
 
@@ -103,7 +107,7 @@ export class TasksService {
     }
 
     return this.prisma.task.create({
-      data: taskData,
+      data: taskData as Prisma.TaskCreateInput,
       include: {
         channel: true,
       },
@@ -122,7 +126,8 @@ export class TasksService {
     // Verify task exists first
     await this.findOne(id);
 
-    const updateData: any = {};
+    // Use Record to avoid strict Prisma type issues with optional fields
+    const updateData: Record<string, unknown> = {};
 
     if (updateTaskDto.title !== undefined) {
       updateData.title = updateTaskDto.title;
@@ -154,7 +159,7 @@ export class TasksService {
 
     return this.prisma.task.update({
       where: { id },
-      data: updateData,
+      data: updateData as Prisma.TaskUpdateInput,
       include: {
         channel: true,
       },

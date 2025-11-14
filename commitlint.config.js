@@ -20,8 +20,8 @@ module.exports = {
             return [
               false,
               'Scope is required and must contain TASK-<number>\n' +
-              'Format: <type>(TASK-123): <description>\n' +
-              'Example: feat(TASK-123): add user authentication'
+                'Format: <type>(TASK-123): <description>\n' +
+                'Example: feat(TASK-123): add user authentication',
             ];
           }
 
@@ -30,8 +30,8 @@ module.exports = {
             return [
               false,
               'Scope must contain TASK-<number> reference\n' +
-              'Format: <type>(TASK-123): <description>\n' +
-              'Example: feat(TASK-123): add user authentication'
+                'Format: <type>(TASK-123): <description>\n' +
+                'Example: feat(TASK-123): add user authentication',
             ];
           }
 

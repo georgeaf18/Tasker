@@ -1,47 +1,56 @@
 <div class="app-container">
   <!-- Header -->
   <header class="app-header">
-    <h1 class="app-title">{{ title }}</h1>
-    <div class="workspace-toggle">
+    <div class="header-left">
+      <h1 class="app-title">{{ title }}</h1>
       <button
         type="button"
-        class="workspace-button"
+        class="settings-btn"
+        routerLink="/settings"
+        title="Settings"
+      >
+        <i class="pi pi-bars"></i>
+      </button>
+    </div>
+
+    <!-- Status Notification Indicator -->
+    @if (notification()) {
+    <div
+      class="status-indicator"
+      [class.success]="notification()!.type === 'success'"
+      [class.error]="notification()!.type === 'error'"
+    >
+      <i
+        [class]="notification()!.type === 'success' ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+      ></i>
+      <span>{{ notification()!.message }}</span>
+    </div>
+    }
+
+    <div class="context-toggle">
+      <button
+        type="button"
+        class="context-button"
         [class.active]="currentWorkspace() === Workspace.WORK"
-        (click)="toggleWorkspace()">
+        (click)="toggleWorkspace()"
+      >
         <i class="pi pi-briefcase"></i>
         <span>Work</span>
       </button>
       <button
         type="button"
-        class="workspace-button"
+        class="context-button"
         [class.active]="currentWorkspace() === Workspace.PERSONAL"
-        (click)="toggleWorkspace()">
+        (click)="toggleWorkspace()"
+      >
         <i class="pi pi-home"></i>
         <span>Personal</span>
       </button>
     </div>
   </header>
 
-  <!-- Main Layout: Sidebar + Content -->
+  <!-- Main Content: Lazy-loaded via router -->
   <div class="app-layout">
-    <!-- Backlog Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2>Backlog</h2>
-        <button type="button" class="add-task-button" title="Add Task">
-          <i class="pi pi-plus"></i>
-        </button>
-      </div>
-      <div class="sidebar-content">
-        <app-backlog-sidebar></app-backlog-sidebar>
-      </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <main class="main-content">
-      <app-kanban-board></app-kanban-board>
-    </main>
+    <router-outlet></router-outlet>
   </div>
 </div>
-
-<router-outlet></router-outlet>
