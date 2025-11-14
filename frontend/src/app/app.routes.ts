@@ -1,15 +1,15 @@
 import { Route } from '@angular/router';
-// import { SettingsComponent } from './components/settings/settings.component';
 
 export const appRoutes: Route[] = [
+  {
+    path: '',
+    loadComponent: () => import('./components/home/home.component')
+      .then(m => m.HomeComponent)
+  },
   // TODO: Re-enable settings route after updating to PrimeNG v20 tabs API
   // {
   //   path: 'settings',
-  //   component: SettingsComponent
-  // },
-  {
-    path: '',
-    redirectTo: '',
-    pathMatch: 'full'
-  }
+  //   loadComponent: () => import('./components/settings/settings.component')
+  //     .then(m => m.SettingsComponent)
+  // }
 ];

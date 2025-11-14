@@ -40,39 +40,8 @@
     </div>
   </header>
 
-  <!-- Main Layout: Sidebar + Content OR Router Outlet -->
-  @if (isMainView()) {
-    <div class="app-layout">
-      <!-- Sidebar Container Wrapper -->
-      <div class="sidebar-container" [class.sidebar-hidden]="!sidebarVisible()">
-        <!-- Backlog Sidebar -->
-        <aside class="sidebar">
-          <div class="sidebar-header">
-            <h2>Backlog</h2>
-            <button type="button" class="add-task-button" title="Add Task" (click)="openCreateTaskDialog()">
-              <i class="pi pi-plus"></i>
-            </button>
-          </div>
-          <div class="sidebar-content">
-            <app-backlog-sidebar></app-backlog-sidebar>
-          </div>
-        </aside>
-        <!-- Toggle button outside sidebar but in wrapper -->
-        <button
-          type="button"
-          class="sidebar-toggle-btn"
-          (click)="toggleSidebar()"
-          [attr.aria-label]="sidebarVisible() ? 'Hide backlog' : 'Show backlog'">
-          <i [class]="sidebarVisible() ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"></i>
-        </button>
-      </div>
-
-      <!-- Main Content Area -->
-      <main class="main-content">
-        <app-kanban-board></app-kanban-board>
-      </main>
-    </div>
-  } @else {
+  <!-- Main Content: Lazy-loaded via router -->
+  <div class="app-layout">
     <router-outlet></router-outlet>
-  }
+  </div>
 </div>

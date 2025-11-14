@@ -1,28 +1,28 @@
-import { Component, signal, ViewChild, effect, inject, computed } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { Component, signal, effect, inject, computed } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Workspace } from './models';
-import { KanbanBoardComponent } from './components/kanban-board/kanban-board.component';
-import { BacklogSidebarComponent } from './components/backlog-sidebar/backlog-sidebar.component';
 import { TaskStateService } from './services/task-state.service';
 import { NotificationService } from './services/notification.service';
 
+/**
+ * App - Root shell component
+ *
+ * Minimal shell that provides header and navigation.
+ * Main views are lazy-loaded via router-outlet to reduce initial bundle size.
+ */
 @Component({
-  imports: [CommonModule, RouterModule, KanbanBoardComponent, BacklogSidebarComponent],
+  imports: [CommonModule, RouterModule],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  @ViewChild(BacklogSidebarComponent) backlogSidebar!: BacklogSidebarComponent;
-
   private readonly taskState = inject(TaskStateService);
   private readonly notificationService = inject(NotificationService);
-  private readonly router = inject(Router);
 
   protected readonly title = 'Tasker';
   protected readonly currentWorkspace = signal<Workspace>(Workspace.WORK);
-  protected readonly sidebarVisible = signal<boolean>(true);
   protected readonly Workspace = Workspace;
   protected readonly notification = computed(() => this.notificationService.notification());
 
@@ -33,25 +33,9 @@ export class App {
     });
   }
 
-  protected isMainView(): boolean {
-    return this.router.url === '/' || this.router.url === '';
-  }
-
   protected toggleWorkspace(): void {
     this.currentWorkspace.update(current =>
       current === Workspace.WORK ? Workspace.PERSONAL : Workspace.WORK
     );
-  }
-
-  protected toggleSidebar(): void {
-    this.sidebarVisible.update(visible => !visible);
-  }
-
-  /**
-   * Opens the create task dialog in the backlog sidebar.
-   * Delegates to BacklogSidebarComponent to keep task creation logic centralized.
-   */
-  protected openCreateTaskDialog(): void {
-    this.backlogSidebar?.showCreateTaskDialog();
   }
 }

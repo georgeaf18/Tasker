@@ -1,0 +1,19 @@
+<div class="home-layout">
+  <!-- Backlog Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Backlog</h2>
+      <button type="button" class="add-task-button" title="Add Task" (click)="openCreateTaskDialog()">
+        <i class="pi pi-plus"></i>
+      </button>
+    </div>
+    <div class="sidebar-content">
+      <app-backlog-sidebar></app-backlog-sidebar>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <app-kanban-board></app-kanban-board>
+  </main>
+</div>
