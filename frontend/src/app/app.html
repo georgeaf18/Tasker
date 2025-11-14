@@ -41,8 +41,6 @@
   </header>
 
   <!-- Main Layout: Sidebar + Content OR Router Outlet -->
-  <router-outlet></router-outlet>
-
   @if (isMainView()) {
     <div class="app-layout">
       <!-- Sidebar Container Wrapper -->
@@ -74,5 +72,7 @@
         <app-kanban-board></app-kanban-board>
       </main>
     </div>
+  } @else {
+    <router-outlet></router-outlet>
   }
 </div>
