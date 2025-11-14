@@ -38,8 +38,10 @@
 - Follow migration naming conventions
 
 ### UI/UX Requirements
-- Use PrimeNG components - avoid custom components when possible
-- Avoid custom CSS - use Tailwind utilities
+- Use PrimeNG components for standard UI elements (buttons, dialogs, forms, inputs)
+- Custom components are acceptable when they improve maintainability
+- Prefer utility classes (Tailwind) over deeply customizing PrimeNG with ::ng-deep
+- Avoid excessive ::ng-deep overrides - if you need many, build a custom component instead
 - Follow design system tokens (see `docs/DESIGN_SYSTEM.md`)
 - Accessibility: WCAG AA minimum, dyslexia-friendly patterns
 
@@ -216,6 +218,18 @@ setTimeout(() => {
 // ✅ DO: Use design tokens
 <div class="mt-md"> // Good (if defined in config)
 <div class="mt-4"> // Good (standard Tailwind spacing)
+
+// ❌ DON'T: Heavily customize PrimeNG with ::ng-deep
+::ng-deep .p-panel { width: 100% !important; }
+::ng-deep .p-panel-header { border-radius: 0; }
+::ng-deep .p-panel-content { padding: 0; }
+// ... many more ::ng-deep overrides
+
+// ✅ DO: Build a custom component with utility classes
+<div class="flex flex-col w-full rounded-none">
+  <div class="panel-header">...</div>
+  <div class="panel-content p-0">...</div>
+</div>
 ```
 
 ---

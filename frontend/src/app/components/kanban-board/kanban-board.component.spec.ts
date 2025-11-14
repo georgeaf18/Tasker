@@ -465,7 +465,7 @@ describe('KanbanBoardComponent', () => {
 
     it('should render three kanban columns', () => {
       const compiled = fixture.nativeElement;
-      const panels = compiled.querySelectorAll('p-panel');
+      const panels = compiled.querySelectorAll('.kanban-panel');
       expect(panels.length).toBeGreaterThanOrEqual(3);
     });
 
