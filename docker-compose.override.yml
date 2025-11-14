@@ -1,0 +1,42 @@
+# Docker Compose Override for Local Development
+# This file automatically extends docker-compose.yml
+# Use: docker-compose up (automatically applies overrides)
+
+version: '3.8'
+
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: tasker_dev
+      POSTGRES_PASSWORD: tasker_dev
+      POSTGRES_DB: tasker_dev
+
+  # Uncomment when backend is ready
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/backend/Dockerfile
+  #     target: builder  # Use builder stage for hot reload
+  #   volumes:
+  #     - ./apps/backend:/app/apps/backend
+  #     - ./prisma:/app/prisma
+  #     - /app/node_modules
+  #   environment:
+  #     NODE_ENV: development
+  #     DATABASE_URL: postgresql://tasker_dev:tasker_dev@postgres:5432/tasker_dev
+  #   command: npm run start:dev backend
+
+  # Uncomment when frontend is ready
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/frontend/Dockerfile
+  #     target: builder
+  #   volumes:
+  #     - ./apps/frontend:/app/apps/frontend
+  #     - /app/node_modules
+  #   command: npm run start frontend
+  #   ports:
+  #     - "4200:4200"
