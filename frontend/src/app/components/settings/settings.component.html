@@ -5,10 +5,17 @@
     <!-- Confirmation dialog -->
     <p-confirmDialog />
 
-    <!-- Vertical tab navigation -->
-    <p-tabView styleClass="settings-tabs" [activeIndex]="activeTab()" (activeIndexChange)="activeTab.set($event)">
-        <!-- Contexts & Channels Tab -->
-        <p-tabPanel header="Contexts & Channels">
+    <!-- New Tabs API -->
+    <p-tabs styleClass="settings-tabs">
+        <p-tablist>
+            <p-tab>Contexts & Channels</p-tab>
+            <p-tab>General</p-tab>
+            <p-tab>Appearance</p-tab>
+        </p-tablist>
+
+        <p-tabpanels>
+            <!-- Contexts & Channels Tab -->
+            <p-tabpanel>
             <div class="settings-content">
                 <!-- Work Context Section -->
                 <section class="context-section">
@@ -18,7 +25,7 @@
                             label="Add Channel"
                             icon="pi pi-plus"
                             size="small"
-                            (onClick)="openCreateDialog('WORK')"
+                            (onClick)="openCreateDialog(Workspace.WORK)"
                             [loading]="isLoading()"
                         />
                     </div>
@@ -74,7 +81,7 @@
                             label="Add Channel"
                             icon="pi pi-plus"
                             size="small"
-                            (onClick)="openCreateDialog('PERSONAL')"
+                            (onClick)="openCreateDialog(Workspace.PERSONAL)"
                             [loading]="isLoading()"
                         />
                     </div>
@@ -122,28 +129,29 @@
                     }
                 </section>
             </div>
-        </p-tabPanel>
+            </p-tabpanel>
 
-        <!-- General Settings Tab (Placeholder) -->
-        <p-tabPanel header="General">
-            <div class="settings-content">
-                <p-message
-                    severity="info"
-                    text="General settings will be available in a future release."
-                />
-            </div>
-        </p-tabPanel>
+            <!-- General Settings Tab (Placeholder) -->
+            <p-tabpanel>
+                <div class="settings-content">
+                    <p-message
+                        severity="info"
+                        text="General settings will be available in a future release."
+                    />
+                </div>
+            </p-tabpanel>
 
-        <!-- Appearance Settings Tab (Placeholder) -->
-        <p-tabPanel header="Appearance">
-            <div class="settings-content">
-                <p-message
-                    severity="info"
-                    text="Appearance customization will be available in a future release."
-                />
-            </div>
-        </p-tabPanel>
-    </p-tabView>
+            <!-- Appearance Settings Tab (Placeholder) -->
+            <p-tabpanel>
+                <div class="settings-content">
+                    <p-message
+                        severity="info"
+                        text="Appearance customization will be available in a future release."
+                    />
+                </div>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
 
     <!-- Channel Create/Edit Dialog -->
     <p-dialog

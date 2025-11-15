@@ -5,7 +5,7 @@ import { ChannelApiService } from '../../services/channel-api.service';
 import { Channel } from '../../models/channel.model';
 import { Workspace } from '../../models/workspace.enum';
 import { ButtonModule } from 'primeng/button';
-import { TabsModule } from 'primeng/tabs';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ColorPickerModule } from 'primeng/colorpicker';
@@ -37,7 +37,11 @@ import { ToastModule } from 'primeng/toast';
         CommonModule,
         ReactiveFormsModule,
         ButtonModule,
-        TabsModule,
+        Tabs,
+        TabList,
+        Tab,
+        TabPanels,
+        TabPanel,
         DialogModule,
         InputTextModule,
         ColorPickerModule,
@@ -75,6 +79,9 @@ export class SettingsComponent implements OnInit {
     readonly editingChannel = signal<Channel | null>(null);
     readonly activeTab = signal<number>(0);
     readonly isLoading = signal<boolean>(false);
+
+    // Expose Workspace enum to template
+    readonly Workspace = Workspace;
 
     // Workspace options for select button
     readonly workspaceOptions = [
