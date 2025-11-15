@@ -343,7 +343,8 @@
 }
 
 .right-sidebar-container.sidebar-hidden .sidebar-toggle-btn.right-toggle {
-  right: calc(-60px - var(--spacing-md)); /* When hidden, move inward (left) to be visible */
+  left: auto;
+  right: 10px; /* When hidden, position 10px from right edge */
 }
 
 /* Main Content */
