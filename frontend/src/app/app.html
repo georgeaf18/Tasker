@@ -20,22 +20,34 @@
       </div>
     }
 
-    <div class="context-toggle">
+    <div class="header-right">
+      <div class="context-toggle">
+        <button
+          type="button"
+          class="context-button"
+          [class.active]="currentWorkspace() === Workspace.WORK"
+          (click)="toggleWorkspace()">
+          <i class="pi pi-briefcase"></i>
+          <span>Work</span>
+        </button>
+        <button
+          type="button"
+          class="context-button"
+          [class.active]="currentWorkspace() === Workspace.PERSONAL"
+          (click)="toggleWorkspace()">
+          <i class="pi pi-home"></i>
+          <span>Personal</span>
+        </button>
+      </div>
+
       <button
         type="button"
-        class="context-button"
-        [class.active]="currentWorkspace() === Workspace.WORK"
-        (click)="toggleWorkspace()">
-        <i class="pi pi-briefcase"></i>
-        <span>Work</span>
-      </button>
-      <button
-        type="button"
-        class="context-button"
-        [class.active]="currentWorkspace() === Workspace.PERSONAL"
-        (click)="toggleWorkspace()">
-        <i class="pi pi-home"></i>
-        <span>Personal</span>
+        class="import-toggle-btn"
+        [class.active]="importSidebarVisible()"
+        (click)="toggleImportSidebar()"
+        title="Import Tasks">
+        <i class="pi pi-download"></i>
+        <span>Import</span>
       </button>
     </div>
   </header>
@@ -71,6 +83,22 @@
       <main class="main-content">
         <app-kanban-board></app-kanban-board>
       </main>
+
+      <!-- Right Sidebar Container -->
+      <div class="sidebar-container right-sidebar-container" [class.sidebar-hidden]="!importSidebarVisible()">
+        <!-- Import Sidebar -->
+        <aside class="sidebar right-sidebar">
+          <app-import-sidebar></app-import-sidebar>
+        </aside>
+        <!-- Toggle button outside sidebar but in wrapper -->
+        <button
+          type="button"
+          class="sidebar-toggle-btn right-toggle"
+          (click)="toggleImportSidebar()"
+          [attr.aria-label]="importSidebarVisible() ? 'Hide import sidebar' : 'Show import sidebar'">
+          <i [class]="importSidebarVisible() ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"></i>
+        </button>
+      </div>
     </div>
   } @else {
     <router-outlet></router-outlet>

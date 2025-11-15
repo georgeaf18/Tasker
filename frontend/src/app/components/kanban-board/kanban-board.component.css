@@ -106,14 +106,14 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 26px;
+  font-size: 18px;
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0.5px;
 }
 
 .column-title i {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 /* Column-specific colors - Subtle solid colors */
@@ -274,7 +274,7 @@
 /* Empty State */
 ::ng-deep .empty-message {
   text-align: center;
-  font-size: 18px;
+  font-size: 14px;
   margin: auto;
   width: 100%;
 }
@@ -382,27 +382,37 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-  .kanban-board {
-    flex-wrap: wrap;
-  }
-
+/* Tablet landscape: Narrower columns but all visible */
+@media (min-width: 1024px) and (max-width: 1366px) {
   .kanban-column {
-    flex: 1 1 calc(50% - 1px);
-  }
-
-  .done-column {
-    flex: 1 1 100%;
+    min-width: 280px;
   }
 }
 
-@media (max-width: 768px) {
+/* Tablet/Small Desktop: Horizontal scroll with all 3 columns visible */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .kanban-board {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .kanban-column {
+    flex: 0 0 300px;
+    min-width: 300px;
+  }
+}
+
+/* Mobile: Stack all columns vertically */
+@media (max-width: 767px) {
   .kanban-board {
     flex-direction: column;
+    overflow-x: visible;
   }
 
   .kanban-column {
     flex: 1 1 auto;
+    min-width: 100%;
+    max-width: 100%;
   }
 
   .metadata-grid {

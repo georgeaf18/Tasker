@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Workspace } from './models';
 import { KanbanBoardComponent } from './components/kanban-board/kanban-board.component';
 import { BacklogSidebarComponent } from './components/backlog-sidebar/backlog-sidebar.component';
+import { ImportSidebarComponent } from './components/import-sidebar/import-sidebar.component';
 import { TaskStateService } from './services/task-state.service';
 import { NotificationService } from './services/notification.service';
 
 @Component({
-  imports: [CommonModule, RouterModule, KanbanBoardComponent, BacklogSidebarComponent],
+  imports: [CommonModule, RouterModule, KanbanBoardComponent, BacklogSidebarComponent, ImportSidebarComponent],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -23,6 +24,7 @@ export class App {
   protected readonly title = 'Tasker';
   protected readonly currentWorkspace = signal<Workspace>(Workspace.WORK);
   protected readonly sidebarVisible = signal<boolean>(true);
+  protected readonly importSidebarVisible = signal<boolean>(false);
   protected readonly Workspace = Workspace;
   protected readonly notification = computed(() => this.notificationService.notification());
 
@@ -45,6 +47,10 @@ export class App {
 
   protected toggleSidebar(): void {
     this.sidebarVisible.update(visible => !visible);
+  }
+
+  protected toggleImportSidebar(): void {
+    this.importSidebarVisible.update(visible => !visible);
   }
 
   /**
