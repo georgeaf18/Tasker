@@ -186,7 +186,8 @@
 .app-layout {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  overflow-x: visible;
+  overflow-y: hidden;
 }
 
 /* Sidebar Container Wrapper */
@@ -339,12 +340,11 @@
   left: auto;
   right: calc(var(--sidebar-width) - 30px);
   box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.15);
-  transition: left 0.3s ease-in-out, right 0.3s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: right 0.3s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .right-sidebar-container.sidebar-hidden .sidebar-toggle-btn.right-toggle {
-  right: auto;
-  left: calc(-60px - var(--spacing-md)); /* When hidden, position from left to extend into view */
+  right: var(--spacing-md); /* When hidden, position from container's right edge (viewport edge) */
 }
 
 /* Main Content */
