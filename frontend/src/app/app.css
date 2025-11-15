@@ -199,6 +199,7 @@
 
 .sidebar-container.sidebar-hidden {
   width: 0;
+  overflow: visible; /* Allow toggle button to be visible when collapsed */
 }
 
 /* Sidebar */
@@ -310,6 +311,7 @@
 
 .right-sidebar-container.sidebar-hidden {
   width: 0;
+  overflow: visible; /* Allow toggle button to be visible when collapsed */
 }
 
 .right-sidebar {
