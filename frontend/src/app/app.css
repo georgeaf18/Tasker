@@ -186,8 +186,7 @@
 .app-layout {
   display: flex;
   flex: 1;
-  overflow-x: visible;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 /* Sidebar Container Wrapper */
@@ -344,7 +343,7 @@
 }
 
 .right-sidebar-container.sidebar-hidden .sidebar-toggle-btn.right-toggle {
-  right: var(--spacing-md); /* When hidden, position from container's right edge (viewport edge) */
+  right: -268px; /* When hidden, offset left to be visible: 12px - 280px = -268px */
 }
 
 /* Main Content */
