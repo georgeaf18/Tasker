@@ -1,6 +1,7 @@
 import { Workspace } from './workspace.enum';
 import { TaskStatus } from './task-status.enum';
 import { Channel } from './channel.model';
+import { TaskTag } from './tag.model';
 
 /**
  * Task represents a single work item in the system.
@@ -16,6 +17,7 @@ export interface Task {
     status: TaskStatus;
     dueDate: Date | null;
     isRoutine: boolean;
+    taskTags?: TaskTag[];
     createdAt: Date;
     updatedAt: Date;
 }

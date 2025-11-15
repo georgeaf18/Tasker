@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
@@ -13,7 +13,9 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { MessageModule } from 'primeng/message';
 import { TaskStateService } from '../../services/task-state.service';
+import { BoardPreferencesService } from '../../services/board-preferences.service';
 import { Task, TaskStatus, Workspace } from '../../models/task.model';
+import { BoardLayout } from '../../models/board-layout.enum';
 
 /**
  * KanbanBoardComponent
@@ -45,6 +47,10 @@ import { Task, TaskStatus, Workspace } from '../../models/task.model';
 export class KanbanBoardComponent implements OnInit {
   TaskStatus = TaskStatus;
   Workspace = Workspace;
+  BoardLayout = BoardLayout;
+
+  private readonly taskState = inject(TaskStateService);
+  private readonly boardPreferences = inject(BoardPreferencesService);
 
   selectedTask = signal<Task | null>(null);
   showTaskDialog = signal<boolean>(false);
@@ -54,6 +60,9 @@ export class KanbanBoardComponent implements OnInit {
   inProgressTasks = computed(() => this.taskState.currentWorkspaceInProgressTasks());
   doneTasks = computed(() => this.taskState.currentWorkspaceDoneTasks());
 
+  // Board layout preferences
+  readonly currentLayout = this.boardPreferences.layout;
+
   dailyProgress = computed(() => {
     const today = this.todayTasks().length;
     const inProgress = this.inProgressTasks().length;
@@ -61,8 +70,6 @@ export class KanbanBoardComponent implements OnInit {
     const total = today + inProgress + done;
     return total > 0 ? Math.round((done / total) * 100) : 0;
   });
-
-  constructor(private taskState: TaskStateService) {}
 
   ngOnInit(): void {
     this.taskState.loadTasks();
@@ -115,8 +122,16 @@ export class KanbanBoardComponent implements OnInit {
   }
 
   /**
+   * Toggle between Traditional and Focus board layouts.
+   */
+  toggleBoardLayout(): void {
+    this.boardPreferences.toggleLayout();
+  }
+
+  /**
    * Handles drag and drop events between kanban columns.
    * Updates task status based on which column the task was dropped into.
+   * In Focus mode, enforces WIP=1 by auto-swapping tasks in IN_PROGRESS.
    */
   onDrop(event: CdkDragDrop<Task[]>, newStatus: TaskStatus): void {
     const task = event.item.data as Task;
@@ -131,6 +146,19 @@ export class KanbanBoardComponent implements OnInit {
 
     // Only update if actually moving to a different container
     if (event.previousContainer !== event.container) {
+      // Focus mode: Enforce WIP=1 for IN_PROGRESS
+      if (newStatus === TaskStatus.IN_PROGRESS && this.currentLayout() === BoardLayout.FOCUS) {
+        // Find existing in-progress task in same workspace
+        const currentInProgress = this.inProgressTasks().find(t => t.id !== task.id);
+
+        // Auto-swap: move current task back to TODAY
+        if (currentInProgress) {
+          console.log('Focus mode WIP=1: Moving existing task back to TODAY:', currentInProgress.title);
+          this.taskState.updateTask(currentInProgress.id, { status: TaskStatus.TODAY });
+        }
+      }
+
+      // Move new task to target status
       this.taskState.updateTask(task.id, { status: newStatus });
     }
   }

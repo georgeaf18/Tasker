@@ -1,15 +1,20 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChannelApiService } from '../../services/channel-api.service';
+import { TagStateService } from '../../services/tag-state.service';
+import { BoardPreferencesService } from '../../services/board-preferences.service';
 import { Channel } from '../../models/channel.model';
+import { Tag, CreateTagDto } from '../../models/tag.model';
 import { Workspace } from '../../models/workspace.enum';
+import { BoardLayout } from '../../models/board-layout.enum';
 import { ButtonModule } from 'primeng/button';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ChipModule } from 'primeng/chip';
 import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -35,6 +40,7 @@ import { ToastModule } from 'primeng/toast';
     standalone: true,
     imports: [
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
         ButtonModule,
         Tabs,
@@ -46,6 +52,7 @@ import { ToastModule } from 'primeng/toast';
         InputTextModule,
         ColorPickerModule,
         SelectButtonModule,
+        MultiSelectModule,
         ChipModule,
         MessageModule,
         ConfirmDialogModule,
@@ -57,6 +64,8 @@ import { ToastModule } from 'primeng/toast';
 })
 export class SettingsComponent implements OnInit {
     private readonly channelApi = inject(ChannelApiService);
+    readonly tagState = inject(TagStateService);
+    readonly boardPreferences = inject(BoardPreferencesService);
     private readonly fb = inject(FormBuilder);
     private readonly confirmationService = inject(ConfirmationService);
     private readonly messageService = inject(MessageService);
@@ -77,10 +86,16 @@ export class SettingsComponent implements OnInit {
     // UI state signals
     readonly showCreateChannelDialog = signal<boolean>(false);
     readonly editingChannel = signal<Channel | null>(null);
+    readonly showCreateTagDialog = signal<boolean>(false);
+    readonly editingTag = signal<Tag | null>(null);
     readonly activeTab = signal<number>(0);
     readonly isLoading = signal<boolean>(false);
 
-    // Expose Workspace enum to template
+    // Tag signals
+    readonly tags = this.tagState.tags;
+    readonly currentBoardLayout = this.boardPreferences.layout;
+
+    // Expose enums to template
     readonly Workspace = Workspace;
 
     // Workspace options for select button
@@ -89,8 +104,21 @@ export class SettingsComponent implements OnInit {
         { label: 'Personal', value: Workspace.PERSONAL }
     ];
 
-    // Channel form
+    // Workspace multi-select options for tags
+    readonly workspaceMultiOptions = [
+        { label: 'Work', value: Workspace.WORK },
+        { label: 'Personal', value: Workspace.PERSONAL }
+    ];
+
+    // Board layout options
+    readonly boardLayoutOptions = [
+        { label: 'Traditional (3 Columns)', value: BoardLayout.TRADITIONAL },
+        { label: 'Focus Mode', value: BoardLayout.FOCUS }
+    ];
+
+    // Forms
     channelForm: FormGroup;
+    tagForm: FormGroup;
 
     constructor() {
         this.channelForm = this.fb.group({
@@ -98,10 +126,17 @@ export class SettingsComponent implements OnInit {
             workspace: [Workspace.WORK, Validators.required],
             color: ['#8B7BB8', Validators.required]
         });
+
+        this.tagForm = this.fb.group({
+            name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+            color: ['#8B7BB8', [Validators.required, Validators.pattern(/^#[0-9A-F]{6}$/i)]],
+            workspaces: [[], Validators.required]
+        });
     }
 
     ngOnInit(): void {
         this.loadChannels();
+        this.tagState.loadTags();
     }
 
     /**
@@ -358,9 +393,14 @@ export class SettingsComponent implements OnInit {
 
     /**
      * Gets the form control error message for display.
+     * Works with both channel and tag forms.
      */
-    getErrorMessage(controlName: string): string {
-        const control = this.channelForm.get(controlName);
+    getErrorMessage(controlName: string, formGroup?: FormGroup): string {
+        // If form group not specified, try to detect based on active dialog
+        const form = formGroup ||
+                     (this.showCreateTagDialog() ? this.tagForm : this.channelForm);
+
+        const control = form.get(controlName);
         if (!control || !control.errors || !control.touched) {
             return '';
         }
@@ -373,6 +413,9 @@ export class SettingsComponent implements OnInit {
         }
         if (control.errors['maxlength']) {
             return `${this.capitalizeFirst(controlName)} must be at most ${control.errors['maxlength'].requiredLength} characters`;
+        }
+        if (control.errors['pattern']) {
+            return `${this.capitalizeFirst(controlName)} format is invalid`;
         }
 
         return 'Invalid input';
@@ -397,5 +440,126 @@ export class SettingsComponent implements OnInit {
      */
     get saveButtonLabel(): string {
         return this.editingChannel() ? 'Update' : 'Create';
+    }
+
+    // Tag Management Methods
+
+    /**
+     * Opens the tag creation dialog.
+     * Resets the form with default values.
+     */
+    openCreateTagDialog(): void {
+        this.editingTag.set(null);
+        this.tagForm.reset({
+            name: '',
+            color: '#8B7BB8',
+            workspaces: []
+        });
+        this.showCreateTagDialog.set(true);
+    }
+
+    /**
+     * Opens the tag edit dialog.
+     * Pre-fills the form with existing tag data.
+     */
+    openEditTagDialog(tag: Tag): void {
+        this.editingTag.set(tag);
+        this.tagForm.patchValue({
+            name: tag.name,
+            color: tag.color,
+            workspaces: tag.workspaces
+        });
+        this.showCreateTagDialog.set(true);
+    }
+
+    /**
+     * Closes the tag dialog and resets form state.
+     */
+    closeTagDialog(): void {
+        this.showCreateTagDialog.set(false);
+        this.editingTag.set(null);
+        this.tagForm.reset();
+    }
+
+    /**
+     * Saves the tag (create or update based on editingTag state).
+     * Validates form before submission.
+     */
+    saveTag(): void {
+        if (this.tagForm.invalid) {
+            this.tagForm.markAllAsTouched();
+            return;
+        }
+
+        const formValue = this.tagForm.value as CreateTagDto;
+        const editingTag = this.editingTag();
+
+        if (editingTag) {
+            this.tagState.updateTag(editingTag.id, formValue);
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: `Tag "${formValue.name}" updated successfully`
+            });
+        } else {
+            this.tagState.addTag(formValue);
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: `Tag "${formValue.name}" created successfully`
+            });
+        }
+
+        this.closeTagDialog();
+    }
+
+    /**
+     * Deletes a tag after user confirmation.
+     * Shows confirmation dialog before proceeding.
+     */
+    deleteTag(tag: Tag): void {
+        this.confirmationService.confirm({
+            message: `Are you sure you want to delete the tag "${tag.name}"? This will remove it from all tasks.`,
+            header: 'Delete Tag',
+            icon: 'pi pi-exclamation-triangle',
+            acceptButtonStyleClass: 'p-button-danger',
+            accept: () => {
+                this.tagState.removeTag(tag.id);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: `Tag "${tag.name}" deleted successfully`
+                });
+            }
+        });
+    }
+
+    /**
+     * Gets the tag dialog header based on editing state.
+     */
+    get tagDialogHeader(): string {
+        return this.editingTag() ? 'Edit Tag' : 'Create Tag';
+    }
+
+    /**
+     * Gets the tag save button label based on editing state.
+     */
+    get tagSaveButtonLabel(): string {
+        return this.editingTag() ? 'Update' : 'Create';
+    }
+
+    // Board Layout Methods
+
+    /**
+     * Sets the board layout preference.
+     * Updates the preference service and shows success message.
+     */
+    setBoardLayout(layout: BoardLayout): void {
+        this.boardPreferences.setLayout(layout);
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Settings Updated',
+            detail: `Board layout changed to ${layout === BoardLayout.FOCUS ? 'Focus Mode' : 'Traditional View'}`
+        });
     }
 }

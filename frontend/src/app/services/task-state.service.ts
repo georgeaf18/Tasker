@@ -224,4 +224,35 @@ export class TaskStateService {
     clearError(): void {
         this.errorSignal.set(null);
     }
+
+    /**
+     * Move a task to IN_PROGRESS status with WIP=1 enforcement.
+     * Automatically swaps any existing in-progress task in the same workspace back to TODAY.
+     *
+     * @param taskId - Task ID to move to IN_PROGRESS
+     * @param currentWorkspace - Current workspace context
+     */
+    moveToInProgress(taskId: number, currentWorkspace: Workspace): void {
+        const task = this.tasksSignal().find(t => t.id === taskId);
+        if (!task) {
+            console.error('[TaskStateService] Task not found:', taskId);
+            return;
+        }
+
+        // Find existing in-progress task in same workspace
+        const currentInProgress = this.tasksSignal().find(t =>
+            t.status === TaskStatus.IN_PROGRESS &&
+            t.workspace === currentWorkspace &&
+            t.id !== taskId
+        );
+
+        // Auto-swap: move current in-progress back to TODAY
+        if (currentInProgress) {
+            console.log('[TaskStateService] WIP=1 enforcement: Moving task', currentInProgress.id, 'back to TODAY');
+            this.updateTask(currentInProgress.id, { status: TaskStatus.TODAY });
+        }
+
+        // Move new task to IN_PROGRESS
+        this.updateTask(taskId, { status: TaskStatus.IN_PROGRESS });
+    }
 }

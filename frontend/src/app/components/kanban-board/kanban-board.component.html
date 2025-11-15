@@ -5,14 +5,27 @@
       <h2>Daily Progress</h2>
       <span class="progress-percentage">{{ dailyProgress() }}%</span>
     </div>
-    <p-progressBar 
-      [value]="dailyProgress()" 
+    <p-progressBar
+      [value]="dailyProgress()"
       [showValue]="false"
       styleClass="custom-progress-bar">
     </p-progressBar>
   </div>
 
-  <!-- Three-Column Kanban Board -->
+  <!-- Board Controls -->
+  <div class="board-controls">
+    <p-button
+      [icon]="currentLayout() === BoardLayout.TRADITIONAL ? 'pi pi-crosshair' : 'pi pi-th-large'"
+      [label]="currentLayout() === BoardLayout.TRADITIONAL ? 'Focus Mode' : 'Traditional View'"
+      (onClick)="toggleBoardLayout()"
+      severity="secondary"
+      [text]="true"
+      size="small">
+    </p-button>
+  </div>
+
+  <!-- Traditional 3-Column Layout -->
+  @if (currentLayout() === BoardLayout.TRADITIONAL) {
   <div class="kanban-board">
     
     <!-- TODAY Column -->
@@ -70,14 +83,26 @@
 
                 <div class="task-card-body">
                   <h3 class="task-title">{{ task.title }}</h3>
-                  
+
+                  @if (task.taskTags && task.taskTags.length > 0) {
+                    <div class="task-tags">
+                      @for (taskTag of task.taskTags; track taskTag.tag.id) {
+                        <span
+                          class="task-tag-chip"
+                          [style.background-color]="taskTag.tag.color">
+                          {{ taskTag.tag.name }}
+                        </span>
+                      }
+                    </div>
+                  }
+
                   <div class="task-meta">
-                    <p-tag 
+                    <p-tag
                       [value]="task.workspace"
                       [severity]="getWorkspaceSeverity(task.workspace)"
                       styleClass="workspace-tag">
                     </p-tag>
-                    
+
                     @if (task.dueDate) {
                       <span class="due-date">
                         <i class="pi pi-calendar"></i>
@@ -148,14 +173,26 @@
 
                 <div class="task-card-body">
                   <h3 class="task-title">{{ task.title }}</h3>
-                  
+
+                  @if (task.taskTags && task.taskTags.length > 0) {
+                    <div class="task-tags">
+                      @for (taskTag of task.taskTags; track taskTag.tag.id) {
+                        <span
+                          class="task-tag-chip"
+                          [style.background-color]="taskTag.tag.color">
+                          {{ taskTag.tag.name }}
+                        </span>
+                      }
+                    </div>
+                  }
+
                   <div class="task-meta">
-                    <p-tag 
+                    <p-tag
                       [value]="task.workspace"
                       [severity]="getWorkspaceSeverity(task.workspace)"
                       styleClass="workspace-tag">
                     </p-tag>
-                    
+
                     @if (task.dueDate) {
                       <span class="due-date">
                         <i class="pi pi-calendar"></i>
@@ -226,14 +263,26 @@
 
                 <div class="task-card-body">
                   <h3 class="task-title">{{ task.title }}</h3>
-                  
+
+                  @if (task.taskTags && task.taskTags.length > 0) {
+                    <div class="task-tags">
+                      @for (taskTag of task.taskTags; track taskTag.tag.id) {
+                        <span
+                          class="task-tag-chip"
+                          [style.background-color]="taskTag.tag.color">
+                          {{ taskTag.tag.name }}
+                        </span>
+                      }
+                    </div>
+                  }
+
                   <div class="task-meta">
-                    <p-tag 
+                    <p-tag
                       [value]="task.workspace"
                       [severity]="getWorkspaceSeverity(task.workspace)"
                       styleClass="workspace-tag">
                     </p-tag>
-                    
+
                     @if (task.dueDate) {
                       <span class="due-date">
                         <i class="pi pi-calendar"></i>
@@ -250,7 +299,167 @@
     </div>
 
   </div>
-</div>
+  }
+
+  <!-- Focus Layout -->
+  @if (currentLayout() === BoardLayout.FOCUS) {
+  <div class="focus-board-layout">
+    <!-- Focus Area - Top (IN_PROGRESS only) -->
+    <div class="focus-area">
+      <div class="column-header">
+        <div class="column-title">
+          <i class="pi pi-crosshair"></i>
+          <span>Current Focus</span>
+        </div>
+        <p-badge [value]="inProgressTasks().length.toString()" severity="warn" />
+      </div>
+
+      <div
+        class="column-content focus-content"
+        cdkDropList
+        [cdkDropListData]="inProgressTasks()"
+        [cdkDropListConnectedTo]="['today-list', 'done-list']"
+        (cdkDropListDropped)="onDrop($event, TaskStatus.IN_PROGRESS)"
+        id="focus-list">
+        @if (inProgressTasks().length === 0) {
+          <div class="empty-state">
+            <i class="pi pi-crosshair"></i>
+            <p>No task in focus. Drag a task here to start working.</p>
+          </div>
+        } @else {
+          @for (task of inProgressTasks(); track task.id) {
+            <div
+              class="task-card focus-task-card"
+              cdkDrag
+              [cdkDragData]="task">
+              <div class="task-header">
+                <h3>{{ task.title }}</h3>
+              </div>
+
+              @if (task.taskTags && task.taskTags.length > 0) {
+                <div class="task-tags">
+                  @for (taskTag of task.taskTags; track taskTag.tag.id) {
+                    <span
+                      class="task-tag-chip"
+                      [style.background-color]="taskTag.tag.color">
+                      {{ taskTag.tag.name }}
+                    </span>
+                  }
+                </div>
+              }
+
+              @if (task.channel) {
+                <div class="task-channel">
+                  <span
+                    class="channel-indicator"
+                    [style.background-color]="task.channel.color"></span>
+                  <span>{{ task.channel.name }}</span>
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <!-- Bottom Columns - TODAY and DONE side-by-side -->
+    <div class="bottom-columns">
+      <!-- TODAY Column (minimized) -->
+      <div class="kanban-column today-column">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="pi pi-calendar"></i>
+            <span>Up Next</span>
+          </div>
+          <p-badge [value]="todayTasks().length.toString()" />
+        </div>
+
+        <div
+          class="column-content"
+          cdkDropList
+          [cdkDropListData]="todayTasks()"
+          [cdkDropListConnectedTo]="['focus-list', 'done-list']"
+          (cdkDropListDropped)="onDrop($event, TaskStatus.TODAY)"
+          id="today-list">
+          @if (todayTasks().length === 0) {
+            <div class="empty-state">
+              <i class="pi pi-inbox"></i>
+              <p>No tasks scheduled for today</p>
+            </div>
+          } @else {
+            @for (task of todayTasks(); track task.id) {
+              <div
+                class="task-card compact-task-card"
+                cdkDrag
+                [cdkDragData]="task">
+                <h4>{{ task.title }}</h4>
+
+                @if (task.taskTags && task.taskTags.length > 0) {
+                  <div class="task-tags">
+                    @for (taskTag of task.taskTags; track taskTag.tag.id) {
+                      <span
+                        class="task-tag-chip"
+                        [style.background-color]="taskTag.tag.color">
+                        {{ taskTag.tag.name }}
+                      </span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
+      </div>
+
+      <!-- DONE Column (minimized) -->
+      <div class="kanban-column done-column">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="pi pi-check-circle"></i>
+            <span>Completed</span>
+          </div>
+          <p-badge [value]="doneTasks().length.toString()" severity="success" />
+        </div>
+
+        <div
+          class="column-content"
+          cdkDropList
+          [cdkDropListData]="doneTasks()"
+          [cdkDropListConnectedTo]="['today-list', 'focus-list']"
+          (cdkDropListDropped)="onDrop($event, TaskStatus.DONE)"
+          id="done-list">
+          @if (doneTasks().length === 0) {
+            <div class="empty-state">
+              <i class="pi pi-check"></i>
+              <p>No completed tasks</p>
+            </div>
+          } @else {
+            @for (task of doneTasks(); track task.id) {
+              <div
+                class="task-card compact-task-card done-card"
+                cdkDrag
+                [cdkDragData]="task">
+                <h4>{{ task.title }}</h4>
+
+                @if (task.taskTags && task.taskTags.length > 0) {
+                  <div class="task-tags">
+                    @for (taskTag of task.taskTags; track taskTag.tag.id) {
+                      <span
+                        class="task-tag-chip"
+                        [style.background-color]="taskTag.tag.color">
+                        {{ taskTag.tag.name }}
+                      </span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  }
 
 <!-- Task Details Dialog -->
 @if (selectedTask()) {

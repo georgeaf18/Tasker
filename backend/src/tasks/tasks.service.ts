@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskFilterDto } from './dto/task-filter.dto';
-import { Task } from '@prisma/client';
+import { Task, Workspace, TaskStatus } from '@prisma/client';
 
 /**
  * TasksService
@@ -23,7 +23,11 @@ export class TasksService {
    * @returns Array of tasks with channel relation, sorted by createdAt DESC
    */
   async findAll(filters: TaskFilterDto): Promise<Task[]> {
-    const where: any = {};
+    const where: {
+      workspace?: Workspace;
+      status?: TaskStatus;
+      channelId?: number | null;
+    } = {};
 
     if (filters.workspace) {
       where.workspace = filters.workspace;
@@ -41,6 +45,11 @@ export class TasksService {
       where,
       include: {
         channel: true,
+        taskTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -60,6 +69,11 @@ export class TasksService {
       where: { id },
       include: {
         channel: true,
+        taskTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
 
@@ -77,7 +91,15 @@ export class TasksService {
    * @returns Created task with channel relation
    */
   async create(createTaskDto: CreateTaskDto): Promise<Task> {
-    const taskData: any = {
+    const taskData: {
+      title: string;
+      workspace: Workspace;
+      description?: string;
+      channelId?: number;
+      status?: TaskStatus;
+      dueDate?: Date;
+      isRoutine?: boolean;
+    } = {
       title: createTaskDto.title,
       workspace: createTaskDto.workspace,
     };
@@ -106,6 +128,11 @@ export class TasksService {
       data: taskData,
       include: {
         channel: true,
+        taskTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
   }
@@ -122,7 +149,15 @@ export class TasksService {
     // Verify task exists first
     await this.findOne(id);
 
-    const updateData: any = {};
+    const updateData: {
+      title?: string;
+      description?: string;
+      workspace?: Workspace;
+      channelId?: number | null;
+      status?: TaskStatus;
+      dueDate?: Date;
+      isRoutine?: boolean;
+    } = {};
 
     if (updateTaskDto.title !== undefined) {
       updateData.title = updateTaskDto.title;
@@ -157,6 +192,11 @@ export class TasksService {
       data: updateData,
       include: {
         channel: true,
+        taskTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
   }
@@ -176,6 +216,11 @@ export class TasksService {
       where: { id },
       include: {
         channel: true,
+        taskTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
   }

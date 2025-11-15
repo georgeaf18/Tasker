@@ -49,10 +49,36 @@ model Task {
   isRoutine   Boolean    @default(false) @map("is_routine")
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
+  taskTags    TaskTag[]
 
   @@index([status])
   @@index([workspace])
   @@index([channelId])
   @@index([dueDate])
   @@map("tasks")
+}
+
+model Tag {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique @db.VarChar(50)
+  color      String     @db.VarChar(7) // Hex color code
+  workspaces Workspace[] // Array of workspaces where this tag appears
+  createdAt  DateTime   @default(now()) @map("created_at")
+  taskTags   TaskTag[]  // Relation to junction table
+
+  @@index([name])
+  @@map("tags")
+}
+
+model TaskTag {
+  taskId    Int      @map("task_id")
+  tagId     Int      @map("tag_id")
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([taskId, tagId])
+  @@index([taskId])
+  @@index([tagId])
+  @@map("task_tags")
 }

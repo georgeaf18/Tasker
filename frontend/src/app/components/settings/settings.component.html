@@ -9,6 +9,7 @@
     <p-tabs styleClass="settings-tabs">
         <p-tablist>
             <p-tab>Contexts & Channels</p-tab>
+            <p-tab>Tags</p-tab>
             <p-tab>General</p-tab>
             <p-tab>Appearance</p-tab>
         </p-tablist>
@@ -131,13 +132,85 @@
             </div>
             </p-tabpanel>
 
-            <!-- General Settings Tab (Placeholder) -->
+            <!-- Tags Tab -->
             <p-tabpanel>
                 <div class="settings-content">
-                    <p-message
-                        severity="info"
-                        text="General settings will be available in a future release."
-                    />
+                    <div class="context-header">
+                        <h2>Manage Tags</h2>
+                        <p-button
+                            label="Create Tag"
+                            icon="pi pi-plus"
+                            size="small"
+                            (onClick)="openCreateTagDialog()"
+                            [loading]="tagState.loading()"
+                        />
+                    </div>
+
+                    @if (tags().length === 0) {
+                        <p-message
+                            severity="info"
+                            text="No tags yet. Create one to get started!"
+                            styleClass="empty-state-message"
+                        />
+                    } @else {
+                        <div class="channels-grid">
+                            @for (tag of tags(); track tag.id) {
+                                <div class="channel-item">
+                                    <div class="channel-content">
+                                        <span
+                                            class="channel-color"
+                                            [style.background-color]="tag.color"
+                                        ></span>
+                                        <span class="channel-name">{{ tag.name }}</span>
+                                        <div class="tag-workspaces">
+                                            @for (workspace of tag.workspaces; track workspace) {
+                                                <p-chip [label]="workspace" />
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="channel-actions">
+                                        <p-button
+                                            icon="pi pi-pencil"
+                                            [text]="true"
+                                            [rounded]="true"
+                                            size="small"
+                                            severity="secondary"
+                                            (onClick)="openEditTagDialog(tag)"
+                                            [attr.aria-label]="'Edit ' + tag.name"
+                                        />
+                                        <p-button
+                                            icon="pi pi-trash"
+                                            [text]="true"
+                                            [rounded]="true"
+                                            size="small"
+                                            severity="danger"
+                                            (onClick)="deleteTag(tag)"
+                                            [attr.aria-label]="'Delete ' + tag.name"
+                                        />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </p-tabpanel>
+
+            <!-- General Settings Tab -->
+            <p-tabpanel>
+                <div class="settings-content">
+                    <section class="context-section">
+                        <h2>Board Layout</h2>
+                        <p-selectButton
+                            [ngModel]="currentBoardLayout()"
+                            (ngModelChange)="setBoardLayout($event)"
+                            [options]="boardLayoutOptions"
+                            optionLabel="label"
+                            optionValue="value"
+                        />
+                        <p class="help-text">
+                            Focus Mode shows one task in a large center area. Traditional shows three columns side-by-side.
+                        </p>
+                    </section>
                 </div>
             </p-tabpanel>
 
@@ -221,6 +294,82 @@
                     type="submit"
                     [loading]="isLoading()"
                     [disabled]="channelForm.invalid"
+                />
+            </div>
+        </form>
+    </p-dialog>
+
+    <!-- Tag Create/Edit Dialog -->
+    <p-dialog
+        [header]="tagDialogHeader"
+        [(visible)]="showCreateTagDialog"
+        [modal]="true"
+        [closable]="true"
+        [draggable]="false"
+        [resizable]="false"
+        styleClass="channel-dialog"
+        (onHide)="closeTagDialog()"
+    >
+        <form [formGroup]="tagForm" (ngSubmit)="saveTag()">
+            <!-- Tag Name -->
+            <div class="form-field">
+                <label for="tag-name">Tag Name *</label>
+                <input
+                    pInputText
+                    id="tag-name"
+                    formControlName="name"
+                    placeholder="e.g., blocked, urgent, bug"
+                    [class.error]="tagForm.get('name')?.invalid && tagForm.get('name')?.touched"
+                />
+                @if (getErrorMessage('name')) {
+                    <small class="error-message">{{ getErrorMessage('name') }}</small>
+                }
+            </div>
+
+            <!-- Color Picker -->
+            <div class="form-field">
+                <label for="tag-color">Color *</label>
+                <div class="color-picker-container">
+                    <p-colorPicker
+                        formControlName="color"
+                        [inline]="false"
+                        format="hex"
+                    />
+                    <span class="color-preview" [style.background-color]="tagForm.get('color')?.value"></span>
+                    <span class="color-value">{{ tagForm.get('color')?.value }}</span>
+                </div>
+            </div>
+
+            <!-- Workspace Multi-Select -->
+            <div class="form-field">
+                <label for="tag-workspaces">Visible In *</label>
+                <p-multiSelect
+                    id="tag-workspaces"
+                    formControlName="workspaces"
+                    [options]="workspaceMultiOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select workspaces"
+                    display="chip"
+                />
+                <small class="help-text">Choose which contexts this tag should appear in</small>
+            </div>
+
+            <!-- Dialog Footer Actions -->
+            <div class="dialog-footer">
+                <p-button
+                    label="Cancel"
+                    severity="secondary"
+                    [text]="true"
+                    (onClick)="closeTagDialog()"
+                    type="button"
+                />
+                <p-button
+                    [label]="tagSaveButtonLabel"
+                    icon="pi pi-check"
+                    type="submit"
+                    [loading]="tagState.loading()"
+                    [disabled]="tagForm.invalid"
                 />
             </div>
         </form>

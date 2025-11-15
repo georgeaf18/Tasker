@@ -104,6 +104,7 @@
     "db:shell": "docker-compose exec postgres psql -U ${POSTGRES_USER:-tasker} -d ${POSTGRES_DB:-tasker_dev}",
     "db:up": "docker-compose up -d postgres",
     "db:validate": "./scripts/validate-db.sh",
+    "seed": "ts-node --project backend/tsconfig.app.json backend/prisma/seed.ts",
     "build": "nx run-many -t build",
     "build:affected": "nx affected -t build",
     "build:production": "nx run-many -t build --configuration=production"

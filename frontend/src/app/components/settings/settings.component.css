@@ -374,3 +374,17 @@
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Tag Workspaces Display */
+.tag-workspaces {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+/* Help Text */
+.help-text {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
