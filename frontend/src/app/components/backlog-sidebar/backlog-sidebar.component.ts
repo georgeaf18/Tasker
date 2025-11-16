@@ -228,7 +228,7 @@ export class BacklogSidebarComponent implements OnInit {
     showCreateTaskDialog(): void {
         this.createTaskForm.reset({
             status: TaskStatus.BACKLOG,
-            workspace: Workspace.PERSONAL,
+            workspace: this.taskStateService.selectedWorkspace(),
             isRoutine: false
         });
         this.createTaskDialogVisible.set(true);
