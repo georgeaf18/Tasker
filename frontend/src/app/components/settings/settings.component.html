@@ -214,13 +214,16 @@
                 </div>
             </p-tabpanel>
 
-            <!-- Appearance Settings Tab (Placeholder) -->
+            <!-- Appearance Settings Tab -->
             <p-tabpanel>
                 <div class="settings-content">
-                    <p-message
-                        severity="info"
-                        text="Appearance customization will be available in a future release."
-                    />
+                    <section class="context-section">
+                        <h2>Theme</h2>
+                        <p class="help-text">
+                            Choose your preferred theme or let the app follow your system settings.
+                        </p>
+                        <app-theme-toggle />
+                    </section>
                 </div>
             </p-tabpanel>
         </p-tabpanels>

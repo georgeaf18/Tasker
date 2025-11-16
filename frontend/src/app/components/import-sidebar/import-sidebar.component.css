@@ -4,23 +4,23 @@
   flex-direction: column;
   height: 100vh;
   width: var(--sidebar-width);
-  background: var(--color-bg-primary);
-  border-left: 1px solid var(--color-border);
+  background: var(--background-primary);
+  border-left: 1px solid var(--border-default);
   overflow: hidden;
 }
 
 /* Sidebar Header */
 .sidebar-header {
   padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--border-default);
+  background: var(--background-secondary);
 }
 
 .sidebar-header h2 {
   margin: 0;
   font-size: var(--font-size-lg);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
 /* Sidebar Content */
@@ -41,12 +41,12 @@
 }
 
 .sidebar-content::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--border-default);
   border-radius: 3px;
 }
 
 .sidebar-content::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-tertiary);
+  background: var(--text-tertiary);
 }
 
 /* Accordion Header Customization */
@@ -60,7 +60,7 @@
 
 .accordion-header-content i {
   font-size: var(--font-size-lg);
-  color: var(--color-primary);
+  color: var(--primary-purple);
 }
 
 /* Placeholder Content */
@@ -77,13 +77,13 @@
 .placeholder-icon {
   font-size: 48px;
   opacity: 0.3;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 .placeholder-content p {
   margin: 0;
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -95,33 +95,33 @@
 }
 
 :host ::ng-deep .p-accordiontab {
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-default);
   border-radius: var(--border-radius);
   overflow: hidden;
-  background: var(--color-bg-primary);
+  background: var(--background-primary);
 }
 
 :host ::ng-deep .p-accordion .p-accordiontab-header-link {
   padding: var(--spacing-md);
   font-weight: 600;
-  background: var(--color-bg-secondary);
+  background: var(--background-secondary);
   border: none;
   transition: all 0.2s ease;
 }
 
 :host ::ng-deep .p-accordion .p-accordiontab-header-link:hover {
-  background: var(--color-bg-tertiary);
+  background: var(--background-secondary);
 }
 
 :host ::ng-deep .p-accordion .p-accordiontab.p-accordiontab-active .p-accordiontab-header-link {
-  background: var(--color-primary-bg);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--primary-purple-bg);
+  border-bottom: 1px solid var(--border-default);
 }
 
 :host ::ng-deep .p-accordion .p-accordiontab-content {
   padding: 0;
   border: none;
-  background: var(--color-bg-primary);
+  background: var(--background-primary);
 }
 
 /* Hide the default toggle icon */

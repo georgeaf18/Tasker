@@ -1,0 +1,93 @@
+/**
+ * Dark Theme CSS Variables
+ * Design System v1.0.0
+ *
+ * This file defines all color variables for dark mode.
+ * Applied when [data-theme="dark"] attribute is present on document root.
+ */
+
+[data-theme="dark"] {
+  /* ========================================
+     Base Colors
+     ======================================== */
+
+  --background-primary: #1C1B1A;        /* Off-black, warm */
+  --background-secondary: #262524;      /* Lighter off-black */
+  --background-elevated: #302F2D;       /* Elevated surfaces */
+
+  --text-primary: #E8E6E3;              /* Off-white */
+  --text-secondary: #B8B6B3;            /* Medium gray */
+  --text-tertiary: #8A8885;             /* Darker gray for hints */
+
+  /* ========================================
+     Primary Colors (Purples & Blues)
+     ======================================== */
+
+  --primary-purple: #A78BFA;            /* Bright purple (lighter for dark) */
+  --primary-purple-hover: #C4B5FD;      /* Lighter on hover (inverted behavior) */
+  --primary-purple-light: #8B5CF6;      /* Darker tint */
+  --primary-purple-bg: #2E1065;         /* Dark background tint */
+
+  --primary-blue: #60A5FA;              /* Bright blue (lighter for dark) */
+  --primary-blue-hover: #93C5FD;        /* Lighter on hover */
+  --primary-blue-light: #3B82F6;        /* Darker tint */
+  --primary-blue-bg: #1E3A8A;           /* Dark background tint */
+
+  /* ========================================
+     Accent Colors (Pinks & Reds)
+     ======================================== */
+
+  --accent-pink: #F472B6;               /* Bright pink (lighter for dark) */
+  --accent-pink-hover: #F9A8D4;         /* Lighter on hover */
+  --accent-pink-light: #EC4899;         /* Darker tint */
+  --accent-pink-bg: #831843;            /* Dark background tint */
+
+  --accent-red: #F87171;                /* Bright red (lighter for dark) */
+  --accent-red-hover: #FCA5A5;          /* Lighter on hover */
+  --accent-red-light: #EF4444;          /* Darker tint */
+  --accent-red-bg: #7F1D1D;             /* Dark background tint */
+
+  /* ========================================
+     Status Colors - Kanban Columns
+     ======================================== */
+
+  --status-backlog: #60A5FA;            /* Bright blue (lighter for dark) */
+  --status-today: #FCD34D;              /* Bright gold (lighter for dark) */
+  --status-in-progress: #A78BFA;        /* Bright purple (lighter for dark) */
+  --status-done: #34D399;               /* Bright green (lighter for dark) */
+
+  /* ========================================
+     Semantic Status Colors
+     ======================================== */
+
+  --success: #34D399;                   /* Bright green */
+  --warning: #FCD34D;                   /* Bright amber */
+  --error: #F87171;                     /* Bright red */
+  --info: #60A5FA;                      /* Bright blue */
+
+  /* ========================================
+     Workspace Colors
+     ======================================== */
+
+  --workspace-work: #60A5FA;            /* Bright blue */
+  --workspace-work-bg: #1E3A8A;         /* Dark blue background */
+
+  --workspace-personal: #F472B6;        /* Hot pink */
+  --workspace-personal-bg: #831843;     /* Dark pink background */
+
+  /* ========================================
+     UI Element Colors
+     ======================================== */
+
+  --border-default: #3D3C3A;            /* Subtle border */
+  --border-strong: #5A5856;             /* Stronger border for emphasis */
+  --border-focus: #A78BFA;              /* Bright purple for focus states */
+
+  /* ========================================
+     Shadows
+     ======================================== */
+
+  --shadow-subtle: rgba(0, 0, 0, 0.20);
+  --shadow-medium: rgba(0, 0, 0, 0.30);
+  --shadow-strong: rgba(0, 0, 0, 0.40);
+}

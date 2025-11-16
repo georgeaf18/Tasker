@@ -20,6 +20,7 @@ import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 /**
  * SettingsComponent
@@ -56,7 +57,8 @@ import { ToastModule } from 'primeng/toast';
         ChipModule,
         MessageModule,
         ConfirmDialogModule,
-        ToastModule
+        ToastModule,
+        ThemeToggleComponent
     ],
     providers: [ConfirmationService, MessageService],
     templateUrl: './settings.component.html',
