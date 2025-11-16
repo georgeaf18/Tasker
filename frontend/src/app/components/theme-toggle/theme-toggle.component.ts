@@ -61,10 +61,10 @@ export class ThemeToggleComponent {
   ];
 
   /**
-   * Computed selected value for two-way binding
-   * Reads from ThemeService signal
+   * Selected theme value from ThemeService
+   * Direct signal reference for SelectButton binding
    */
-  readonly selectedTheme = computed<Theme>(() => this.themeService.theme());
+  readonly selectedTheme = this.themeService.theme;
 
   /**
    * Handle theme selection change

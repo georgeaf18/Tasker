@@ -5,7 +5,8 @@
 @import './styles/themes/dark-theme.css';
 
 /* Design System CSS Variables - Light Mode */
-:root {
+:root:not([data-theme="dark"]),
+[data-theme="light"] {
   /* ========================================
      Base Colors
      ======================================== */
