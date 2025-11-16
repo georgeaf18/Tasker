@@ -1,5 +1,6 @@
 <div class="app-container">
-  <!-- Header -->
+  <!-- Header (hidden on settings page) -->
+  @if (isMainView()) {
   <header class="app-header">
     <div class="header-left">
       <h1 class="app-title">{{ title }}</h1>
@@ -52,6 +53,7 @@
       </button>
     </div>
   </header>
+  }
 
   <!-- Main Layout: Sidebar + Content OR Router Outlet -->
   @if (isMainView()) {
