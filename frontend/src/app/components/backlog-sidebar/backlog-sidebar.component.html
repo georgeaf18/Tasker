@@ -137,14 +137,6 @@
     styleClass="sleek-task-dialog"
 >
     <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()" class="sleek-form">
-        <!-- Top Actions -->
-        <div class="dialog-top-actions">
-            <button type="button" class="add-task-btn" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
-                <i class="pi pi-user-plus"></i>
-                <span>Add task</span>
-            </button>
-        </div>
-
         <!-- Main Input -->
         <div class="task-input-container">
             <input
@@ -211,10 +203,16 @@
                     }
                 </div>
             </p-popover>
+        </div>
 
-            <!-- Priority/Up Arrow Button -->
-            <button type="button" class="metadata-btn">
-                <i class="pi pi-arrow-up"></i>
+        <!-- Bottom Actions -->
+        <div class="dialog-bottom-actions">
+            <button type="button" class="cancel-btn" (click)="hideCreateTaskDialog()">
+                <span>Cancel</span>
+            </button>
+            <button type="button" class="add-task-btn" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
+                <i class="pi pi-user-plus"></i>
+                <span>Add task</span>
             </button>
         </div>
     </form>
