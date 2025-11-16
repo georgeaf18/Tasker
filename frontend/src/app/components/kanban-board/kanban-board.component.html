@@ -374,6 +374,35 @@
           <p-badge [value]="todayTasks().length.toString()" />
         </div>
 
+        <!-- Progress Bar -->
+        <div class="up-next-progress">
+          <p-progressBar
+            [value]="upNextProgress()"
+            [showValue]="false"
+            styleClass="up-next-progress-bar">
+          </p-progressBar>
+        </div>
+
+        <!-- Quick Actions Row -->
+        <div class="quick-actions-row">
+          <p-button
+            icon="pi pi-plus"
+            label="Add task"
+            (onClick)="showAddTaskDialog()"
+            [text]="true"
+            size="small"
+            styleClass="add-task-quick-btn">
+          </p-button>
+          <p-button
+            icon="pi pi-sort-alt"
+            [label]="getSortLabel()"
+            (onClick)="toggleSort()"
+            [text]="true"
+            size="small"
+            styleClass="sort-toggle-btn">
+          </p-button>
+        </div>
+
         <div
           class="column-content"
           cdkDropList
@@ -463,7 +492,7 @@
 
 <!-- Task Details Dialog -->
 @if (selectedTask()) {
-  <p-dialog 
+  <p-dialog
     [(visible)]="showTaskDialog"
     [header]="selectedTask()?.title"
     [modal]="true"
@@ -472,7 +501,7 @@
     [resizable]="false"
     styleClass="task-dialog"
     [style]="{ width: '600px', maxWidth: '90vw' }">
-    
+
     <div class="task-details">
       <!-- Task Info -->
       <div class="detail-section">
@@ -490,7 +519,7 @@
         <div class="metadata-grid">
           <div class="metadata-item">
             <span class="metadata-label">Workspace:</span>
-            <p-tag 
+            <p-tag
               [value]="selectedTask()?.workspace"
               [severity]="getWorkspaceSeverity(selectedTask()!.workspace)">
             </p-tag>
@@ -527,7 +556,7 @@
         <h4>Move Task</h4>
         <div class="status-buttons">
           @if (selectedTask()?.status !== TaskStatus.TODAY) {
-            <p-button 
+            <p-button
               label="Move to Today"
               icon="pi pi-calendar"
               severity="info"
@@ -545,7 +574,7 @@
           }
 
           @if (selectedTask()?.status !== TaskStatus.DONE) {
-            <p-button 
+            <p-button
               label="Mark as Done"
               icon="pi pi-check-circle"
               severity="success"
@@ -558,14 +587,14 @@
 
     <ng-template pTemplate="footer">
       <div class="dialog-footer">
-        <p-button 
+        <p-button
           label="Delete"
           icon="pi pi-trash"
           severity="danger"
           [text]="true"
           (onClick)="deleteTask(selectedTask()!.id)">
         </p-button>
-        <p-button 
+        <p-button
           label="Close"
           icon="pi pi-times"
           [text]="true"
@@ -575,3 +604,89 @@
     </ng-template>
   </p-dialog>
 }
+
+<!-- Create Task Dialog - Sleek Design -->
+<p-dialog
+  [(visible)]="createTaskDialogVisible"
+  [modal]="true"
+  [style]="{width: '700px'}"
+  [draggable]="false"
+  [resizable]="false"
+  [showHeader]="false"
+  [dismissableMask]="true"
+  styleClass="sleek-task-dialog">
+  <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()" class="sleek-form">
+    <!-- Main Input -->
+    <div class="task-input-container">
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Task description..."
+        class="sleek-task-input"
+        autocomplete="off"
+      />
+    </div>
+
+    <!-- Metadata Row -->
+    <div class="metadata-row">
+      <!-- Status Button -->
+      <button type="button" class="metadata-btn" (click)="op1.toggle($event)">
+        <i class="pi pi-calendar"></i>
+        <span>{{ createTaskForm.get('status')?.value === 'TODAY' ? 'Today' : 'Backlog' }}</span>
+      </button>
+      <p-popover #op1>
+        <div class="metadata-popover">
+          @for (option of statusOptions; track option.value) {
+            <div class="popover-option" (click)="createTaskForm.patchValue({status: option.value}); op1.hide()">
+              <i class="pi pi-calendar"></i>
+              <span>{{ option.label }}</span>
+            </div>
+          }
+        </div>
+      </p-popover>
+
+      <!-- Channel Button -->
+      <button type="button" class="metadata-btn" (click)="op2.toggle($event)">
+        <i class="pi pi-hashtag"></i>
+        <span>{{ getChannelName(createTaskForm.get('channelId')?.value) || 'No channel' }}</span>
+      </button>
+      <p-popover #op2>
+        <div class="metadata-popover">
+          @for (channel of filteredChannels(); track channel.id) {
+            <div class="popover-option" (click)="createTaskForm.patchValue({channelId: channel.id}); op2.hide()">
+              <i class="pi pi-hashtag"></i>
+              <span>{{ channel.name }}</span>
+            </div>
+          }
+        </div>
+      </p-popover>
+
+      <!-- Workspace Button -->
+      <button type="button" class="metadata-btn" (click)="op3.toggle($event)">
+        <i class="pi pi-{{ createTaskForm.get('workspace')?.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+      </button>
+      <p-popover #op3>
+        <div class="metadata-popover">
+          @for (workspace of workspaceOptions; track workspace.value) {
+            <div class="popover-option" (click)="createTaskForm.patchValue({workspace: workspace.value}); op3.hide()">
+              <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
+              <span>{{ workspace.label }}</span>
+            </div>
+          }
+        </div>
+      </p-popover>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="dialog-bottom-actions">
+      <button type="button" class="cancel-btn" (click)="hideCreateTaskDialog()">
+        <span>Cancel</span>
+      </button>
+      <button type="button" class="add-task-btn" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
+        <i class="pi pi-user-plus"></i>
+        <span>Add task</span>
+      </button>
+    </div>
+  </form>
+</p-dialog>

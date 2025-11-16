@@ -702,6 +702,183 @@
   margin: calc(var(--spacing-lg) * -1) calc(var(--spacing-lg) * -1) var(--spacing-lg);
 }
 
+/* Up Next Progress Bar */
+.up-next-progress {
+  padding: 0 var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+::ng-deep .up-next-progress-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: #e5e7eb;
+}
+
+::ng-deep .up-next-progress-bar .p-progressbar-value {
+  background: #10b981;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Quick Actions Row */
+.quick-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-sm);
+}
+
+::ng-deep .add-task-quick-btn,
+::ng-deep .sort-toggle-btn {
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+::ng-deep .add-task-quick-btn {
+  color: var(--color-primary);
+}
+
+::ng-deep .add-task-quick-btn:hover {
+  background: var(--color-primary-bg);
+}
+
+::ng-deep .sort-toggle-btn {
+  color: var(--color-text-secondary);
+}
+
+::ng-deep .sort-toggle-btn:hover {
+  background: var(--color-bg-secondary);
+}
+
+/* Sleek Task Dialog Styles */
+::ng-deep .sleek-task-dialog .p-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .sleek-task-dialog .p-dialog-content {
+  padding: 0;
+}
+
+.sleek-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+}
+
+.task-input-container {
+  width: 100%;
+}
+
+.sleek-task-input {
+  width: 100%;
+  border: none;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  padding: var(--spacing-md) 0;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.sleek-task-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.metadata-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.metadata-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.metadata-btn:hover {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary);
+}
+
+.metadata-popover {
+  padding: var(--spacing-xs);
+  min-width: 200px;
+}
+
+.popover-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.popover-option:hover {
+  background: var(--color-bg-secondary);
+}
+
+.dialog-bottom-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.cancel-btn,
+.add-task-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.cancel-btn:hover {
+  background: var(--color-bg-secondary);
+}
+
+.add-task-btn {
+  background: var(--color-primary);
+  color: white;
+}
+
+.add-task-btn:hover {
+  background: var(--color-primary-hover);
+}
+
+.add-task-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Responsive: Stack bottom columns on mobile */
 @media (max-width: 768px) {
   .focus-area {
@@ -715,5 +892,16 @@
 
   .board-controls {
     padding: var(--spacing-sm);
+  }
+
+  .quick-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  ::ng-deep .add-task-quick-btn,
+  ::ng-deep .sort-toggle-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
