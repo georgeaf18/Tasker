@@ -27,7 +27,7 @@
 .app-title {
   margin: 0;
   color: var(--color-primary);
-  font-size: var(--font-size-xl);
+  font-size: 28px; /* Increased from 18px for more prominent branding */
   font-weight: 700;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   -webkit-background-clip: text;

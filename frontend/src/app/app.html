@@ -3,13 +3,6 @@
   <header class="app-header">
     <div class="header-left">
       <h1 class="app-title">{{ title }}</h1>
-      <button
-        type="button"
-        class="settings-btn"
-        routerLink="/settings"
-        title="Settings">
-        <i class="pi pi-bars"></i>
-      </button>
     </div>
 
     <!-- Status Notification Indicator -->
@@ -45,9 +38,17 @@
         class="import-toggle-btn"
         [class.active]="importSidebarVisible()"
         (click)="toggleImportSidebar()"
-        title="Import Tasks">
+        title="Inbox">
         <i class="pi pi-download"></i>
-        <span>Import</span>
+        <span>Inbox</span>
+      </button>
+
+      <button
+        type="button"
+        class="settings-btn"
+        routerLink="/settings"
+        title="Settings">
+        <i class="pi pi-cog"></i>
       </button>
     </div>
   </header>
