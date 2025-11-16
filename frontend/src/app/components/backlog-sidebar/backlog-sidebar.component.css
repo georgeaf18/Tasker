@@ -438,6 +438,7 @@
     align-items: center;
     gap: var(--spacing-sm);
     flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .metadata-btn {
@@ -462,6 +463,11 @@
 
 .metadata-btn i {
     font-size: var(--font-size-base);
+}
+
+/* Add task button in metadata row - pushed to right with separator */
+.metadata-row .add-task-btn {
+    margin-left: auto;
 }
 
 /* Popover Styling */

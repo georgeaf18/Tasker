@@ -203,13 +203,8 @@
                     }
                 </div>
             </p-popover>
-        </div>
 
-        <!-- Bottom Actions -->
-        <div class="dialog-bottom-actions">
-            <button type="button" class="cancel-btn" (click)="hideCreateTaskDialog()">
-                <span>Cancel</span>
-            </button>
+            <!-- Add Task Button (aligned with metadata buttons) -->
             <button type="button" class="add-task-btn" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
                 <i class="pi pi-user-plus"></i>
                 <span>Add task</span>
