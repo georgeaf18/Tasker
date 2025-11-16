@@ -18,6 +18,36 @@
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
     padding: var(--spacing-lg);
+    position: relative;
+}
+
+/* Close Button */
+.settings-close-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.settings-close-btn:hover {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    border-color: var(--primary-purple);
+}
+
+.settings-close-btn i {
+    font-size: 20px;
 }
 
 /* Tab View Customization */

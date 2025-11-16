@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChannelApiService } from '../../services/channel-api.service';
 import { TagStateService } from '../../services/tag-state.service';
@@ -41,6 +42,7 @@ import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
     standalone: true,
     imports: [
         CommonModule,
+        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         ButtonModule,
