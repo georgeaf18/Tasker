@@ -14,16 +14,27 @@
     <!-- Confirmation dialog -->
     <p-confirmDialog />
 
-    <!-- New Tabs API -->
-    <p-tabs styleClass="settings-tabs">
+    <!-- Vertical Tabs Layout -->
+    <p-tabs styleClass="settings-tabs" orientation="left">
         <p-tablist>
+            <p-tab>General</p-tab>
             <p-tab>Contexts & Channels</p-tab>
             <p-tab>Tags</p-tab>
-            <p-tab>General</p-tab>
             <p-tab>Appearance</p-tab>
         </p-tablist>
 
         <p-tabpanels>
+            <!-- General Tab -->
+            <p-tabpanel>
+            <div class="settings-content">
+                <section class="context-section">
+                    <h2>General Settings</h2>
+                    <p class="help-text">Configure general application settings.</p>
+                    <!-- General settings content will go here -->
+                </section>
+            </div>
+            </p-tabpanel>
+
             <!-- Contexts & Channels Tab -->
             <p-tabpanel>
             <div class="settings-content">
