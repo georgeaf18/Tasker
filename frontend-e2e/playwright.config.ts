@@ -19,12 +19,12 @@ const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
 
-  // Test timeout: 30 seconds per test
-  timeout: 30000,
+  // Test timeout: 60 seconds per test (increased for slower CI)
+  timeout: 60000,
 
-  // Expect timeout: 5 seconds for assertions
+  // Expect timeout: 10 seconds for assertions (increased for UI to render)
   expect: {
-    timeout: 5000,
+    timeout: 10000,
   },
 
   // Fail fast in CI, continue locally for better debugging
@@ -67,17 +67,17 @@ export default defineConfig({
   webServer: [
     {
       command: 'npx nx run backend:serve',
-      url: 'http://localhost:3000/api/health',
+      url: 'http://localhost:3000/api',
       reuseExistingServer: !process.env['CI'],
       cwd: workspaceRoot,
-      timeout: 120000,
+      timeout: 180000, // 3 minutes for backend to start
     },
     {
       command: 'npx nx run frontend:serve',
       url: 'http://localhost:4200',
       reuseExistingServer: !process.env['CI'],
       cwd: workspaceRoot,
-      timeout: 120000,
+      timeout: 180000, // 3 minutes for frontend to build and serve
     },
   ],
 

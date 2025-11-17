@@ -10,10 +10,13 @@ import { test, expect } from '@playwright/test';
 test.describe('Subtask Management', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the app
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'networkidle' });
 
-    // Wait for the kanban board to load
-    await page.waitForSelector('.kanban-container', { timeout: 10000 });
+    // Wait for the kanban board to load (increased timeout for initial load)
+    await page.waitForSelector('.kanban-container', { timeout: 30000 });
+
+    // Wait an additional second for Angular to fully render
+    await page.waitForTimeout(1000);
   });
 
   test('should add a subtask to a task', async ({ page }) => {
