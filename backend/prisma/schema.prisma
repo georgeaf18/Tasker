@@ -25,6 +25,12 @@ enum TaskStatus {
   DONE
 }
 
+enum SubtaskStatus {
+  TODO
+  DOING
+  DONE
+}
+
 model Channel {
   id        Int       @id @default(autoincrement())
   name      String    @unique @db.VarChar(255)
@@ -50,6 +56,7 @@ model Task {
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
   taskTags    TaskTag[]
+  subtasks    Subtask[]
 
   @@index([status])
   @@index([workspace])
@@ -59,12 +66,12 @@ model Task {
 }
 
 model Tag {
-  id         Int        @id @default(autoincrement())
-  name       String     @unique @db.VarChar(50)
-  color      String     @db.VarChar(7) // Hex color code
+  id         Int         @id @default(autoincrement())
+  name       String      @unique @db.VarChar(50)
+  color      String      @db.VarChar(7) // Hex color code
   workspaces Workspace[] // Array of workspaces where this tag appears
-  createdAt  DateTime   @default(now()) @map("created_at")
-  taskTags   TaskTag[]  // Relation to junction table
+  createdAt  DateTime    @default(now()) @map("created_at")
+  taskTags   TaskTag[] // Relation to junction table
 
   @@index([name])
   @@map("tags")
@@ -81,4 +88,20 @@ model TaskTag {
   @@index([taskId])
   @@index([tagId])
   @@map("task_tags")
+}
+
+model Subtask {
+  id          Int           @id @default(autoincrement())
+  taskId      Int           @map("task_id")
+  task        Task          @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  title       String        @db.VarChar(500)
+  status      SubtaskStatus @default(TODO)
+  position    Int           @default(0)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  completedAt DateTime?     @map("completed_at")
+
+  @@index([taskId])
+  @@index([taskId, status])
+  @@map("subtasks")
 }
