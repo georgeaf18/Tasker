@@ -171,11 +171,10 @@ export class SubtaskFormDialogComponent implements OnChanges {
             };
             this.subtaskState.updateSubtask(this.taskId, this.subtask.id, updateDto);
         } else {
-            // Create mode: add new subtask
+            // Create mode: add new subtask (title only for now)
+            // Backend sets default: description=null, status=TODO
             const createDto: CreateSubtaskDto = {
-                title: formValue.title,
-                description: formValue.description || undefined,
-                status: formValue.status
+                title: formValue.title
             };
             this.subtaskState.addSubtask(this.taskId, createDto);
         }

@@ -1,10 +1,10 @@
-<div class="subtask-list w-full">
+<div class="subtask-list w-full" (click)="$event.stopPropagation()">
     <!-- Header: Toggle + Progress Badge (shown when subtasks exist) -->
     <div class="flex items-center justify-between gap-2 mb-2" *ngIf="totalCount() > 0">
         <button
             pButton
             [icon]="isExpanded() ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-            (click)="toggleExpanded()"
+            (click)="toggleExpanded(); $event.stopPropagation()"
             class="p-button-text p-button-sm"
             [attr.aria-expanded]="isExpanded()"
             [attr.aria-label]="isExpanded() ? 'Collapse subtasks' : 'Expand subtasks'"
@@ -27,7 +27,7 @@
             <button
                 pButton
                 icon="pi pi-plus"
-                (click)="showAddDialog()"
+                (click)="showAddDialog(); $event.stopPropagation()"
                 class="p-button-sm p-button-text"
                 aria-label="Add new subtask"
                 [disabled]="loading()">
@@ -41,7 +41,7 @@
             pButton
             icon="pi pi-plus"
             label="Add subtask"
-            (click)="showAddDialog()"
+            (click)="showAddDialog(); $event.stopPropagation()"
             class="p-button-sm p-button-outlined"
             aria-label="Add new subtask"
             [disabled]="loading()">

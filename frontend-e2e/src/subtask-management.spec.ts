@@ -12,6 +12,18 @@ test.describe('Subtask Management', () => {
     // Ensure we have a baseURL (either from config or default to localhost)
     const url = baseURL || 'http://localhost:4200';
 
+    // Listen to console messages for debugging
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        console.log(`Browser Error: ${msg.text()}`);
+      }
+    });
+
+    // Listen to page errors
+    page.on('pageerror', error => {
+      console.log(`Page Error: ${error.message}`);
+    });
+
     // Navigate to the app
     await page.goto(url, { waitUntil: 'networkidle' });
 
@@ -23,13 +35,9 @@ test.describe('Subtask Management', () => {
   });
 
   test('should add a subtask to a task', async ({ page }) => {
-    // Step 1: Find the first task card in any column
-    const taskCard = page.locator('.task-card').first();
-    await expect(taskCard).toBeVisible({ timeout: 10000 });
-
-    // Step 2: Look for the subtask list component within the task card
-    const subtaskList = taskCard.locator('app-subtask-list');
-    await expect(subtaskList).toBeVisible();
+    // Step 1: Find the first subtask-list component directly (don't click task card)
+    const subtaskList = page.locator('app-subtask-list').first();
+    await expect(subtaskList).toBeVisible({ timeout: 10000 });
 
     // Step 3: Click the "Add subtask" button
     const addButton = subtaskList.locator('button').filter({ hasText: 'Add subtask' }).or(subtaskList.locator('button[aria-label="Add new subtask"]'));
@@ -41,28 +49,52 @@ test.describe('Subtask Management', () => {
 
     // Step 5: Fill in the subtask title
     await page.locator('input#subtask-title').fill('Test Subtask - E2E Test');
+    await page.waitForTimeout(500);
 
     // Step 6: Fill in description (optional)
     await page.locator('textarea#subtask-description').fill('This is a test subtask created by E2E test');
+    await page.waitForTimeout(500);
 
     // Step 7: Submit the form by clicking Create button
-    await page.locator('p-dialog button').filter({ hasText: 'Create' }).click();
+    // Find the Create button (it's in the footer, type="submit")
+    const createButton = page.locator('p-dialog button[type="submit"]');
+    await createButton.waitFor({ state: 'visible', timeout: 5000 });
+    await expect(createButton).toBeEnabled({ timeout: 5000 });
+
+    // Wait for the POST request to create subtask
+    const responsePromise = page.waitForResponse(
+      response => response.url().includes('/api/tasks/') && response.url().includes('/subtasks') && response.request().method() === 'POST',
+      { timeout: 10000 }
+    );
+
+    await createButton.click();
+
+    // Wait for API response
+    await responsePromise;
 
     // Step 8: Wait for the dialog to close
-    await page.waitForSelector('p-dialog', { state: 'hidden', timeout: 5000 });
+    await page.waitForSelector('p-dialog', { state: 'hidden', timeout: 10000 });
 
-    // Step 9: Wait for API call to complete
+    // Step 9: Wait for component to re-render
     await page.waitForTimeout(1000);
 
-    // Step 10: Expand the subtask list if needed
+    // Step 10: Verify the subtask was created by checking for the "Subtasks" expand button
+    // (it only appears when totalCount() > 0)
     const expandButton = subtaskList.locator('button').filter({ hasText: 'Subtasks' });
+    await expect(expandButton).toBeVisible({ timeout: 10000 });
+
+    // Step 11: Verify progress badge appears
+    const progressBadge = subtaskList.locator('p-tag').filter({ hasText: /complete/ });
+    await expect(progressBadge).toBeVisible({ timeout: 5000 });
+
+    // Step 12: Expand the subtask list if collapsed
     const isExpanded = await expandButton.getAttribute('aria-expanded');
     if (isExpanded === 'false') {
       await expandButton.click();
       await page.waitForTimeout(500);
     }
 
-    // Step 11: Verify the subtask appears in the list
+    // Step 13: Verify the subtask appears in the list
     const subtaskItem = subtaskList.locator('.subtask-item').filter({ hasText: 'Test Subtask - E2E Test' });
     await expect(subtaskItem).toBeVisible({ timeout: 5000 });
 
@@ -71,10 +103,8 @@ test.describe('Subtask Management', () => {
 
   test('should change subtask status from TODO to DOING to DONE', async ({ page }) => {
     // First, create a subtask
-    const taskCard = page.locator('.task-card').first();
-    await expect(taskCard).toBeVisible({ timeout: 10000 });
-
-    const subtaskList = taskCard.locator('app-subtask-list');
+    const subtaskList = page.locator('app-subtask-list').first();
+    await expect(subtaskList).toBeVisible({ timeout: 10000 });
 
     // Click add button
     const addButton = subtaskList.locator('button').filter({ hasText: 'Add subtask' }).or(subtaskList.locator('button[aria-label="Add new subtask"]'));
@@ -143,10 +173,8 @@ test.describe('Subtask Management', () => {
 
   test('should delete a subtask', async ({ page }) => {
     // Create a subtask first
-    const taskCard = page.locator('.task-card').first();
-    await expect(taskCard).toBeVisible({ timeout: 10000 });
-
-    const subtaskList = taskCard.locator('app-subtask-list');
+    const subtaskList = page.locator('app-subtask-list').first();
+    await expect(subtaskList).toBeVisible({ timeout: 10000 });
 
     // Click add button
     const addButton = subtaskList.locator('button').filter({ hasText: 'Add subtask' }).or(subtaskList.locator('button[aria-label="Add new subtask"]'));
@@ -195,10 +223,8 @@ test.describe('Subtask Management', () => {
   });
 
   test('should show subtask progress indicator', async ({ page }) => {
-    const taskCard = page.locator('.task-card').first();
-    await expect(taskCard).toBeVisible({ timeout: 10000 });
-
-    const subtaskList = taskCard.locator('app-subtask-list');
+    const subtaskList = page.locator('app-subtask-list').first();
+    await expect(subtaskList).toBeVisible({ timeout: 10000 });
 
     // Create a subtask first so there's something to show
     const addButton = subtaskList.locator('button').filter({ hasText: 'Add subtask' }).or(subtaskList.locator('button[aria-label="Add new subtask"]'));

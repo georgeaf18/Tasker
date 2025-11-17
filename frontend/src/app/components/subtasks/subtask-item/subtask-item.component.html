@@ -1,6 +1,6 @@
-<div class="subtask-item flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+<div class="subtask-item flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors" (click)="$event.stopPropagation()">
     <!-- Status Dropdown -->
-    <div class="flex-shrink-0">
+    <div class="flex-shrink-0" (click)="$event.stopPropagation()">
         <p-select
             [options]="statusOptions"
             [(ngModel)]="subtask.status"
@@ -51,7 +51,7 @@
         <button
             pButton
             icon="pi pi-pencil"
-            (click)="onEdit()"
+            (click)="onEdit(); $event.stopPropagation()"
             class="p-button-text p-button-sm p-button-rounded"
             [attr.aria-label]="'Edit ' + subtask.title">
         </button>
@@ -60,7 +60,7 @@
         <button
             pButton
             icon="pi pi-trash"
-            (click)="confirmDelete()"
+            (click)="confirmDelete(); $event.stopPropagation()"
             class="p-button-text p-button-sm p-button-rounded p-button-danger"
             [attr.aria-label]="'Delete ' + subtask.title">
         </button>

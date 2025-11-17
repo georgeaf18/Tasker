@@ -25,11 +25,10 @@ export interface Subtask {
 
 /**
  * DTO for creating a new subtask
+ * Note: description and status must be set via UPDATE after creation
  */
 export interface CreateSubtaskDto {
     title: string;
-    description?: string;
-    status?: SubtaskStatus;
     position?: number;
 }
 
