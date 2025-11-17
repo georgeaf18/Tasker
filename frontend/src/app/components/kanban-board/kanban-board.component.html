@@ -110,6 +110,9 @@
                       </span>
                     }
                   </div>
+
+                  <!-- Subtasks Section -->
+                  <app-subtask-list [taskId]="task.id"></app-subtask-list>
                 </div>
               </p-card>
             }
@@ -200,6 +203,9 @@
                       </span>
                     }
                   </div>
+
+                  <!-- Subtasks Section -->
+                  <app-subtask-list [taskId]="task.id"></app-subtask-list>
                 </div>
               </p-card>
             }
@@ -290,6 +296,9 @@
                       </span>
                     }
                   </div>
+
+                  <!-- Subtasks Section -->
+                  <app-subtask-list [taskId]="task.id"></app-subtask-list>
                 </div>
               </p-card>
             }
@@ -356,6 +365,9 @@
                   <span>{{ task.channel.name }}</span>
                 </div>
               }
+
+              <!-- Subtasks Section -->
+              <app-subtask-list [taskId]="task.id"></app-subtask-list>
             </div>
           }
         }

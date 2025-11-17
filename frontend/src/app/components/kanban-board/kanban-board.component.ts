@@ -21,6 +21,7 @@ import { BoardPreferencesService } from '../../services/board-preferences.servic
 import { ChannelApiService } from '../../services/channel-api.service';
 import { Task, TaskStatus, Workspace, CreateTaskDto, Channel } from '../../models';
 import { BoardLayout } from '../../models/board-layout.enum';
+import { SubtaskListComponent } from '../subtasks/subtask-list/subtask-list.component';
 
 /**
  * KanbanBoardComponent
@@ -49,6 +50,7 @@ import { BoardLayout } from '../../models/board-layout.enum';
     InputTextModule,
     SelectModule,
     Popover,
+    SubtaskListComponent,
   ],
   templateUrl: './kanban-board.component.html',
   styleUrl: './kanban-board.component.css',
