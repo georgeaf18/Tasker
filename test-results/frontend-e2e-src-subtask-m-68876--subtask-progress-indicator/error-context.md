@@ -1,0 +1,124 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - heading "Tasker" [level=1] [ref=e6]
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - button " Work" [ref=e9] [cursor=pointer]:
+          - generic [ref=e10]: 
+          - generic [ref=e11]: Work
+        - button " Personal" [ref=e12] [cursor=pointer]:
+          - generic [ref=e13]: 
+          - generic [ref=e14]: Personal
+      - button " Inbox" [ref=e15] [cursor=pointer]:
+        - generic [ref=e16]: 
+        - generic [ref=e17]: Inbox
+      - button "" [ref=e18] [cursor=pointer]:
+        - generic [ref=e19]: 
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - complementary [ref=e22]:
+        - generic [ref=e23]:
+          - heading "Backlog" [level=2] [ref=e24]
+          - button "" [ref=e25] [cursor=pointer]:
+            - generic [ref=e26]: 
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e31]:
+              - generic [ref=e32]:
+                - button " Work 0" [expanded] [ref=e33] [cursor=pointer]:
+                  - generic [ref=e34]:
+                    - generic [ref=e35]: 
+                    - generic [ref=e36]: Work
+                    - generic [ref=e37]: "0"
+                - region " Work 0" [ref=e38]:
+                  - alert [ref=e42]:
+                    - generic [ref=e44]: No work tasks in backlog
+              - generic [ref=e45]:
+                - button " Personal 0" [ref=e46] [cursor=pointer]:
+                  - generic [ref=e47]:
+                    - generic [ref=e48]: 
+                    - generic [ref=e49]: Personal
+                    - generic [ref=e50]: "0"
+                - region " Personal 0"
+            - button "" [ref=e53] [cursor=pointer]:
+              - generic [ref=e54]: 
+          - generic:
+            - alertdialog
+      - button "Hide backlog" [ref=e55] [cursor=pointer]:
+        - generic [ref=e56]: 
+    - main [ref=e57]:
+      - generic [ref=e59]:
+        - generic [ref=e61]:
+          - heading "Daily Progress" [level=2] [ref=e62]
+          - generic [ref=e63]: 0%
+        - button "Focus Mode" [ref=e67] [cursor=pointer]:
+          - generic [ref=e68]: Focus Mode
+        - generic [ref=e69]:
+          - generic [ref=e71]:
+            - generic [ref=e73]:
+              - generic [ref=e74]:
+                - generic [ref=e75]: 
+                - generic [ref=e76]: Today
+              - generic [ref=e77]: "0"
+            - region [ref=e78]:
+              - alert [ref=e82]:
+                - generic [ref=e84]: No tasks scheduled for today
+          - generic [ref=e86]:
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - generic [ref=e90]: 
+                - generic [ref=e91]: In Progress
+              - generic [ref=e92]: "0"
+            - region [ref=e93]:
+              - alert [ref=e97]:
+                - generic [ref=e99]: No tasks in progress
+          - generic [ref=e101]:
+            - generic [ref=e103]:
+              - generic [ref=e104]:
+                - generic [ref=e105]: 
+                - generic [ref=e106]: Done
+              - generic [ref=e107]: "0"
+            - region [ref=e108]:
+              - alert [ref=e112]:
+                - generic [ref=e114]: No completed tasks
+    - generic:
+      - complementary [ref=e115]:
+        - generic [ref=e117]:
+          - heading "Import Tasks" [level=2] [ref=e119]
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - button " Jira Integration" [expanded] [ref=e123] [cursor=pointer]:
+                - generic [ref=e124]:
+                  - generic [ref=e125]: 
+                  - generic [ref=e126]: Jira Integration
+                - img [ref=e127]
+              - region " Jira Integration" [ref=e129]:
+                - generic [ref=e131]:
+                  - generic [ref=e132]: 
+                  - paragraph [ref=e133]: "Coming soon: Import tasks from Jira"
+            - generic [ref=e134]:
+              - button " Apple Reminders" [expanded] [ref=e135] [cursor=pointer]:
+                - generic [ref=e136]:
+                  - generic [ref=e137]: 
+                  - generic [ref=e138]: Apple Reminders
+                - img [ref=e139]
+              - region " Jira Integration" [ref=e141]:
+                - generic [ref=e143]:
+                  - generic [ref=e144]: 
+                  - paragraph [ref=e145]: "Coming soon: Import tasks from Apple Reminders"
+            - generic [ref=e146]:
+              - button " Calendar Events" [expanded] [ref=e147] [cursor=pointer]:
+                - generic [ref=e148]:
+                  - generic [ref=e149]: 
+                  - generic [ref=e150]: Calendar Events
+                - img [ref=e151]
+              - region " Jira Integration" [ref=e153]:
+                - generic [ref=e155]:
+                  - generic [ref=e156]: 
+                  - paragraph [ref=e157]: "Coming soon: Import calendar events as tasks"
+      - button "Show import sidebar" [ref=e158] [cursor=pointer]:
+        - generic [ref=e159]: 
+```

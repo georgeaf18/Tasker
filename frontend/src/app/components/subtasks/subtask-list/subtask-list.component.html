@@ -1,6 +1,6 @@
-<div class="subtask-list w-full" *ngIf="totalCount() > 0 || isExpanded()">
-    <!-- Header: Toggle + Progress Badge -->
-    <div class="flex items-center justify-between gap-2 mb-2">
+<div class="subtask-list w-full">
+    <!-- Header: Toggle + Progress Badge (shown when subtasks exist) -->
+    <div class="flex items-center justify-between gap-2 mb-2" *ngIf="totalCount() > 0">
         <button
             pButton
             [icon]="isExpanded() ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
@@ -33,6 +33,19 @@
                 [disabled]="loading()">
             </button>
         </div>
+    </div>
+
+    <!-- Add First Subtask Button (shown when no subtasks exist) -->
+    <div *ngIf="totalCount() === 0" class="flex items-center gap-2 mb-2">
+        <button
+            pButton
+            icon="pi pi-plus"
+            label="Add subtask"
+            (click)="showAddDialog()"
+            class="p-button-sm p-button-outlined"
+            aria-label="Add new subtask"
+            [disabled]="loading()">
+        </button>
     </div>
 
     <!-- Progress Bar (shown when expanded) -->
