@@ -8,9 +8,12 @@ import { test, expect } from '@playwright/test';
  */
 
 test.describe('Subtask Management', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, baseURL }) => {
+    // Ensure we have a baseURL (either from config or default to localhost)
+    const url = baseURL || 'http://localhost:4200';
+
     // Navigate to the app
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto(url, { waitUntil: 'networkidle' });
 
     // Wait for the kanban board to load (increased timeout for initial load)
     await page.waitForSelector('.kanban-container', { timeout: 30000 });
