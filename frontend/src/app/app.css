@@ -12,8 +12,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  background-color: var(--color-bg-primary);
-  border-bottom: var(--border-width) solid var(--color-border);
+  background-color: var(--background-primary);
+  border-bottom: var(--border-width) solid var(--border-default);
   box-shadow: var(--shadow-sm);
   gap: var(--spacing-lg);
 }
@@ -26,10 +26,14 @@
 
 .app-title {
   margin: 0;
-  color: var(--color-primary);
+  color: var(--primary-purple);
   font-size: 28px; /* Increased from 18px for more prominent branding */
   font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-blue) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -42,17 +46,17 @@
   width: 36px;
   height: 36px;
   background: transparent;
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .settings-btn:hover {
-  background: var(--color-bg-hover);
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--background-secondary);
+  color: var(--primary-purple);
+  border-color: var(--primary-purple);
 }
 
 .settings-btn i {
@@ -80,13 +84,13 @@
 }
 
 .status-indicator.success {
-  color: var(--color-success);
-  background: color-mix(in srgb, var(--color-success) 10%, transparent);
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 10%, transparent);
 }
 
 .status-indicator.error {
-  color: var(--color-destructive);
-  background: color-mix(in srgb, var(--color-destructive) 10%, transparent);
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 10%, transparent);
 }
 
 .status-indicator i {
@@ -107,7 +111,7 @@
 .context-toggle {
   display: flex;
   gap: var(--spacing-xs);
-  background-color: var(--color-bg-tertiary);
+  background-color: var(--background-secondary);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-xs);
   box-shadow: var(--shadow-sm);
@@ -121,7 +125,7 @@
   background-color: transparent;
   border: none;
   border-radius: var(--border-radius);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
   font-weight: 600;
@@ -132,14 +136,18 @@
 }
 
 .context-button:hover {
-  background-color: var(--color-bg-hover);
-  color: var(--color-text-primary);
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 
 .context-button.active {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: var(--color-text-on-primary);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-purple-hover) 100%
+  );
+  color: white;
   box-shadow: var(--shadow-md);
 }
 
@@ -154,9 +162,9 @@
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-lg);
   background-color: transparent;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-default);
   border-radius: var(--border-radius);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
   font-weight: 600;
@@ -165,15 +173,19 @@
 }
 
 .import-toggle-btn:hover {
-  background-color: var(--color-bg-hover);
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  background-color: var(--background-secondary);
+  color: var(--primary-purple);
+  border-color: var(--primary-purple);
   transform: translateY(-1px);
 }
 
 .import-toggle-btn.active {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: var(--color-text-on-primary);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-purple-hover) 100%
+  );
+  color: white;
   border-color: transparent;
   box-shadow: var(--shadow-md);
 }
@@ -209,8 +221,8 @@
   top: 0;
   width: var(--sidebar-width);
   height: 100%;
-  background-color: var(--color-bg-secondary);
-  border-right: var(--border-width) solid var(--color-border);
+  background-color: var(--background-secondary);
+  border-right: var(--border-width) solid var(--border-default);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -226,14 +238,14 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-lg) var(--spacing-lg);
-  border-bottom: var(--border-width) solid var(--color-border);
-  background-color: var(--color-bg-primary);
+  border-bottom: var(--border-width) solid var(--border-default);
+  background-color: var(--background-primary);
 }
 
 .sidebar-header h2 {
   margin: 0;
   font-size: var(--font-size-lg);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -243,8 +255,12 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: var(--color-text-on-primary);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-purple-hover) 100%
+  );
+  color: white;
   border: none;
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -264,7 +280,6 @@
 .sidebar-content {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-md);
 }
 
 /* Sidebar Toggle Button */
@@ -274,7 +289,7 @@
   bottom: var(--spacing-md);
   width: 60px;
   height: 60px;
-  background: var(--color-primary);
+  background: var(--primary-purple);
   color: white;
   border: none;
   border-radius: 50%; /* Circular button */
@@ -284,7 +299,10 @@
   align-items: center;
   justify-content: center;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
-  transition: left 0.3s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    left 0.3s ease-in-out,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .sidebar-container.sidebar-hidden .sidebar-toggle-btn {
@@ -292,7 +310,7 @@
 }
 
 .sidebar-toggle-btn:hover {
-  background: var(--color-primary-hover);
+  background: var(--primary-purple-hover);
   transform: scale(1.1);
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
 }
@@ -321,8 +339,8 @@
   left: auto;
   width: var(--sidebar-width);
   height: 100%;
-  background-color: var(--color-bg-secondary);
-  border-left: var(--border-width) solid var(--color-border);
+  background-color: var(--background-secondary);
+  border-left: var(--border-width) solid var(--border-default);
   border-right: none;
   display: flex;
   flex-direction: column;
@@ -339,7 +357,10 @@
   left: auto;
   right: calc(var(--sidebar-width) - 30px);
   box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.15);
-  transition: right 0.3s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    right 0.3s ease-in-out,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .right-sidebar-container.sidebar-hidden .sidebar-toggle-btn.right-toggle {
@@ -353,19 +374,19 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: var(--color-bg-secondary);
+  background-color: var(--background-secondary);
 }
 
 .kanban-header {
   padding: var(--spacing-lg) var(--spacing-xl);
-  border-bottom: var(--border-width) solid var(--color-border);
-  background-color: var(--color-bg-primary);
+  border-bottom: var(--border-width) solid var(--border-default);
+  background-color: var(--background-primary);
 }
 
 .kanban-header h2 {
   margin: 0;
   font-size: var(--font-size-lg);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -378,7 +399,7 @@
 
 /* Placeholder Text */
 .placeholder-text {
-  color: var(--color-text-tertiary);
+  color: var(--text-tertiary);
   text-align: center;
   padding: var(--spacing-xl);
   font-style: italic;
@@ -394,7 +415,7 @@
     width: 100%;
     max-height: 40vh;
     border-right: none;
-    border-bottom: var(--border-width) solid var(--color-bg-tertiary);
+    border-bottom: var(--border-width) solid var(--background-secondary);
   }
 
   .context-button span {

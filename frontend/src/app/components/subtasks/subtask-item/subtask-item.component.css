@@ -1,0 +1,8 @@
+/* SubtaskItemComponent Styles */
+
+/* Minimal custom CSS - using Tailwind utilities in template */
+
+/* Ensure smooth hover transitions */
+.subtask-item {
+    transition: background-color 0.2s ease-in-out;
+}

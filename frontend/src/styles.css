@@ -1,49 +1,96 @@
 /* PrimeNG Theme and Base Styles */
 @import "primeicons/primeicons.css";
 
-/* Design System CSS Variables */
-:root {
-  /* Colors - More vibrant and modern */
-  --color-primary: #7C3AED;
-  --color-primary-hover: #6D28D9;
-  --color-primary-active: #5B21B6;
-  --color-primary-light: #A78BFA;
-  --color-primary-bg: #EDE9FE;
+/* Dark Theme - loaded before light mode for proper override order */
+@import './styles/themes/dark-theme.css';
 
-  --color-secondary: #3B82F6;
-  --color-secondary-hover: #2563EB;
-  --color-secondary-active: #1D4ED8;
-  --color-secondary-light: #60A5FA;
-  --color-secondary-bg: #DBEAFE;
+/* Design System CSS Variables - Light Mode */
+:root:not([data-theme="dark"]),
+[data-theme="light"] {
+  /* ========================================
+     Base Colors
+     ======================================== */
 
-  --color-accent: #EC4899;
-  --color-accent-hover: #DB2777;
-  --color-accent-light: #F472B6;
+  --background-primary: #FAF9F7;        /* Off-white, warm */
+  --background-secondary: #F3F2EE;      /* Slightly darker off-white */
+  --background-elevated: #FFFFFF;       /* Pure white for cards/modals */
 
-  --color-destructive: #EF4444;
-  --color-destructive-hover: #DC2626;
+  --text-primary: #2B2B2B;              /* Off-black */
+  --text-secondary: #5A5A5A;            /* Medium gray */
+  --text-tertiary: #878787;             /* Light gray for hints */
 
-  --color-success: #10B981;
-  --color-success-hover: #059669;
-  --color-success-bg: #D1FAE5;
+  /* ========================================
+     Primary Colors (Purples & Blues)
+     ======================================== */
 
-  --color-warning: #F59E0B;
-  --color-warning-bg: #FEF3C7;
+  --primary-purple: #8B5CF6;            /* Bright vibrant purple */
+  --primary-purple-hover: #7C3AED;      /* Darker on hover */
+  --primary-purple-light: #A78BFA;      /* Lighter tint */
+  --primary-purple-bg: #EDE9FE;         /* Background tint */
 
-  --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #F9FAFB;
-  --color-bg-tertiary: #F3F4F6;
-  --color-bg-hover: #F9FAFB;
+  --primary-blue: #3B82F6;              /* Bright saturated blue */
+  --primary-blue-hover: #2563EB;        /* Darker on hover */
+  --primary-blue-light: #60A5FA;        /* Lighter tint */
+  --primary-blue-bg: #DBEAFE;           /* Background tint */
 
-  --color-text-primary: #111827;
-  --color-text-secondary: #6B7280;
-  --color-text-tertiary: #9CA3AF;
-  --color-text-on-primary: #FFFFFF;
+  /* ========================================
+     Accent Colors (Pinks & Reds)
+     ======================================== */
 
-  --color-border: #E5E7EB;
-  --color-border-light: #F3F4F6;
+  --accent-pink: #EC4899;               /* Hot pink */
+  --accent-pink-hover: #DB2777;         /* Darker on hover */
+  --accent-pink-light: #F472B6;         /* Lighter tint */
+  --accent-pink-bg: #FCE7F3;            /* Background tint */
 
-  /* Typography - ADHD/Dyslexia-friendly but professional */
+  --accent-red: #EF4444;                /* Bright red */
+  --accent-red-hover: #DC2626;          /* Darker on hover */
+  --accent-red-light: #F87171;          /* Lighter tint */
+  --accent-red-bg: #FEE2E2;             /* Background tint */
+
+  /* ========================================
+     Status Colors - Kanban Columns
+     ======================================== */
+
+  --status-backlog: #3B82F6;            /* Bright blue - "waiting" */
+  --status-today: #F59E0B;              /* Bright gold - "attention" */
+  --status-in-progress: #8B5CF6;        /* Bright purple - "active" */
+  --status-done: #10B981;               /* Bright green - "complete" */
+
+  /* ========================================
+     Semantic Status Colors
+     ======================================== */
+
+  --success: #10B981;                   /* Bright green */
+  --warning: #F59E0B;                   /* Bright amber */
+  --error: #EF4444;                     /* Bright red */
+  --info: #3B82F6;                      /* Bright blue */
+
+  /* ========================================
+     Workspace Colors
+     ======================================== */
+
+  --workspace-work: #2563EB;            /* Bright blue */
+  --workspace-work-bg: #DBEAFE;
+
+  --workspace-personal: #EC4899;        /* Hot pink */
+  --workspace-personal-bg: #FCE7F3;
+
+  /* ========================================
+     UI Element Colors
+     ======================================== */
+
+  --border-default: #D4D2CE;            /* Subtle border */
+  --border-strong: #A8A6A2;             /* Stronger border for emphasis */
+  --border-focus: #8B5CF6;              /* Bright purple for focus states */
+
+  --shadow-subtle: rgba(43, 43, 43, 0.08);
+  --shadow-medium: rgba(43, 43, 43, 0.12);
+  --shadow-strong: rgba(43, 43, 43, 0.16);
+
+  /* ========================================
+     Typography - ADHD/Dyslexia-friendly
+     ======================================== */
+
   --font-family-base: 'Open Sans', Verdana, sans-serif;
   --font-size-base: 14px;
   --font-size-sm: 12px;
@@ -55,7 +102,10 @@
   --letter-spacing-base: 0.01em;
   --letter-spacing-wide: 0.025em;
 
-  /* Spacing - Tighter but still comfortable */
+  /* ========================================
+     Spacing
+     ======================================== */
+
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 12px;
@@ -63,18 +113,24 @@
   --spacing-xl: 24px;
   --spacing-2xl: 32px;
 
-  /* Layout */
+  /* ========================================
+     Layout & Structure
+     ======================================== */
+
   --sidebar-width: 280px;
   --border-radius: 8px;
   --border-radius-sm: 6px;
   --border-radius-lg: 12px;
   --border-width: 1px;
 
-  /* Shadows - More depth */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* ========================================
+     Shadows (using pre-built shadow values)
+     ======================================== */
+
+  --shadow-sm: 0 1px 2px 0 var(--shadow-subtle);
+  --shadow-md: 0 4px 6px -1px var(--shadow-medium), 0 2px 4px -1px var(--shadow-subtle);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-medium), 0 4px 6px -2px var(--shadow-subtle);
+  --shadow-xl: 0 20px 25px -5px var(--shadow-medium), 0 10px 10px -5px var(--shadow-subtle);
 }
 
 /* Global Body Styles */
@@ -94,8 +150,8 @@ body {
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   letter-spacing: var(--letter-spacing-base);
-  color: var(--color-text-primary);
-  background-color: var(--color-bg-primary);
+  color: var(--text-primary);
+  background-color: var(--background-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -105,7 +161,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 1.3;
   margin-bottom: var(--spacing-sm);
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
 h1 {
@@ -126,7 +182,7 @@ p {
 
 /* Focus States for Accessibility */
 *:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--border-focus);
   outline-offset: 2px;
 }
 
@@ -154,13 +210,13 @@ p {
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
   border-width: var(--border-width);
-  border-color: var(--color-border);
+  border-color: var(--border-default);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .p-inputtext:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-bg);
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--primary-purple-bg);
 }
 
 /* Utility Classes */

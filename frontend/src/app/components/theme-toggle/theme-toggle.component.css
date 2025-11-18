@@ -1,0 +1,20 @@
+/**
+ * ThemeToggleComponent styles
+ * Minimal custom CSS - primarily uses PrimeNG defaults
+ */
+
+:host {
+  display: inline-block;
+}
+
+/* Ensure icons and text are vertically aligned */
+::ng-deep .p-selectbutton .p-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Icon sizing for consistency */
+::ng-deep .p-selectbutton .p-button i {
+  font-size: 1rem;
+}

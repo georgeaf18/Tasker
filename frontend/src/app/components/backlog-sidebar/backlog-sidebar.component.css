@@ -1,627 +1,639 @@
 .backlog-sidebar-container {
-    height: 100vh;
-    width: var(--sidebar-width);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--color-bg-secondary);
+  height: 100vh;
+  width: var(--sidebar-width);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--background-secondary);
 }
 
 /* Accordion wrapper takes all available space except FAB */
 .accordion-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: var(--spacing-md);
-    padding-bottom: calc(var(--spacing-xl) + 56px); /* Space for FAB */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: calc(var(--spacing-xl) + 56px); /* Space for FAB */
 }
 
 /* Workspace content areas with smart height management */
 .workspace-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    padding: var(--spacing-xs) var(--spacing-sm);
-    min-height: 200px;
-    max-height: 100%;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  padding: var(--spacing-xs) var(--spacing-sm);
+  min-height: 200px;
+  max-height: 100%;
 }
 
 .task-list-item {
-    margin-bottom: var(--spacing-xs); /* Reduced whitespace */
+  margin-bottom: var(--spacing-xs); /* Reduced whitespace */
 }
 
 .task-card-content {
-    padding: var(--spacing-sm) var(--spacing-md); /* Sleeker padding */
+  padding: var(--spacing-sm) var(--spacing-md); /* Sleeker padding */
 }
 
 .task-title {
-    font-weight: 600;
-    font-size: var(--font-size-base);
-    margin-bottom: var(--spacing-xs);
-    color: var(--color-text-primary);
-    line-height: 1.4;
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+  line-height: 1.4;
 }
 
 .task-meta {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    margin-top: var(--spacing-sm);
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
 .task-routine-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
-    color: white;
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: 700;
-    margin-top: var(--spacing-xs);
-    box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: linear-gradient(
+    135deg,
+    var(--accent-pink) 0%,
+    var(--accent-pink-hover) 100%
+  );
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  margin-top: var(--spacing-xs);
+  box-shadow: var(--shadow-sm);
 }
 
 .fab-container {
-    position: absolute;
-    bottom: var(--spacing-xl);
-    right: var(--spacing-xl);
-    z-index: 100;
+  position: absolute;
+  bottom: var(--spacing-xl);
+  right: var(--spacing-xl);
+  z-index: 100;
 }
 
 /* Form styling */
 .form-field {
-    margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
 .form-field label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    font-weight: 700;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
 .form-field-checkbox {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
 }
 
 .form-field-checkbox label {
-    margin: 0;
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    font-weight: 500;
+  margin: 0;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-weight: 500;
 }
 
 .error-message {
-    display: block;
-    color: var(--color-destructive);
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
+  display: block;
+  color: var(--error);
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
 }
 
 .w-full {
-    width: 100%;
+  width: 100%;
 }
 
 /* Card hover effect */
 :host ::ng-deep .p-card {
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
-    cursor: pointer;
-    border: var(--border-width) solid var(--color-border);
-    border-left: 3px solid transparent;
-    border-radius: 4px; /* Less rounded */
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  border: var(--border-width) solid var(--border-default);
+  border-left: 3px solid transparent;
+  border-radius: 4px; /* Less rounded */
 }
 
 :host ::ng-deep .p-card:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow-lg);
-    border-left-color: var(--color-primary);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--primary-purple);
 }
 
 /* Hide scrollbar while keeping scroll functionality */
 .workspace-content {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 .workspace-content::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Workspace Accordion Styling */
 :host ::ng-deep .workspace-accordion {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--spacing-sm);
 }
 
 :host ::ng-deep .workspace-accordion .p-accordiontab {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0; /* Critical for flex children with overflow */
-    margin-bottom: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; /* Critical for flex children with overflow */
+  margin-bottom: var(--spacing-sm);
 }
 
 :host ::ng-deep .workspace-accordion .p-accordiontab:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* Accordion header styling */
 :host ::ng-deep .p-accordion .p-accordiontab-header {
-    min-height: 56px;
+  min-height: 56px;
 }
 
 /* Hide the chevron toggle icon */
-:host ::ng-deep .p-accordion [data-pc-section="toggleicon"] {
-    display: none !important;
+:host ::ng-deep .p-accordion [data-pc-section='toggleicon'] {
+  display: none !important;
 }
 
 :host ::ng-deep .p-accordion .p-accordiontab-header-link {
-    padding: var(--spacing-md);
-    font-weight: 700;
-    font-size: var(--font-size-base);
-    background: var(--color-bg-primary);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--border-radius);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
+  padding: var(--spacing-md);
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  background: var(--background-primary);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--border-radius);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
 :host ::ng-deep .p-accordion .p-accordiontab-header-link:hover {
-    background: var(--color-bg-hover);
-    border-color: var(--color-primary-light);
-    transform: translateX(2px);
+  background: var(--background-secondary);
+  border-color: var(--primary-purple-light);
+  transform: translateX(2px);
 }
 
 /* Expanded state styling */
-:host ::ng-deep .p-accordion .p-accordiontab-header-link[aria-expanded="true"] {
-    background: linear-gradient(135deg, var(--color-primary-bg) 0%, var(--color-secondary-bg) 100%);
-    border-color: var(--color-primary);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+:host ::ng-deep .p-accordion .p-accordiontab-header-link[aria-expanded='true'] {
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple-bg) 0%,
+    var(--primary-blue-bg) 100%
+  );
+  border-color: var(--primary-purple);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 /* Accordion content with dynamic height */
 :host ::ng-deep .p-accordion .p-accordiontab-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 0;
-    background: var(--color-bg-secondary);
-    border: var(--border-width) solid var(--color-border);
-    border-top: none;
-    border-bottom-left-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  background: var(--background-secondary);
+  border: var(--border-width) solid var(--border-default);
+  border-top: none;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 /* Workspace header styling */
 .workspace-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
 .workspace-icon {
-    font-size: 1.25rem;
+  font-size: 1.25rem;
 }
 
 .workspace-name {
-    flex: 1;
-    font-size: var(--font-size-base);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
+  flex: 1;
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
 /* Work section specific colors */
 .work-header .workspace-icon {
-    color: var(--color-secondary);
+  color: var(--primary-blue);
 }
 
 .work-header .workspace-name {
-    color: var(--color-secondary);
+  color: var(--primary-blue);
 }
 
 /* Personal section specific colors */
 .personal-header .workspace-icon {
-    color: var(--color-accent);
+  color: var(--accent-pink);
 }
 
 .personal-header .workspace-name {
-    color: var(--color-accent);
+  color: var(--accent-pink);
 }
 
 /* Badge styling */
 :host ::ng-deep .workspace-badge {
-    background: var(--color-primary);
-    color: white;
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    min-width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  background: var(--primary-purple);
+  color: white;
 }
 
 /* Remove panel padding and borders */
 :host ::ng-deep .p-panel {
-    border: none;
-    box-shadow: none;
+  border: none;
+  box-shadow: none;
 }
 
 :host ::ng-deep .p-panel .p-panel-header {
-    display: none;
+  display: none;
 }
 
 :host ::ng-deep .p-panel .p-panel-content {
-    padding: 0;
-    border: none;
+  padding: 0;
+  border: none;
 }
 
 /* Drag and Drop Styles */
 :host ::ng-deep .p-card.cdk-drag {
-    cursor: grab;
+  cursor: grab;
 }
 
 :host ::ng-deep .p-card.cdk-drag:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 :host ::ng-deep .p-card.cdk-drag-dragging {
-    opacity: 0.8;
-    transform: rotate(2deg);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    cursor: grabbing !important;
-    border-left-width: 4px;
-    z-index: 1000;
+  opacity: 0.8;
+  transform: rotate(2deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  cursor: grabbing !important;
+  border-left-width: 4px;
+  z-index: 1000;
 }
 
 :host ::ng-deep .cdk-drag-placeholder {
-    opacity: 0.4;
-    border: 2px dashed var(--color-primary);
-    background: var(--color-primary-bg);
-    box-shadow: none;
+  opacity: 0.4;
+  border: 2px dashed var(--primary-purple);
+  background: var(--primary-purple-bg);
+  box-shadow: none;
 }
 
 .workspace-content.cdk-drop-list-receiving {
-    background: var(--color-primary-bg);
-    border-radius: var(--border-radius);
+  background: var(--primary-purple-bg);
+  border-radius: var(--border-radius);
 }
 
 :host ::ng-deep .cdk-drag-preview {
-    opacity: 0.9;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    border-radius: var(--border-radius);
+  opacity: 0.9;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius);
 }
 
-.workspace-content.cdk-drop-list-dragging :host ::ng-deep .p-card:not(.cdk-drag-placeholder) {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+.workspace-content.cdk-drop-list-dragging
+  :host
+  ::ng-deep
+  .p-card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* Ensure only one expanded panel takes full height */
-:host ::ng-deep .workspace-accordion .p-accordiontab:not(.p-accordiontab-active) {
-    flex: 0 0 auto;
+:host
+  ::ng-deep
+  .workspace-accordion
+  .p-accordiontab:not(.p-accordiontab-active) {
+  flex: 0 0 auto;
 }
 
 :host ::ng-deep .workspace-accordion .p-accordiontab.p-accordiontab-active {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* When both panels are expanded, split height equally */
-:host ::ng-deep .workspace-accordion:has(.p-accordiontab.p-accordiontab-active:nth-child(1)):has(.p-accordiontab.p-accordiontab-active:nth-child(2)) .p-accordiontab.p-accordiontab-active {
-    flex: 1 1 50%;
+:host
+  ::ng-deep
+  .workspace-accordion:has(
+    .p-accordiontab.p-accordiontab-active:nth-child(1)
+  ):has(.p-accordiontab.p-accordiontab-active:nth-child(2))
+  .p-accordiontab.p-accordiontab-active {
+  flex: 1 1 50%;
 }
 
 /* Sleek Task Dialog Styling */
 :host ::ng-deep .p-dialog.sleek-task-dialog {
-    background: var(--color-bg-primary) !important;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: var(--border-width) solid var(--color-border) !important;
+  background: var(--background-primary) !important;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: var(--border-width) solid var(--border-default) !important;
 }
 
 :host ::ng-deep .p-dialog.sleek-task-dialog .p-dialog-content {
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 :host ::ng-deep .p-dialog.sleek-task-dialog .p-dialog-header {
-    display: none !important;
+  display: none !important;
 }
 
 .sleek-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
 }
 
 .dialog-bottom-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-lg);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
 .add-task-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-primary);
-    color: #ffffff;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--primary-purple);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .add-task-btn:hover:not(:disabled) {
-    background: var(--color-primary-hover);
-    transform: translateY(-1px);
+  background: var(--primary-purple-hover);
+  transform: translateY(-1px);
 }
 
 .add-task-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .cancel-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: transparent;
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .cancel-btn:hover {
-    background: var(--color-bg-hover);
-    color: var(--color-text-primary);
-    border-color: var(--color-primary-light);
-    transform: translateY(-1px);
+  background: var(--background-secondary);
+  color: var(--text-primary);
+  border-color: var(--primary-purple-light);
+  transform: translateY(-1px);
 }
 
 .task-input-container {
-    margin: var(--spacing-lg) 0;
+  margin: var(--spacing-lg) 0;
 }
 
 .sleek-task-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--color-text-primary);
-    font-size: 20px;
-    font-weight: 300;
-    padding: var(--spacing-md) 0;
-    outline: none;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 300;
+  padding: var(--spacing-md) 0;
+  outline: none;
 }
 
 .sleek-task-input::placeholder {
-    color: var(--color-text-tertiary);
+  color: var(--text-tertiary);
 }
 
 .metadata-row {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
 .metadata-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-lg);
-    background: var(--color-bg-secondary);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--background-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: all 0.2s ease;
 }
 
 .metadata-btn:hover {
-    background: var(--color-bg-hover);
-    color: var(--color-text-primary);
-    border-color: var(--color-primary-light);
+  background: var(--background-secondary);
+  color: var(--text-primary);
+  border-color: var(--primary-purple-light);
 }
 
 .metadata-btn i {
-    font-size: var(--font-size-base);
+  font-size: var(--font-size-base);
 }
 
 /* Popover Styling */
 :host ::ng-deep .p-popover {
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: var(--background-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 :host ::ng-deep .p-popover .p-popover-content {
-    padding: var(--spacing-xs);
+  padding: var(--spacing-xs);
 }
 
 .metadata-popover {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-    min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 200px;
 }
 
 .popover-option {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md) var(--spacing-lg);
-    color: var(--color-text-secondary);
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--text-secondary);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: all 0.2s ease;
 }
 
 .popover-option:hover {
-    background: var(--color-bg-hover);
-    color: var(--color-text-primary);
+  background: var(--background-secondary);
+  color: var(--text-primary);
 }
 
 .popover-option i {
-    font-size: var(--font-size-base);
+  font-size: var(--font-size-base);
 }
 
 /* Edit Dialog - Action Buttons */
 .dialog-actions-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
 }
 
 .right-actions {
-    display: flex;
-    gap: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-sm);
 }
 
 .delete-task-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: transparent;
-    color: var(--color-destructive);
-    border: 1px solid var(--color-destructive);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  color: var(--error);
+  border: 1px solid var(--error);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .delete-task-btn:hover {
-    background: var(--color-destructive);
-    color: white;
-    transform: translateY(-1px);
+  background: var(--error);
+  color: white;
+  transform: translateY(-1px);
 }
 
 .save-task-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-primary);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--primary-purple);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .save-task-btn:hover:not(:disabled) {
-    background: var(--color-primary-hover);
-    transform: translateY(-1px);
+  background: var(--primary-purple-hover);
+  transform: translateY(-1px);
 }
 
 .save-task-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Description Textarea */
 .description-container {
-    margin: var(--spacing-md) 0;
+  margin: var(--spacing-md) 0;
 }
 
 .sleek-description-textarea {
-    width: 100%;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    color: var(--color-text-primary);
-    font-size: var(--font-size-base);
-    font-family: var(--font-family-base);
-    padding: var(--spacing-md);
-    outline: none;
-    resize: vertical;
-    min-height: 100px;
-    transition: all 0.2s ease;
+  width: 100%;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  padding: var(--spacing-md);
+  outline: none;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.2s ease;
 }
 
 .sleek-description-textarea:focus {
-    border-color: var(--color-primary);
-    background: var(--color-bg-primary);
+  border-color: var(--primary-purple);
+  background: var(--background-primary);
 }
 
 .sleek-description-textarea::placeholder {
-    color: var(--color-text-tertiary);
+  color: var(--text-tertiary);
 }
 
 /* Date Popover */
 .date-popover {
-    padding: var(--spacing-sm) !important;
+  padding: var(--spacing-sm) !important;
 }
 
 .clear-date-btn {
-    width: 100%;
-    margin-top: var(--spacing-sm);
-    padding: var(--spacing-sm);
-    background: transparent;
-    color: var(--color-destructive);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    transition: all 0.2s ease;
+  width: 100%;
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: transparent;
+  color: var(--error);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
 }
 
 .clear-date-btn:hover {
-    background: var(--color-bg-hover);
-    border-color: var(--color-destructive);
+  background: var(--background-secondary);
+  border-color: var(--error);
 }
 
 /* Routine Button Active State */
 .routine-btn.active {
-    background: var(--color-primary);
-    color: white;
-    border-color: var(--color-primary);
+  background: var(--primary-purple);
+  color: white;
+  border-color: var(--primary-purple);
 }
 
 .routine-btn.active:hover {
-    background: var(--color-primary-hover);
+  background: var(--primary-purple-hover);
 }

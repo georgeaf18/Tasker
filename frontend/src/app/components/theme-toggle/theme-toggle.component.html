@@ -1,0 +1,14 @@
+<p-selectButton
+  [options]="themeOptions"
+  [ngModel]="selectedTheme()"
+  (ngModelChange)="onThemeChange($event)"
+  optionLabel="label"
+  optionValue="value"
+  [allowEmpty]="false"
+  aria-label="Theme selection"
+  role="radiogroup">
+  <ng-template let-item>
+    <i [class]="item.icon" [attr.aria-label]="item.ariaLabel"></i>
+    <span class="ml-2">{{ item.label }}</span>
+  </ng-template>
+</p-selectButton>

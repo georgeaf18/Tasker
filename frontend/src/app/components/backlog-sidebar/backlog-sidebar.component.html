@@ -1,346 +1,115 @@
 <div class="backlog-sidebar-container">
-    <div class="accordion-wrapper">
-        <p-accordion
-            [multiple]="true"
-            [(value)]="expandedPanels"
-            class="workspace-accordion">
-
-            <!-- Work Section -->
-            <p-accordionpanel [value]="0">
-                <p-accordionheader>
-                    <div class="workspace-header work-header">
-                        <i class="pi pi-briefcase workspace-icon"></i>
-                        <span class="workspace-name">Work</span>
-                        <p-badge [value]="workTaskCount().toString()" styleClass="workspace-badge" />
-                    </div>
-                </p-accordionheader>
-                <p-accordioncontent>
-                <div
-                    class="workspace-content"
-                    cdkDropList
-                    [cdkDropListData]="workTasks()"
-                    [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list', 'personal-backlog-list']"
-                    (cdkDropListDropped)="onDrop($event)"
-                    id="work-backlog-list">
-                    @if (workTasks().length === 0) {
-                        <p-message severity="info" [text]="'No work tasks in backlog'" />
-                    } @else {
-                        @for (task of workTasks(); track task.id) {
-                            <div class="task-list-item">
-                                <p-card
-                                    cdkDrag
-                                    [cdkDragData]="task"
-                                    [style]="{'cursor': 'grab'}"
-                                    (click)="showTaskDetails(task)"
-                                    [pTooltip]="task.description || 'No description'"
-                                    tooltipPosition="right"
-                                >
-                                    <div class="task-card-content">
-                                        <div class="task-title">{{ task.title }}</div>
-                                        @if (task.dueDate) {
-                                            <div class="task-meta">
-                                                <i class="pi pi-calendar"></i>
-                                                <span>{{ task.dueDate | date:'short' }}</span>
-                                            </div>
-                                        }
-                                        @if (task.isRoutine) {
-                                            <div class="task-routine-badge">
-                                                <i class="pi pi-sync"></i> Routine
-                                            </div>
-                                        }
-                                    </div>
-                                </p-card>
-                            </div>
-                        }
-                    }
+  <div class="accordion-wrapper">
+    <p-accordion
+      [multiple]="true"
+      [(value)]="expandedPanels"
+      class="workspace-accordion"
+    >
+      <!-- Work Section -->
+      <p-accordionpanel [value]="0">
+        <p-accordionheader>
+          <div class="workspace-header work-header">
+            <i class="pi pi-briefcase workspace-icon"></i>
+            <span class="workspace-name">Work</span>
+            <p-chip
+              [label]="workTaskCount().toString()"
+              styleClass="workspace-badge"
+            />
+          </div>
+        </p-accordionheader>
+        <p-accordioncontent>
+          <div
+            class="workspace-content"
+            cdkDropList
+            [cdkDropListData]="workTasks()"
+            [cdkDropListConnectedTo]="[
+              'today-list',
+              'in-progress-list',
+              'done-list',
+              'personal-backlog-list',
+            ]"
+            (cdkDropListDropped)="onDrop($event)"
+            id="work-backlog-list"
+          >
+            @if (workTasks().length === 0) {
+              <p-message severity="info" [text]="'No work tasks in backlog'" />
+            } @else {
+              @for (task of workTasks(); track task.id) {
+                <div cdkDrag [cdkDragData]="task">
+                  <app-task-card
+                    [task]="task"
+                    variant="compact"
+                    [draggable]="true"
+                    (taskClick)="showTaskDetails($event)"
+                  />
                 </div>
-                </p-accordioncontent>
-            </p-accordionpanel>
+              }
+            }
+          </div>
+        </p-accordioncontent>
+      </p-accordionpanel>
 
-            <!-- Personal Section -->
-            <p-accordionpanel [value]="1">
-                <p-accordionheader>
-                    <div class="workspace-header personal-header">
-                        <i class="pi pi-home workspace-icon"></i>
-                        <span class="workspace-name">Personal</span>
-                        <p-badge [value]="personalTaskCount().toString()" styleClass="workspace-badge" />
-                    </div>
-                </p-accordionheader>
-                <p-accordioncontent>
-                <div
-                    class="workspace-content"
-                    cdkDropList
-                    [cdkDropListData]="personalTasks()"
-                    [cdkDropListConnectedTo]="['today-list', 'in-progress-list', 'done-list', 'work-backlog-list']"
-                    (cdkDropListDropped)="onDrop($event)"
-                    id="personal-backlog-list">
-                    @if (personalTasks().length === 0) {
-                        <p-message severity="info" [text]="'No personal tasks in backlog'" />
-                    } @else {
-                        @for (task of personalTasks(); track task.id) {
-                            <div class="task-list-item">
-                                <p-card
-                                    cdkDrag
-                                    [cdkDragData]="task"
-                                    [style]="{'cursor': 'grab'}"
-                                    (click)="showTaskDetails(task)"
-                                    [pTooltip]="task.description || 'No description'"
-                                    tooltipPosition="right"
-                                >
-                                    <div class="task-card-content">
-                                        <div class="task-title">{{ task.title }}</div>
-                                        @if (task.dueDate) {
-                                            <div class="task-meta">
-                                                <i class="pi pi-calendar"></i>
-                                                <span>{{ task.dueDate | date:'short' }}</span>
-                                            </div>
-                                        }
-                                        @if (task.isRoutine) {
-                                            <div class="task-routine-badge">
-                                                <i class="pi pi-sync"></i> Routine
-                                            </div>
-                                        }
-                                    </div>
-                                </p-card>
-                            </div>
-                        }
-                    }
+      <!-- Personal Section -->
+      <p-accordionpanel [value]="1">
+        <p-accordionheader>
+          <div class="workspace-header personal-header">
+            <i class="pi pi-home workspace-icon"></i>
+            <span class="workspace-name">Personal</span>
+            <p-chip
+              [label]="personalTaskCount().toString()"
+              styleClass="workspace-badge"
+            />
+          </div>
+        </p-accordionheader>
+        <p-accordioncontent>
+          <div
+            class="workspace-content"
+            cdkDropList
+            [cdkDropListData]="personalTasks()"
+            [cdkDropListConnectedTo]="[
+              'today-list',
+              'in-progress-list',
+              'done-list',
+              'work-backlog-list',
+            ]"
+            (cdkDropListDropped)="onDrop($event)"
+            id="personal-backlog-list"
+          >
+            @if (personalTasks().length === 0) {
+              <p-message
+                severity="info"
+                [text]="'No personal tasks in backlog'"
+              />
+            } @else {
+              @for (task of personalTasks(); track task.id) {
+                <div cdkDrag [cdkDragData]="task">
+                  <app-task-card
+                    [task]="task"
+                    variant="compact"
+                    [draggable]="true"
+                    (taskClick)="showTaskDetails($event)"
+                  />
                 </div>
-                </p-accordioncontent>
-            </p-accordionpanel>
-        </p-accordion>
-    </div>
-
-    <!-- Floating Action Button -->
-    <div class="fab-container">
-        <p-button
-            icon="pi pi-plus"
-            [rounded]="true"
-            [raised]="true"
-            severity="primary"
-            (onClick)="showCreateTaskDialog()"
-            pTooltip="Create New Task"
-            tooltipPosition="left"
-        />
-    </div>
+              }
+            }
+          </div>
+        </p-accordioncontent>
+      </p-accordionpanel>
+    </p-accordion>
+  </div>
 </div>
 
-<!-- Create Task Dialog - Sleek Design -->
-<p-dialog
-    [(visible)]="createTaskDialogVisible"
-    [modal]="true"
-    [style]="{width: '700px'}"
-    [draggable]="false"
-    [resizable]="false"
-    [showHeader]="false"
-    [dismissableMask]="true"
-    styleClass="sleek-task-dialog"
->
-    <form [formGroup]="createTaskForm" (ngSubmit)="submitCreateTask()" class="sleek-form">
-        <!-- Main Input -->
-        <div class="task-input-container">
-            <input
-                id="title"
-                type="text"
-                formControlName="title"
-                placeholder="Task description..."
-                class="sleek-task-input"
-                autocomplete="off"
-            />
-        </div>
+<!-- Create Task Dialog -->
+<app-task-form-dialog
+  [(visible)]="createTaskDialogVisible"
+  [defaultStatus]="TaskStatus.BACKLOG"
+  [defaultWorkspace]="taskStateService.selectedWorkspace()"
+  (taskSubmitted)="handleTaskSubmitted($event)"
+/>
 
-        <!-- Metadata Row -->
-        <div class="metadata-row">
-            <!-- Status/Due Date Button -->
-            <button type="button" class="metadata-btn" (click)="op1.toggle($event)">
-                <i class="pi pi-calendar"></i>
-                <span>{{ createTaskForm.get('status')?.value === 'TODAY' ? 'Today' : createTaskForm.get('status')?.value === 'IN_PROGRESS' ? 'In Progress' : createTaskForm.get('status')?.value === 'DONE' ? 'Done' : 'Backlog' }}</span>
-            </button>
-            <p-popover #op1>
-                <div class="metadata-popover">
-                    @for (option of statusOptions; track option.value) {
-                        <div class="popover-option" (click)="createTaskForm.patchValue({status: option.value}); op1.hide()">
-                            <i class="pi pi-calendar"></i>
-                            <span>{{ option.label }}</span>
-                        </div>
-                    }
-                </div>
-            </p-popover>
-
-            <!-- Time Button (Optional) -->
-            <button type="button" class="metadata-btn">
-                <i class="pi pi-clock"></i>
-                <span>--:--</span>
-            </button>
-
-            <!-- Channel Button -->
-            <button type="button" class="metadata-btn" (click)="op2.toggle($event)">
-                <i class="pi pi-hashtag"></i>
-                <span>{{ getChannelName(createTaskForm.get('channelId')?.value) || 'development' }}</span>
-            </button>
-            <p-popover #op2>
-                <div class="metadata-popover">
-                    @for (channel of filteredChannels(); track channel.id) {
-                        <div class="popover-option" (click)="createTaskForm.patchValue({channelId: channel.id}); op2.hide()">
-                            <i class="pi pi-hashtag"></i>
-                            <span>{{ channel.name }}</span>
-                        </div>
-                    }
-                </div>
-            </p-popover>
-
-            <!-- Workspace Button -->
-            <button type="button" class="metadata-btn" (click)="op3.toggle($event)">
-                <i class="pi pi-{{ createTaskForm.get('workspace')?.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
-            </button>
-            <p-popover #op3>
-                <div class="metadata-popover">
-                    @for (workspace of workspaceOptions; track workspace.value) {
-                        <div class="popover-option" (click)="createTaskForm.patchValue({workspace: workspace.value}); op3.hide()">
-                            <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
-                            <span>{{ workspace.label }}</span>
-                        </div>
-                    }
-                </div>
-            </p-popover>
-        </div>
-
-        <!-- Bottom Actions -->
-        <div class="dialog-bottom-actions">
-            <button type="button" class="cancel-btn" (click)="hideCreateTaskDialog()">
-                <span>Cancel</span>
-            </button>
-            <button type="button" class="add-task-btn" (click)="submitCreateTask()" [disabled]="createTaskForm.invalid">
-                <i class="pi pi-user-plus"></i>
-                <span>Add task</span>
-            </button>
-        </div>
-    </form>
-</p-dialog>
-
-<!-- Task Details/Edit Dialog - Sleek Design -->
-<p-dialog
-    [(visible)]="taskDetailsDialogVisible"
-    [modal]="true"
-    [style]="{width: '700px'}"
-    [draggable]="false"
-    [resizable]="false"
-    [showHeader]="false"
-    [dismissableMask]="true"
-    styleClass="sleek-task-dialog"
->
-    @if (selectedTask()) {
-        <form [formGroup]="editTaskForm" (ngSubmit)="submitEditTask()" class="sleek-form">
-            <!-- Action Buttons Row -->
-            <div class="dialog-actions-row">
-                <button type="button" class="delete-task-btn" (click)="confirmDeleteTask()">
-                    <i class="pi pi-trash"></i>
-                    <span>Delete</span>
-                </button>
-
-                <div class="right-actions">
-                    <button type="button" class="save-task-btn" (click)="submitEditTask()" [disabled]="editTaskForm.invalid">
-                        <i class="pi pi-check"></i>
-                        <span>Save</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Title Input -->
-            <div class="task-input-container">
-                <input
-                    id="edit-title"
-                    type="text"
-                    formControlName="title"
-                    placeholder="Task description..."
-                    class="sleek-task-input"
-                    autocomplete="off"
-                />
-            </div>
-
-            <!-- Description Textarea -->
-            <div class="description-container">
-                <textarea
-                    id="edit-description"
-                    formControlName="description"
-                    placeholder="Add more details..."
-                    class="sleek-description-textarea"
-                    rows="4"
-                ></textarea>
-            </div>
-
-            <!-- Metadata Row -->
-            <div class="metadata-row">
-                <!-- Channel Button -->
-                <button type="button" class="metadata-btn" (click)="opEditChannel.toggle($event)">
-                    <i class="pi pi-hashtag"></i>
-                    <span>{{ getChannelName(editTaskForm.get('channelId')?.value) || 'No channel' }}</span>
-                </button>
-                <p-popover #opEditChannel>
-                    <div class="metadata-popover">
-                        <div class="popover-option" (click)="editTaskForm.patchValue({channelId: null}); opEditChannel.hide()">
-                            <i class="pi pi-times"></i>
-                            <span>No channel</span>
-                        </div>
-                        @for (channel of filteredChannels(); track channel.id) {
-                            <div class="popover-option" (click)="editTaskForm.patchValue({channelId: channel.id}); opEditChannel.hide()">
-                                <i class="pi pi-hashtag"></i>
-                                <span>{{ channel.name }}</span>
-                            </div>
-                        }
-                    </div>
-                </p-popover>
-
-                <!-- Workspace Button -->
-                <button type="button" class="metadata-btn" (click)="opEditWorkspace.toggle($event)">
-                    <i class="pi pi-{{ editTaskForm.get('workspace')?.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
-                    <span>{{ editTaskForm.get('workspace')?.value === 'WORK' ? 'Work' : 'Personal' }}</span>
-                </button>
-                <p-popover #opEditWorkspace>
-                    <div class="metadata-popover">
-                        @for (workspace of workspaceOptions; track workspace.value) {
-                            <div class="popover-option" (click)="editTaskForm.patchValue({workspace: workspace.value}); opEditWorkspace.hide()">
-                                <i class="pi pi-{{ workspace.value === 'WORK' ? 'briefcase' : 'home' }}"></i>
-                                <span>{{ workspace.label }}</span>
-                            </div>
-                        }
-                    </div>
-                </p-popover>
-
-                <!-- Due Date Button -->
-                <button type="button" class="metadata-btn" (click)="opEditDueDate.toggle($event)">
-                    <i class="pi pi-calendar"></i>
-                    <span>{{ editTaskForm.get('dueDate')?.value ? (editTaskForm.get('dueDate')?.value | date:'MMM d, y') : 'No due date' }}</span>
-                </button>
-                <p-popover #opEditDueDate>
-                    <div class="metadata-popover date-popover">
-                        <p-datepicker
-                            formControlName="dueDate"
-                            [showIcon]="false"
-                            [inline]="true"
-                            dateFormat="mm/dd/yy"
-                            (onSelect)="opEditDueDate.hide()"
-                        />
-                        @if (editTaskForm.get('dueDate')?.value) {
-                            <button type="button" class="clear-date-btn" (click)="editTaskForm.patchValue({dueDate: null}); opEditDueDate.hide()">
-                                Clear date
-                            </button>
-                        }
-                    </div>
-                </p-popover>
-
-                <!-- Routine Toggle -->
-                <button type="button"
-                    class="metadata-btn routine-btn"
-                    [class.active]="editTaskForm.get('isRoutine')?.value"
-                    (click)="editTaskForm.patchValue({isRoutine: !editTaskForm.get('isRoutine')?.value})">
-                    <i class="pi pi-sync"></i>
-                    <span>{{ editTaskForm.get('isRoutine')?.value ? 'Routine' : 'One-time' }}</span>
-                </button>
-            </div>
-        </form>
-    }
-</p-dialog>
-
-<!-- Confirmation Dialog -->
-<p-confirmDialog />
+<!-- Edit Task Dialog -->
+<app-task-form-dialog
+  [(visible)]="taskDetailsDialogVisible"
+  [task]="selectedTask()!"
+  (taskSubmitted)="handleTaskUpdated($event)"
+/>

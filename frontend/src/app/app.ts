@@ -7,6 +7,7 @@ import { BacklogSidebarComponent } from './components/backlog-sidebar/backlog-si
 import { ImportSidebarComponent } from './components/import-sidebar/import-sidebar.component';
 import { TaskStateService } from './services/task-state.service';
 import { NotificationService } from './services/notification.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   imports: [CommonModule, RouterModule, KanbanBoardComponent, BacklogSidebarComponent, ImportSidebarComponent],
@@ -20,6 +21,7 @@ export class App {
   private readonly taskState = inject(TaskStateService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
+  private readonly themeService = inject(ThemeService);
 
   protected readonly title = 'Tasker';
   protected readonly currentWorkspace = signal<Workspace>(Workspace.WORK);
@@ -32,6 +34,12 @@ export class App {
     // Sync currentWorkspace changes to TaskStateService
     effect(() => {
       this.taskState.setSelectedWorkspace(this.currentWorkspace());
+    });
+
+    // Apply theme changes to document root
+    effect(() => {
+      const theme = this.themeService.effectiveTheme();
+      document.documentElement.setAttribute('data-theme', theme);
     });
   }
 

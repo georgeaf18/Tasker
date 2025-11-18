@@ -1,0 +1,91 @@
+<div class="subtask-list w-full" (click)="$event.stopPropagation()">
+    <!-- Header: Toggle + Progress Badge (shown when subtasks exist) -->
+    <div class="flex items-center justify-between gap-2 mb-2" *ngIf="totalCount() > 0">
+        <button
+            pButton
+            [icon]="isExpanded() ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            (click)="toggleExpanded(); $event.stopPropagation()"
+            class="p-button-text p-button-sm"
+            [attr.aria-expanded]="isExpanded()"
+            [attr.aria-label]="isExpanded() ? 'Collapse subtasks' : 'Expand subtasks'"
+            [disabled]="loading()">
+            <span class="ml-2 text-sm font-medium">
+                Subtasks
+            </span>
+        </button>
+
+        <!-- Progress Badge -->
+        <div class="flex items-center gap-2">
+            <p-tag
+                [value]="completedCount() + '/' + totalCount() + ' complete'"
+                [severity]="getProgressSeverity()"
+                styleClass="text-xs"
+                [attr.aria-label]="completedCount() + ' of ' + totalCount() + ' subtasks complete'">
+            </p-tag>
+
+            <!-- Add Subtask Button -->
+            <button
+                pButton
+                icon="pi pi-plus"
+                (click)="showAddDialog(); $event.stopPropagation()"
+                class="p-button-sm p-button-text"
+                aria-label="Add new subtask"
+                [disabled]="loading()">
+            </button>
+        </div>
+    </div>
+
+    <!-- Add First Subtask Button (shown when no subtasks exist) -->
+    <div *ngIf="totalCount() === 0" class="flex items-center gap-2 mb-2">
+        <button
+            pButton
+            icon="pi pi-plus"
+            label="Add subtask"
+            (click)="showAddDialog(); $event.stopPropagation()"
+            class="p-button-sm p-button-outlined"
+            aria-label="Add new subtask"
+            [disabled]="loading()">
+        </button>
+    </div>
+
+    <!-- Progress Bar (shown when expanded) -->
+    <div *ngIf="isExpanded() && totalCount() > 0" class="mb-3">
+        <p-progressBar
+            [value]="progressPercentage()"
+            [showValue]="false"
+            styleClass="h-2"
+            [attr.aria-label]="'Progress: ' + progressPercentage() + ' percent complete'">
+        </p-progressBar>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error() && isExpanded()" class="mb-3">
+        <div class="p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-700 dark:text-red-400">
+            {{ error() }}
+        </div>
+    </div>
+
+    <!-- Subtask List (shown when expanded) -->
+    <div *ngIf="isExpanded()" class="space-y-2" role="list" aria-label="Subtask list">
+        <div *ngFor="let subtask of subtasks(); trackBy: trackBySubtaskId" role="listitem">
+            <app-subtask-item
+                [subtask]="subtask"
+                [taskId]="taskId"
+                (edit)="showEditDialog(subtask)">
+            </app-subtask-item>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="subtasks().length === 0" class="text-center py-4 text-sm text-gray-500 dark:text-gray-400">
+            No subtasks yet. Click the + button to add one.
+        </div>
+    </div>
+
+    <!-- Add/Edit Dialog -->
+    <app-subtask-form-dialog
+        [visible]="dialogVisible()"
+        [taskId]="taskId"
+        [subtask]="editingSubtask()"
+        (visibleChange)="hideDialog()">
+    </app-subtask-form-dialog>
+</div>

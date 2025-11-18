@@ -1,377 +1,415 @@
 <div class="settings-container">
-    <!-- Toast notifications -->
-    <p-toast />
+  <!-- Close button -->
+  <button
+    type="button"
+    class="settings-close-btn"
+    routerLink="/"
+    title="Close settings"
+  >
+    <i class="pi pi-times"></i>
+  </button>
 
-    <!-- Confirmation dialog -->
-    <p-confirmDialog />
+  <!-- Toast notifications -->
+  <p-toast />
 
-    <!-- New Tabs API -->
-    <p-tabs styleClass="settings-tabs">
-        <p-tablist>
-            <p-tab>Contexts & Channels</p-tab>
-            <p-tab>Tags</p-tab>
-            <p-tab>General</p-tab>
-            <p-tab>Appearance</p-tab>
-        </p-tablist>
+  <!-- Confirmation dialog -->
+  <p-confirmDialog />
 
-        <p-tabpanels>
-            <!-- Contexts & Channels Tab -->
-            <p-tabpanel>
-            <div class="settings-content">
-                <!-- Work Context Section -->
-                <section class="context-section">
-                    <div class="context-header">
-                        <h2>Work Context</h2>
-                        <p-button
-                            label="Add Channel"
-                            icon="pi pi-plus"
-                            size="small"
-                            (onClick)="openCreateDialog(Workspace.WORK)"
-                            [loading]="isLoading()"
-                        />
-                    </div>
+  <!-- Vertical Tabs Layout -->
+  <p-tabs styleClass="settings-tabs" orientation="left">
+    <p-tablist>
+      <p-tab>Generalisimo</p-tab>
+      <p-tab>Contexts & Channels</p-tab>
+      <p-tab>Tags</p-tab>
+      <p-tab>Appearance</p-tab>
+    </p-tablist>
 
-                    @if (workChannels().length === 0) {
-                        <p-message
-                            severity="info"
-                            text="No work channels yet. Create one to get started!"
-                            styleClass="empty-state-message"
-                        />
-                    } @else {
-                        <div class="channels-grid">
-                            @for (channel of workChannels(); track channel.id) {
-                                <div class="channel-item">
-                                    <div class="channel-content">
-                                        <span
-                                            class="channel-color"
-                                            [style.background-color]="channel.color || '#8B7BB8'"
-                                        ></span>
-                                        <span class="channel-name">{{ channel.name }}</span>
-                                    </div>
-                                    <div class="channel-actions">
-                                        <p-button
-                                            icon="pi pi-pencil"
-                                            [text]="true"
-                                            [rounded]="true"
-                                            size="small"
-                                            severity="secondary"
-                                            (onClick)="openEditDialog(channel)"
-                                            [attr.aria-label]="'Edit ' + channel.name"
-                                        />
-                                        <p-button
-                                            icon="pi pi-trash"
-                                            [text]="true"
-                                            [rounded]="true"
-                                            size="small"
-                                            severity="danger"
-                                            (onClick)="deleteChannel(channel)"
-                                            [attr.aria-label]="'Delete ' + channel.name"
-                                        />
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                </section>
+    <p-tabpanels>
+      <!-- General Tab -->
+      <p-tabpanel>
+        <div class="settings-content">
+          <section class="context-section">
+            <h2>General Settings</h2>
+            <p class="help-text">Configure general application settings.</p>
+            <!-- General settings content will go here -->
+          </section>
+        </div>
+      </p-tabpanel>
 
-                <!-- Personal Context Section -->
-                <section class="context-section">
-                    <div class="context-header">
-                        <h2>Personal Context</h2>
-                        <p-button
-                            label="Add Channel"
-                            icon="pi pi-plus"
-                            size="small"
-                            (onClick)="openCreateDialog(Workspace.PERSONAL)"
-                            [loading]="isLoading()"
-                        />
-                    </div>
-
-                    @if (personalChannels().length === 0) {
-                        <p-message
-                            severity="info"
-                            text="No personal channels yet. Create one to get started!"
-                            styleClass="empty-state-message"
-                        />
-                    } @else {
-                        <div class="channels-grid">
-                            @for (channel of personalChannels(); track channel.id) {
-                                <div class="channel-item">
-                                    <div class="channel-content">
-                                        <span
-                                            class="channel-color"
-                                            [style.background-color]="channel.color || '#8B7BB8'"
-                                        ></span>
-                                        <span class="channel-name">{{ channel.name }}</span>
-                                    </div>
-                                    <div class="channel-actions">
-                                        <p-button
-                                            icon="pi pi-pencil"
-                                            [text]="true"
-                                            [rounded]="true"
-                                            size="small"
-                                            severity="secondary"
-                                            (onClick)="openEditDialog(channel)"
-                                            [attr.aria-label]="'Edit ' + channel.name"
-                                        />
-                                        <p-button
-                                            icon="pi pi-trash"
-                                            [text]="true"
-                                            [rounded]="true"
-                                            size="small"
-                                            severity="danger"
-                                            (onClick)="deleteChannel(channel)"
-                                            [attr.aria-label]="'Delete ' + channel.name"
-                                        />
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                </section>
+      <!-- Contexts & Channels Tab -->
+      <p-tabpanel>
+        <div class="settings-content">
+          <!-- Work Context Section -->
+          <section class="context-section">
+            <div class="context-header">
+              <h2>Work Context</h2>
+              <p-button
+                label="Add Channel"
+                icon="pi pi-plus"
+                size="small"
+                (onClick)="openCreateDialog(Workspace.WORK)"
+                [loading]="isLoading()"
+              />
             </div>
-            </p-tabpanel>
 
-            <!-- Tags Tab -->
-            <p-tabpanel>
-                <div class="settings-content">
-                    <div class="context-header">
-                        <h2>Manage Tags</h2>
-                        <p-button
-                            label="Create Tag"
-                            icon="pi pi-plus"
-                            size="small"
-                            (onClick)="openCreateTagDialog()"
-                            [loading]="tagState.loading()"
-                        />
+            @if (workChannels().length === 0) {
+              <p-message
+                severity="info"
+                text="No work channels yet. Create one to get started!"
+                styleClass="empty-state-message"
+              />
+            } @else {
+              <div class="channels-grid">
+                @for (channel of workChannels(); track channel.id) {
+                  <div class="channel-item">
+                    <div class="channel-content">
+                      <span
+                        class="channel-color"
+                        [style.background-color]="channel.color || '#8B7BB8'"
+                      ></span>
+                      <span class="channel-name">{{ channel.name }}</span>
                     </div>
-
-                    @if (tags().length === 0) {
-                        <p-message
-                            severity="info"
-                            text="No tags yet. Create one to get started!"
-                            styleClass="empty-state-message"
-                        />
-                    } @else {
-                        <div class="channels-grid">
-                            @for (tag of tags(); track tag.id) {
-                                <div class="channel-item">
-                                    <div class="channel-content">
-                                        <span
-                                            class="channel-color"
-                                            [style.background-color]="tag.color"
-                                        ></span>
-                                        <span class="channel-name">{{ tag.name }}</span>
-                                        <div class="tag-workspaces">
-                                            @for (workspace of tag.workspaces; track workspace) {
-                                                <p-chip [label]="workspace" />
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="channel-actions">
-                                        <p-button
-                                            icon="pi pi-pencil"
-                                            [text]="true"
-                                            [rounded]="true"
-                                            size="small"
-                                            severity="secondary"
-                                            (onClick)="openEditTagDialog(tag)"
-                                            [attr.aria-label]="'Edit ' + tag.name"
-                                        />
-                                        <p-button
-                                            icon="pi pi-trash"
-                                            [text]="true"
-                                            [rounded]="true"
-                                            size="small"
-                                            severity="danger"
-                                            (onClick)="deleteTag(tag)"
-                                            [attr.aria-label]="'Delete ' + tag.name"
-                                        />
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                </div>
-            </p-tabpanel>
-
-            <!-- General Settings Tab -->
-            <p-tabpanel>
-                <div class="settings-content">
-                    <section class="context-section">
-                        <h2>Board Layout</h2>
-                        <p-selectButton
-                            [ngModel]="currentBoardLayout()"
-                            (ngModelChange)="setBoardLayout($event)"
-                            [options]="boardLayoutOptions"
-                            optionLabel="label"
-                            optionValue="value"
-                        />
-                        <p class="help-text">
-                            Focus Mode shows one task in a large center area. Traditional shows three columns side-by-side.
-                        </p>
-                    </section>
-                </div>
-            </p-tabpanel>
-
-            <!-- Appearance Settings Tab (Placeholder) -->
-            <p-tabpanel>
-                <div class="settings-content">
-                    <p-message
-                        severity="info"
-                        text="Appearance customization will be available in a future release."
-                    />
-                </div>
-            </p-tabpanel>
-        </p-tabpanels>
-    </p-tabs>
-
-    <!-- Channel Create/Edit Dialog -->
-    <p-dialog
-        [header]="dialogHeader"
-        [(visible)]="showCreateChannelDialog"
-        [modal]="true"
-        [closable]="true"
-        [draggable]="false"
-        [resizable]="false"
-        styleClass="channel-dialog"
-        (onHide)="closeDialog()"
-    >
-        <form [formGroup]="channelForm" (ngSubmit)="saveChannel()">
-            <!-- Channel Name -->
-            <div class="form-field">
-                <label for="channel-name">Channel Name *</label>
-                <input
-                    pInputText
-                    id="channel-name"
-                    formControlName="name"
-                    placeholder="e.g., Frontend, Home, Learning"
-                    [class.error]="channelForm.get('name')?.invalid && channelForm.get('name')?.touched"
-                />
-                @if (getErrorMessage('name')) {
-                    <small class="error-message">{{ getErrorMessage('name') }}</small>
+                    <div class="channel-actions">
+                      <p-button
+                        icon="pi pi-pencil"
+                        [text]="true"
+                        [rounded]="true"
+                        size="small"
+                        severity="secondary"
+                        (onClick)="openEditDialog(channel)"
+                        [attr.aria-label]="'Edit ' + channel.name"
+                      />
+                      <p-button
+                        icon="pi pi-trash"
+                        [text]="true"
+                        [rounded]="true"
+                        size="small"
+                        severity="danger"
+                        (onClick)="deleteChannel(channel)"
+                        [attr.aria-label]="'Delete ' + channel.name"
+                      />
+                    </div>
+                  </div>
                 }
+              </div>
+            }
+          </section>
+
+          <!-- Personal Context Section -->
+          <section class="context-section">
+            <div class="context-header">
+              <h2>Personal Context</h2>
+              <p-button
+                label="Add Channel"
+                icon="pi pi-plus"
+                size="small"
+                (onClick)="openCreateDialog(Workspace.PERSONAL)"
+                [loading]="isLoading()"
+              />
             </div>
 
-            <!-- Workspace Selection -->
-            <div class="form-field">
-                <label for="workspace">Context *</label>
-                <p-selectButton
-                    formControlName="workspace"
-                    [options]="workspaceOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                    styleClass="workspace-select"
-                />
-            </div>
-
-            <!-- Color Picker -->
-            <div class="form-field">
-                <label for="channel-color">Color *</label>
-                <div class="color-picker-container">
-                    <p-colorPicker
-                        formControlName="color"
-                        [inline]="false"
-                        format="hex"
-                    />
-                    <span class="color-preview" [style.background-color]="channelForm.get('color')?.value"></span>
-                    <span class="color-value">{{ channelForm.get('color')?.value }}</span>
-                </div>
-            </div>
-
-            <!-- Dialog Footer Actions -->
-            <div class="dialog-footer">
-                <p-button
-                    label="Cancel"
-                    severity="secondary"
-                    [text]="true"
-                    (onClick)="closeDialog()"
-                    type="button"
-                />
-                <p-button
-                    [label]="saveButtonLabel"
-                    icon="pi pi-check"
-                    type="submit"
-                    [loading]="isLoading()"
-                    [disabled]="channelForm.invalid"
-                />
-            </div>
-        </form>
-    </p-dialog>
-
-    <!-- Tag Create/Edit Dialog -->
-    <p-dialog
-        [header]="tagDialogHeader"
-        [(visible)]="showCreateTagDialog"
-        [modal]="true"
-        [closable]="true"
-        [draggable]="false"
-        [resizable]="false"
-        styleClass="channel-dialog"
-        (onHide)="closeTagDialog()"
-    >
-        <form [formGroup]="tagForm" (ngSubmit)="saveTag()">
-            <!-- Tag Name -->
-            <div class="form-field">
-                <label for="tag-name">Tag Name *</label>
-                <input
-                    pInputText
-                    id="tag-name"
-                    formControlName="name"
-                    placeholder="e.g., blocked, urgent, bug"
-                    [class.error]="tagForm.get('name')?.invalid && tagForm.get('name')?.touched"
-                />
-                @if (getErrorMessage('name')) {
-                    <small class="error-message">{{ getErrorMessage('name') }}</small>
+            @if (personalChannels().length === 0) {
+              <p-message
+                severity="info"
+                text="No personal channels yet. Create one to get started!"
+                styleClass="empty-state-message"
+              />
+            } @else {
+              <div class="channels-grid">
+                @for (channel of personalChannels(); track channel.id) {
+                  <div class="channel-item">
+                    <div class="channel-content">
+                      <span
+                        class="channel-color"
+                        [style.background-color]="channel.color || '#8B7BB8'"
+                      ></span>
+                      <span class="channel-name">{{ channel.name }}</span>
+                    </div>
+                    <div class="channel-actions">
+                      <p-button
+                        icon="pi pi-pencil"
+                        [text]="true"
+                        [rounded]="true"
+                        size="small"
+                        severity="secondary"
+                        (onClick)="openEditDialog(channel)"
+                        [attr.aria-label]="'Edit ' + channel.name"
+                      />
+                      <p-button
+                        icon="pi pi-trash"
+                        [text]="true"
+                        [rounded]="true"
+                        size="small"
+                        severity="danger"
+                        (onClick)="deleteChannel(channel)"
+                        [attr.aria-label]="'Delete ' + channel.name"
+                      />
+                    </div>
+                  </div>
                 }
-            </div>
+              </div>
+            }
+          </section>
+        </div>
+      </p-tabpanel>
 
-            <!-- Color Picker -->
-            <div class="form-field">
-                <label for="tag-color">Color *</label>
-                <div class="color-picker-container">
-                    <p-colorPicker
-                        formControlName="color"
-                        [inline]="false"
-                        format="hex"
+      <!-- Tags Tab -->
+      <p-tabpanel>
+        <div class="settings-content">
+          <div class="context-header">
+            <h2>Manage Tags</h2>
+            <p-button
+              label="Create Tag"
+              icon="pi pi-plus"
+              size="small"
+              (onClick)="openCreateTagDialog()"
+              [loading]="tagState.loading()"
+            />
+          </div>
+
+          @if (tags().length === 0) {
+            <p-message
+              severity="info"
+              text="No tags yet. Create one to get started!"
+              styleClass="empty-state-message"
+            />
+          } @else {
+            <div class="channels-grid">
+              @for (tag of tags(); track tag.id) {
+                <div class="channel-item">
+                  <div class="channel-content">
+                    <span
+                      class="channel-color"
+                      [style.background-color]="tag.color"
+                    ></span>
+                    <span class="channel-name">{{ tag.name }}</span>
+                    <div class="tag-workspaces">
+                      @for (workspace of tag.workspaces; track workspace) {
+                        <p-chip [label]="workspace" />
+                      }
+                    </div>
+                  </div>
+                  <div class="channel-actions">
+                    <p-button
+                      icon="pi pi-pencil"
+                      [text]="true"
+                      [rounded]="true"
+                      size="small"
+                      severity="secondary"
+                      (onClick)="openEditTagDialog(tag)"
+                      [attr.aria-label]="'Edit ' + tag.name"
                     />
-                    <span class="color-preview" [style.background-color]="tagForm.get('color')?.value"></span>
-                    <span class="color-value">{{ tagForm.get('color')?.value }}</span>
+                    <p-button
+                      icon="pi pi-trash"
+                      [text]="true"
+                      [rounded]="true"
+                      size="small"
+                      severity="danger"
+                      (onClick)="deleteTag(tag)"
+                      [attr.aria-label]="'Delete ' + tag.name"
+                    />
+                  </div>
                 </div>
+              }
             </div>
+          }
+        </div>
+      </p-tabpanel>
 
-            <!-- Workspace Multi-Select -->
-            <div class="form-field">
-                <label for="tag-workspaces">Visible In *</label>
-                <p-multiSelect
-                    id="tag-workspaces"
-                    formControlName="workspaces"
-                    [options]="workspaceMultiOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                    placeholder="Select workspaces"
-                    display="chip"
-                />
-                <small class="help-text">Choose which contexts this tag should appear in</small>
-            </div>
+      <!-- General Settings Tab -->
+      <p-tabpanel>
+        <div class="settings-content">
+          <section class="context-section">
+            <h2>Board Layout</h2>
+            <p-selectButton
+              [ngModel]="currentBoardLayout()"
+              (ngModelChange)="setBoardLayout($event)"
+              [options]="boardLayoutOptions"
+              optionLabel="label"
+              optionValue="value"
+            />
+            <p class="help-text">
+              Focus Mode shows one task in a large center area. Traditional
+              shows three columns side-by-side.
+            </p>
+          </section>
+        </div>
+      </p-tabpanel>
 
-            <!-- Dialog Footer Actions -->
-            <div class="dialog-footer">
-                <p-button
-                    label="Cancel"
-                    severity="secondary"
-                    [text]="true"
-                    (onClick)="closeTagDialog()"
-                    type="button"
-                />
-                <p-button
-                    [label]="tagSaveButtonLabel"
-                    icon="pi pi-check"
-                    type="submit"
-                    [loading]="tagState.loading()"
-                    [disabled]="tagForm.invalid"
-                />
-            </div>
-        </form>
-    </p-dialog>
+      <!-- Appearance Settings Tab -->
+      <p-tabpanel>
+        <div class="settings-content">
+          <section class="context-section">
+            <h2>Theme</h2>
+            <p class="help-text">
+              Choose your preferred theme or let the app follow your system
+              settings.
+            </p>
+            <app-theme-toggle />
+          </section>
+        </div>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+
+  <!-- Channel Create/Edit Dialog -->
+  <p-dialog
+    [header]="dialogHeader"
+    [(visible)]="showCreateChannelDialog"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="channel-dialog"
+    (onHide)="closeDialog()"
+  >
+    <form [formGroup]="channelForm" (ngSubmit)="saveChannel()">
+      <!-- Channel Name -->
+      <div class="form-field">
+        <label for="channel-name">Channel Name *</label>
+        <input
+          pInputText
+          id="channel-name"
+          formControlName="name"
+          placeholder="e.g., Frontend, Home, Learning"
+          [class.error]="
+            channelForm.get('name')?.invalid && channelForm.get('name')?.touched
+          "
+        />
+        @if (getErrorMessage('name')) {
+          <small class="error-message">{{ getErrorMessage('name') }}</small>
+        }
+      </div>
+
+      <!-- Workspace Selection -->
+      <div class="form-field">
+        <label for="workspace">Context *</label>
+        <p-selectButton
+          formControlName="workspace"
+          [options]="workspaceOptions"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="workspace-select"
+        />
+      </div>
+
+      <!-- Color Picker -->
+      <div class="form-field">
+        <label for="channel-color">Color *</label>
+        <div class="color-picker-container">
+          <p-colorPicker
+            formControlName="color"
+            [inline]="false"
+            format="hex"
+          />
+          <span
+            class="color-preview"
+            [style.background-color]="channelForm.get('color')?.value"
+          ></span>
+          <span class="color-value">{{ channelForm.get('color')?.value }}</span>
+        </div>
+      </div>
+
+      <!-- Dialog Footer Actions -->
+      <div class="dialog-footer">
+        <p-button
+          label="Cancel"
+          severity="secondary"
+          [text]="true"
+          (onClick)="closeDialog()"
+          type="button"
+        />
+        <p-button
+          [label]="saveButtonLabel"
+          icon="pi pi-check"
+          type="submit"
+          [loading]="isLoading()"
+          [disabled]="channelForm.invalid"
+        />
+      </div>
+    </form>
+  </p-dialog>
+
+  <!-- Tag Create/Edit Dialog -->
+  <p-dialog
+    [header]="tagDialogHeader"
+    [(visible)]="showCreateTagDialog"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="channel-dialog"
+    (onHide)="closeTagDialog()"
+  >
+    <form [formGroup]="tagForm" (ngSubmit)="saveTag()">
+      <!-- Tag Name -->
+      <div class="form-field">
+        <label for="tag-name">Tag Name *</label>
+        <input
+          pInputText
+          id="tag-name"
+          formControlName="name"
+          placeholder="e.g., blocked, urgent, bug"
+          [class.error]="
+            tagForm.get('name')?.invalid && tagForm.get('name')?.touched
+          "
+        />
+        @if (getErrorMessage('name')) {
+          <small class="error-message">{{ getErrorMessage('name') }}</small>
+        }
+      </div>
+
+      <!-- Color Picker -->
+      <div class="form-field">
+        <label for="tag-color">Color *</label>
+        <div class="color-picker-container">
+          <p-colorPicker
+            formControlName="color"
+            [inline]="false"
+            format="hex"
+          />
+          <span
+            class="color-preview"
+            [style.background-color]="tagForm.get('color')?.value"
+          ></span>
+          <span class="color-value">{{ tagForm.get('color')?.value }}</span>
+        </div>
+      </div>
+
+      <!-- Workspace Multi-Select -->
+      <div class="form-field">
+        <label for="tag-workspaces">Visible In *</label>
+        <p-multiSelect
+          id="tag-workspaces"
+          formControlName="workspaces"
+          [options]="workspaceMultiOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select workspaces"
+          display="chip"
+        />
+        <small class="help-text"
+          >Choose which contexts this tag should appear in</small
+        >
+      </div>
+
+      <!-- Dialog Footer Actions -->
+      <div class="dialog-footer">
+        <p-button
+          label="Cancel"
+          severity="secondary"
+          [text]="true"
+          (onClick)="closeTagDialog()"
+          type="button"
+        />
+        <p-button
+          [label]="tagSaveButtonLabel"
+          icon="pi pi-check"
+          type="submit"
+          [loading]="tagState.loading()"
+          [disabled]="tagForm.invalid"
+        />
+      </div>
+    </form>
+  </p-dialog>
 </div>

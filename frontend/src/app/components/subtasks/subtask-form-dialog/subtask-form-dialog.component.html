@@ -1,0 +1,106 @@
+<p-dialog
+    [header]="getDialogHeader()"
+    [(visible)]="visible"
+    (visibleChange)="visibleChange.emit($event)"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="w-full max-w-md"
+    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }">
+
+    <form [formGroup]="subtaskForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <!-- Title Field -->
+        <div class="flex flex-col gap-2">
+            <label for="subtask-title" class="font-medium text-sm">
+                Title <span class="text-red-500">*</span>
+            </label>
+            <input
+                pInputText
+                id="subtask-title"
+                formControlName="title"
+                placeholder="Enter subtask title"
+                class="w-full"
+                maxlength="255"
+                [attr.aria-required]="true"
+                [attr.aria-invalid]="hasError('title', 'required')" />
+
+            <!-- Validation Errors -->
+            <small class="text-red-500" *ngIf="hasError('title', 'required')">
+                Title is required
+            </small>
+            <small class="text-red-500" *ngIf="hasError('title', 'maxlength')">
+                Title must be less than 255 characters
+            </small>
+        </div>
+
+        <!-- Description Field -->
+        <div class="flex flex-col gap-2">
+            <label for="subtask-description" class="font-medium text-sm">
+                Description
+            </label>
+            <textarea
+                id="subtask-description"
+                formControlName="description"
+                placeholder="Enter subtask description (optional)"
+                rows="3"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                maxlength="1000">
+            </textarea>
+
+            <!-- Character Count -->
+            <small class="text-gray-500 dark:text-gray-400 text-xs text-right">
+                {{ subtaskForm.get('description')?.value?.length || 0 }} / 1000
+            </small>
+
+            <!-- Validation Errors -->
+            <small class="text-red-500" *ngIf="hasError('description', 'maxlength')">
+                Description must be less than 1000 characters
+            </small>
+        </div>
+
+        <!-- Status Field -->
+        <div class="flex flex-col gap-2">
+            <label for="subtask-status" class="font-medium text-sm">
+                Status <span class="text-red-500">*</span>
+            </label>
+            <p-select
+                id="subtask-status"
+                [options]="statusOptions"
+                formControlName="status"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select status"
+                styleClass="w-full"
+                [attr.aria-required]="true">
+            </p-select>
+
+            <!-- Validation Errors -->
+            <small class="text-red-500" *ngIf="hasError('status', 'required')">
+                Status is required
+            </small>
+        </div>
+    </form>
+
+    <!-- Dialog Footer -->
+    <ng-template #footer>
+        <div class="flex justify-end gap-2">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                (click)="onCancel()"
+                class="p-button-text"
+                aria-label="Cancel">
+            </button>
+            <button
+                pButton
+                type="submit"
+                [label]="getSubmitLabel()"
+                (click)="onSubmit()"
+                [disabled]="subtaskForm.invalid"
+                [attr.aria-label]="getSubmitLabel() + ' subtask'">
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

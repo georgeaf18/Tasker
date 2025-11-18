@@ -4,15 +4,16 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0;
+  padding: var(--spacing-lg);
   background: transparent;
-  overflow: hidden;
 }
 
 /* Progress Section */
 .progress-section {
   margin-bottom: var(--spacing-xl);
-  padding: 0 var(--spacing-xs);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--background-primary);
+  border-radius: var(--border-radius);
 }
 
 .progress-header {
@@ -25,14 +26,18 @@
 .progress-header h2 {
   font-size: var(--font-size-xl);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   margin: 0;
 }
 
 .progress-percentage {
   font-size: var(--font-size-lg);
   font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-blue) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -80,15 +85,15 @@
   border-bottom-right-radius: 0;
   overflow: hidden;
   box-shadow: none;
-  background: var(--color-bg-primary);
-  border-right: 1px solid var(--color-border);
+  background: var(--background-primary);
+  border-right: 1px solid var(--border-default);
 }
 
 ::ng-deep .kanban-panel .p-panel-content {
   flex: 1;
   overflow: hidden;
   padding: 0;
-  background: var(--color-bg-primary);
+  background: var(--background-primary);
   display: flex;
   flex-direction: column;
 }
@@ -118,19 +123,19 @@
 
 /* Column-specific colors - Subtle solid colors */
 .today-column ::ng-deep .p-panel-header {
-  background: #3B82F6;
+  background: var(--status-today);
   color: white;
   border-bottom: none;
 }
 
 .in-progress-column ::ng-deep .p-panel-header {
-  background: #8B5CF6;
+  background: var(--status-in-progress);
   color: white;
   border-bottom: none;
 }
 
 .done-column ::ng-deep .p-panel-header {
-  background: #10B981;
+  background: var(--status-done);
   color: white;
   border-bottom: none;
 }
@@ -167,13 +172,13 @@
 }
 
 .column-content::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--border-default);
   border-radius: 3px;
   transition: background 0.2s ease;
 }
 
 .column-content::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-tertiary);
+  background: var(--text-tertiary);
 }
 
 /* Horizontal scrollbar for kanban board */
@@ -186,29 +191,29 @@
 }
 
 .kanban-board::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--border-default);
   border-radius: 4px;
   transition: background 0.2s ease;
 }
 
 .kanban-board::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-tertiary);
+  background: var(--text-tertiary);
 }
 
 /* Task Cards */
 ::ng-deep .task-card {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border-left: 3px solid var(--color-primary);
+  border-left: 3px solid var(--primary-purple);
   border-radius: var(--border-radius);
-  background: var(--color-bg-primary);
+  background: var(--background-primary);
   box-shadow: var(--shadow-sm);
 }
 
 ::ng-deep .task-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
-  border-left-color: var(--color-primary-hover);
+  border-left-color: var(--primary-purple-hover);
 }
 
 ::ng-deep .task-card .p-card-body {
@@ -220,7 +225,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-sm) var(--spacing-md);
-  border-bottom: var(--border-width) solid var(--color-border-light);
+  border-bottom: var(--border-width) solid var(--border-default);
 }
 
 .channel-chip {
@@ -230,7 +235,7 @@
 
 .routine-icon {
   font-size: var(--font-size-base);
-  color: var(--color-accent);
+  color: var(--accent-pink);
 }
 
 .task-card-body {
@@ -242,7 +247,7 @@
 .task-title {
   font-size: var(--font-size-base);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   margin: 0;
   line-height: 1.4;
 }
@@ -264,7 +269,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 .due-date i {
@@ -281,7 +286,11 @@
 
 /* Task Details Dialog */
 ::ng-deep .task-dialog .p-dialog-header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-purple-hover) 100%
+  );
   color: white;
   padding: var(--spacing-lg);
 }
@@ -310,22 +319,22 @@
 .detail-section h4 {
   font-size: var(--font-size-lg);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   margin: 0;
-  border-bottom: 2px solid var(--color-primary-light);
+  border-bottom: 2px solid var(--primary-purple-light);
   padding-bottom: var(--spacing-sm);
 }
 
 .task-description {
   font-size: var(--font-size-base);
   line-height: 1.6;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   margin: 0;
 }
 
 .no-description {
   font-size: var(--font-size-base);
-  color: var(--color-text-tertiary);
+  color: var(--text-tertiary);
   font-style: italic;
   margin: 0;
 }
@@ -345,7 +354,7 @@
 .metadata-label {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
 }
@@ -353,8 +362,8 @@
 .status-badge {
   display: inline-block;
   padding: var(--spacing-xs) var(--spacing-md);
-  background: var(--color-primary-bg);
-  color: var(--color-primary);
+  background: var(--primary-purple-bg);
+  color: var(--primary-purple);
   border-radius: var(--border-radius-lg);
   font-size: var(--font-size-sm);
   font-weight: 700;
@@ -432,12 +441,17 @@
 ::ng-deep .p-progressbar {
   height: 12px;
   border-radius: var(--border-radius);
-  background: var(--color-border-light);
+  background: var(--border-default);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 ::ng-deep .p-progressbar .p-progressbar-value {
-  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-success) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--primary-purple) 0%,
+    var(--primary-blue) 50%,
+    var(--success) 100%
+  );
   border-radius: var(--border-radius);
   position: relative;
   overflow: hidden;
@@ -450,18 +464,27 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
   animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 ::ng-deep .p-card {
   box-shadow: var(--shadow-sm);
-  border: var(--border-width) solid var(--color-border);
+  border: var(--border-width) solid var(--border-default);
 }
 
 ::ng-deep .p-panel .p-panel-header {
@@ -489,7 +512,9 @@
 }
 
 /* Drag and Drop Styles */
-.column-content.cdk-drop-list-dragging ::ng-deep .task-card:not(.cdk-drag-placeholder) {
+.column-content.cdk-drop-list-dragging
+  ::ng-deep
+  .task-card:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
@@ -506,14 +531,14 @@
 /* Placeholder style (where the dragged item will land) */
 ::ng-deep .cdk-drag-placeholder {
   opacity: 0.4;
-  border: 2px dashed var(--color-primary);
-  background: var(--color-primary-bg);
+  border: 2px dashed var(--primary-purple);
+  background: var(--primary-purple-bg);
   box-shadow: none;
 }
 
 /* Drop zone highlighting */
 .column-content.cdk-drop-list-receiving {
-  background: var(--color-primary-bg);
+  background: var(--primary-purple-bg);
   border-radius: var(--border-radius);
 }
 
@@ -540,7 +565,7 @@
 
 /* Board Controls */
 .board-controls {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 0 0 var(--spacing-md) 0;
   display: flex;
   justify-content: flex-end;
   gap: var(--spacing-sm);
@@ -559,7 +584,7 @@
 .focus-area {
   flex: 0 0 40%;
   min-height: 300px;
-  background: var(--color-bg-primary);
+  background: var(--background-primary);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-lg);
@@ -580,8 +605,12 @@
   flex: 1;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%);
-  border-left: 4px solid var(--color-primary);
+  background: linear-gradient(
+    135deg,
+    var(--background-secondary) 0%,
+    var(--background-elevated) 100%
+  );
+  border-left: 4px solid var(--primary-purple);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   display: flex;
@@ -592,7 +621,7 @@
 .focus-task-card .task-header h3 {
   font-size: var(--font-size-2xl);
   margin: 0;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -607,7 +636,7 @@
 .bottom-columns .kanban-column {
   flex: 1;
   min-width: 0;
-  background: var(--color-bg-primary);
+  background: var(--background-primary);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -624,6 +653,17 @@
 .compact-task-card h4 {
   font-size: var(--font-size-sm);
   margin: 0;
+}
+
+/* Clickable task cards in focus mode */
+.clickable-task-card {
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clickable-task-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Task Tags */
@@ -652,7 +692,7 @@
   gap: var(--spacing-xs);
   margin-top: var(--spacing-sm);
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 .channel-indicator {
@@ -670,36 +710,214 @@
   justify-content: center;
   height: 100%;
   gap: var(--spacing-md);
-  color: var(--color-text-tertiary);
+  color: var(--text-tertiary);
   font-size: var(--font-size-base);
 }
 
 .focus-area .empty-state i {
   font-size: 3rem;
-  color: var(--color-text-tertiary);
+  color: var(--text-tertiary);
 }
 
 /* Focus Mode Column Headers - Consistent Styling */
 .bottom-columns .today-column .column-header {
-  background: #3B82F6;
+  background: var(--status-today);
   color: white;
   padding: var(--spacing-md);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .bottom-columns .done-column .column-header {
-  background: #10B981;
+  background: var(--status-done);
   color: white;
   padding: var(--spacing-md);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .focus-area .column-header {
-  background: #8B5CF6;
+  background: var(--status-in-progress);
   color: white;
   padding: var(--spacing-md);
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-  margin: calc(var(--spacing-lg) * -1) calc(var(--spacing-lg) * -1) var(--spacing-lg);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  margin: calc(var(--spacing-lg) * -1) calc(var(--spacing-lg) * -1)
+    var(--spacing-lg);
+}
+
+/* Up Next Progress Bar */
+.up-next-progress {
+  padding: 0 var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+::ng-deep .up-next-progress-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-default);
+}
+
+::ng-deep .up-next-progress-bar .p-progressbar-value {
+  background: var(--status-done);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Quick Actions Row */
+.quick-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-sm);
+}
+
+::ng-deep .add-task-quick-btn,
+::ng-deep .sort-toggle-btn {
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+::ng-deep .add-task-quick-btn {
+  color: var(--primary-purple);
+}
+
+::ng-deep .add-task-quick-btn:hover {
+  background: var(--primary-purple-bg);
+}
+
+::ng-deep .sort-toggle-btn {
+  color: var(--text-secondary);
+}
+
+::ng-deep .sort-toggle-btn:hover {
+  background: var(--background-secondary);
+}
+
+/* Sleek Task Dialog Styles */
+::ng-deep .sleek-task-dialog .p-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .sleek-task-dialog .p-dialog-content {
+  padding: 0;
+}
+
+.sleek-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+}
+
+.task-input-container {
+  width: 100%;
+}
+
+.sleek-task-input {
+  width: 100%;
+  border: none;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  padding: var(--spacing-md) 0;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.sleek-task-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.metadata-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.metadata-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius);
+  background: var(--background-primary);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.metadata-btn:hover {
+  background: var(--background-secondary);
+  border-color: var(--primary-purple);
+}
+
+.metadata-popover {
+  padding: var(--spacing-xs);
+  min-width: 200px;
+}
+
+.popover-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.popover-option:hover {
+  background: var(--background-secondary);
+}
+
+.dialog-bottom-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-default);
+}
+
+.cancel-btn,
+.add-task-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.cancel-btn:hover {
+  background: var(--background-secondary);
+}
+
+.add-task-btn {
+  background: var(--primary-purple);
+  color: white;
+}
+
+.add-task-btn:hover {
+  background: var(--primary-purple-hover);
+}
+
+.add-task-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Responsive: Stack bottom columns on mobile */
@@ -715,5 +933,16 @@
 
   .board-controls {
     padding: var(--spacing-sm);
+  }
+
+  .quick-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  ::ng-deep .add-task-quick-btn,
+  ::ng-deep .sort-toggle-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

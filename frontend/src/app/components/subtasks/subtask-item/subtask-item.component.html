@@ -1,0 +1,68 @@
+<div class="subtask-item flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors" (click)="$event.stopPropagation()">
+    <!-- Status Dropdown -->
+    <div class="flex-shrink-0" (click)="$event.stopPropagation()">
+        <p-select
+            [options]="statusOptions"
+            [(ngModel)]="subtask.status"
+            (ngModelChange)="onStatusChange($event)"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Status"
+            styleClass="w-32"
+            [attr.aria-label]="'Change status for ' + subtask.title">
+            <ng-template #selectedItem let-option>
+                <div class="flex items-center gap-2">
+                    <i [class]="option.icon" class="text-sm"></i>
+                    <span class="text-sm">{{ option.label }}</span>
+                </div>
+            </ng-template>
+            <ng-template #item let-option>
+                <div class="flex items-center gap-2">
+                    <i [class]="option.icon"></i>
+                    <span>{{ option.label }}</span>
+                </div>
+            </ng-template>
+        </p-select>
+    </div>
+
+    <!-- Title and Description -->
+    <div class="flex-grow min-w-0">
+        <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate" [title]="subtask.title">
+            {{ subtask.title }}
+        </div>
+        <div *ngIf="subtask.description" class="text-xs text-gray-600 dark:text-gray-400 truncate mt-1" [title]="subtask.description">
+            {{ subtask.description }}
+        </div>
+    </div>
+
+    <!-- Status Badge (mobile-friendly alternative to dropdown) -->
+    <div class="flex-shrink-0 hidden sm:block">
+        <p-tag
+            [value]="getStatusLabel(subtask.status)"
+            [severity]="getStatusSeverity(subtask.status)"
+            styleClass="text-xs"
+            [attr.aria-label]="'Status: ' + getStatusLabel(subtask.status)">
+        </p-tag>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex-shrink-0 flex items-center gap-1">
+        <!-- Edit Button -->
+        <button
+            pButton
+            icon="pi pi-pencil"
+            (click)="onEdit(); $event.stopPropagation()"
+            class="p-button-text p-button-sm p-button-rounded"
+            [attr.aria-label]="'Edit ' + subtask.title">
+        </button>
+
+        <!-- Delete Button -->
+        <button
+            pButton
+            icon="pi pi-trash"
+            (click)="confirmDelete(); $event.stopPropagation()"
+            class="p-button-text p-button-sm p-button-rounded p-button-danger"
+            [attr.aria-label]="'Delete ' + subtask.title">
+        </button>
+    </div>
+</div>

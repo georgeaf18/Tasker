@@ -2,20 +2,22 @@ import { Component, OnInit, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
-import { CardModule } from 'primeng/card';
 import { BadgeModule } from 'primeng/badge';
-import { ChipModule } from 'primeng/chip';
-import { TagModule } from 'primeng/tag';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DataViewModule } from 'primeng/dataview';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
 import { MessageModule } from 'primeng/message';
+import { DialogModule } from 'primeng/dialog';
+import { TagModule } from 'primeng/tag';
+import { ChipModule } from 'primeng/chip';
 import { TaskStateService } from '../../services/task-state.service';
 import { BoardPreferencesService } from '../../services/board-preferences.service';
-import { Task, TaskStatus, Workspace } from '../../models/task.model';
+import { TaskUtilsService } from '../../shared/services/task-utils.service';
+import { Task, TaskStatus, Workspace, CreateTaskDto, UpdateTaskDto } from '../../models';
 import { BoardLayout } from '../../models/board-layout.enum';
+import { TaskFormDialogComponent } from '../../shared/components/task-form-dialog/task-form-dialog.component';
+import { TaskCardComponent } from '../../shared/components/task-card/task-card.component';
+import { SubtaskListComponent } from '../subtasks/subtask-list/subtask-list.component';
 
 /**
  * KanbanBoardComponent
@@ -30,16 +32,17 @@ import { BoardLayout } from '../../models/board-layout.enum';
     CommonModule,
     DragDropModule,
     PanelModule,
-    CardModule,
     BadgeModule,
-    ChipModule,
-    TagModule,
     ProgressBarModule,
     DataViewModule,
-    DialogModule,
     ButtonModule,
-    TooltipModule,
     MessageModule,
+    DialogModule,
+    TagModule,
+    ChipModule,
+    TaskFormDialogComponent,
+    TaskCardComponent,
+    SubtaskListComponent,
   ],
   templateUrl: './kanban-board.component.html',
   styleUrl: './kanban-board.component.css',
@@ -51,9 +54,14 @@ export class KanbanBoardComponent implements OnInit {
 
   private readonly taskState = inject(TaskStateService);
   private readonly boardPreferences = inject(BoardPreferencesService);
+  private readonly taskUtils = inject(TaskUtilsService);
 
   selectedTask = signal<Task | null>(null);
   showTaskDialog = signal<boolean>(false);
+  createTaskDialogVisible = signal<boolean>(false);
+
+  // Sort mode: 'time' | 'priority' | 'manual' | 'alphabetical'
+  currentSortMode = signal<'time' | 'priority' | 'manual' | 'alphabetical'>('manual');
 
   // Use workspace-filtered computed signals from TaskStateService
   todayTasks = computed(() => this.taskState.currentWorkspaceTodayTasks());
@@ -71,8 +79,61 @@ export class KanbanBoardComponent implements OnInit {
     return total > 0 ? Math.round((done / total) * 100) : 0;
   });
 
+  // Progress for Up Next column (TODAY tasks)
+  upNextProgress = computed(() => {
+    const tasks = this.todayTasks();
+    const total = tasks.length;
+    if (total === 0) return 0;
+
+    // In the context of "Up Next", we consider tasks that have been moved to IN_PROGRESS or DONE
+    // But since these are todayTasks, they're all in TODAY status
+    // So we'll calculate based on completed tasks in the entire workspace for now
+    // A better approach might be to track completion within the day
+    return 0; // For now, since all tasks in todayTasks are by definition not complete
+  });
+
   ngOnInit(): void {
     this.taskState.loadTasks();
+  }
+
+  showAddTaskDialog(): void {
+    this.createTaskDialogVisible.set(true);
+  }
+
+  hideCreateTaskDialog(): void {
+    this.createTaskDialogVisible.set(false);
+  }
+
+  handleTaskSubmitted(dto: CreateTaskDto | UpdateTaskDto): void {
+    // Only CreateTaskDto is used when creating new tasks (no 'id' field on create)
+    this.taskState.addTask(dto as CreateTaskDto);
+  }
+
+  toggleSort(): void {
+    const modes: Array<'time' | 'priority' | 'manual' | 'alphabetical'> = ['manual', 'time', 'priority', 'alphabetical'];
+    const currentIndex = modes.indexOf(this.currentSortMode());
+    const nextIndex = (currentIndex + 1) % modes.length;
+    this.currentSortMode.set(modes[nextIndex]);
+  }
+
+  getCurrentTime(): string {
+    const now = new Date();
+    return now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
+  }
+
+  getSortLabel(): string {
+    const mode = this.currentSortMode();
+    switch (mode) {
+      case 'time':
+        return this.getCurrentTime();
+      case 'priority':
+        return 'Priority';
+      case 'alphabetical':
+        return 'A-Z';
+      case 'manual':
+      default:
+        return 'Manual';
+    }
   }
 
   openTaskDetails(task: Task): void {
@@ -94,30 +155,6 @@ export class KanbanBoardComponent implements OnInit {
     if (confirm('Are you sure you want to delete this task?')) {
       this.taskState.removeTask(taskId);
       this.closeTaskDialog();
-    }
-  }
-
-  getWorkspaceColor(workspace: Workspace): string {
-    return workspace === Workspace.WORK ? '#F97316' : '#14B8A6';
-  }
-
-  getWorkspaceSeverity(workspace: Workspace): 'success' | 'info' {
-    return workspace === Workspace.WORK ? 'success' : 'info';
-  }
-
-  formatDate(dateStr: string | Date | null | undefined): string {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return 'Today';
-    } else if (date.toDateString() === tomorrow.toDateString()) {
-      return 'Tomorrow';
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
   }
 
@@ -161,5 +198,16 @@ export class KanbanBoardComponent implements OnInit {
       // Move new task to target status
       this.taskState.updateTask(task.id, { status: newStatus });
     }
+  }
+
+  /**
+   * Utility methods delegating to TaskUtilsService
+   */
+  getWorkspaceSeverity(workspace: Workspace): 'success' | 'info' {
+    return this.taskUtils.getWorkspaceSeverity(workspace);
+  }
+
+  formatDate(dateStr: string | Date | null | undefined): string {
+    return this.taskUtils.formatDate(dateStr);
   }
 }

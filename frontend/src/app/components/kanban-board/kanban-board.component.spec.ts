@@ -1,91 +1,84 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { signal, computed } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { signal } from '@angular/core';
+
 import { KanbanBoardComponent } from './kanban-board.component';
 import { TaskStateService } from '../../services/task-state.service';
-import { Task, TaskStatus, Workspace } from '../../models/task.model';
+import { BoardPreferencesService } from '../../services/board-preferences.service';
+import { TaskUtilsService } from '../../shared/services/task-utils.service';
+import { Task, CreateTaskDto } from '../../models';
+import { Workspace } from '../../models/workspace.enum';
+import { TaskStatus } from '../../models/task-status.enum';
+import { BoardLayout } from '../../models/board-layout.enum';
 
 describe('KanbanBoardComponent', () => {
     let component: KanbanBoardComponent;
     let fixture: ComponentFixture<KanbanBoardComponent>;
-    let mockTaskStateService: Partial<TaskStateService>;
-    let tasksSignal: ReturnType<typeof signal<Task[]>>;
+    let mockTaskState: jest.Mocked<Partial<TaskStateService>>;
+    let mockBoardPreferences: jest.Mocked<Partial<BoardPreferencesService>>;
+    let mockTaskUtils: jest.Mocked<Partial<TaskUtilsService>>;
 
-    // Mock tasks for testing
     const mockTasks: Task[] = [
         {
             id: 1,
-            title: 'Today Task 1',
-            description: 'Description 1',
+            title: 'Today Task',
+            description: 'Description',
             workspace: Workspace.WORK,
             channelId: 1,
             status: TaskStatus.TODAY,
-            dueDate: new Date('2025-11-13'),
+            dueDate: null,
             isRoutine: false,
-            createdAt: new Date('2025-11-10'),
-            updatedAt: new Date('2025-11-10'),
+            createdAt: new Date('2025-01-01'),
+            updatedAt: new Date('2025-01-01')
         },
         {
             id: 2,
             title: 'In Progress Task',
-            description: 'Description 2',
-            workspace: Workspace.PERSONAL,
-            channelId: 2,
+            description: null,
+            workspace: Workspace.WORK,
+            channelId: null,
             status: TaskStatus.IN_PROGRESS,
-            dueDate: new Date('2025-11-14'),
-            isRoutine: true,
-            createdAt: new Date('2025-11-09'),
-            updatedAt: new Date('2025-11-12'),
+            dueDate: null,
+            isRoutine: false,
+            createdAt: new Date('2025-01-01'),
+            updatedAt: new Date('2025-01-01')
         },
         {
             id: 3,
             title: 'Done Task',
-            description: null,
+            description: 'Completed',
             workspace: Workspace.WORK,
             channelId: null,
             status: TaskStatus.DONE,
             dueDate: null,
-            isRoutine: false,
-            createdAt: new Date('2025-11-08'),
-            updatedAt: new Date('2025-11-13'),
-        },
-        {
-            id: 4,
-            title: 'Today Task 2',
-            description: 'Another today task',
-            workspace: Workspace.PERSONAL,
-            channelId: 1,
-            status: TaskStatus.TODAY,
-            dueDate: new Date('2025-11-13'),
-            isRoutine: false,
-            createdAt: new Date('2025-11-11'),
-            updatedAt: new Date('2025-11-11'),
-        },
+            isRoutine: true,
+            createdAt: new Date('2025-01-01'),
+            updatedAt: new Date('2025-01-01')
+        }
     ];
 
     beforeEach(async () => {
-        // Create mock signals for TaskStateService
-        tasksSignal = signal<Task[]>([]);
-        const currentWorkspaceTodayTasksSignal = computed(() =>
-            tasksSignal().filter((t) => t.status === TaskStatus.TODAY)
-        );
-        const currentWorkspaceInProgressTasksSignal = computed(() =>
-            tasksSignal().filter((t) => t.status === TaskStatus.IN_PROGRESS)
-        );
-        const currentWorkspaceDoneTasksSignal = computed(() =>
-            tasksSignal().filter((t) => t.status === TaskStatus.DONE)
-        );
-
-        // Create mock service with workspace-filtered signals
-        mockTaskStateService = {
+        mockTaskState = {
+            currentWorkspaceTodayTasks: signal([mockTasks[0]]),
+            currentWorkspaceInProgressTasks: signal([mockTasks[1]]),
+            currentWorkspaceDoneTasks: signal([mockTasks[2]]),
             loadTasks: jest.fn(),
+            addTask: jest.fn(),
             updateTask: jest.fn(),
-            removeTask: jest.fn(),
-            currentWorkspaceTodayTasks: currentWorkspaceTodayTasksSignal,
-            currentWorkspaceInProgressTasks: currentWorkspaceInProgressTasksSignal,
-            currentWorkspaceDoneTasks: currentWorkspaceDoneTasksSignal,
+            removeTask: jest.fn()
+        };
+
+        mockBoardPreferences = {
+            layout: signal(BoardLayout.TRADITIONAL),
+            toggleLayout: jest.fn()
+        };
+
+        mockTaskUtils = {
+            getWorkspaceSeverity: jest.fn().mockReturnValue('success'),
+            formatDate: jest.fn().mockReturnValue('Feb 1, 2025'),
+            getChannelName: jest.fn().mockReturnValue('Work Channel')
         };
 
         await TestBed.configureTestingModule({
@@ -94,160 +87,70 @@ describe('KanbanBoardComponent', () => {
                 provideHttpClient(),
                 provideHttpClientTesting(),
                 provideNoopAnimations(),
-                { provide: TaskStateService, useValue: mockTaskStateService },
-            ],
+                { provide: TaskStateService, useValue: mockTaskState },
+                { provide: BoardPreferencesService, useValue: mockBoardPreferences },
+                { provide: TaskUtilsService, useValue: mockTaskUtils }
+            ]
         }).compileComponents();
 
         fixture = TestBed.createComponent(KanbanBoardComponent);
         component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
-    // Helper function to update mock tasks
-    const setMockTasks = (tasks: Task[]) => {
-        tasksSignal.set(tasks);
-    };
-
-    describe('Component Initialization', () => {
+    describe('Initialization', () => {
         it('should create', () => {
             expect(component).toBeTruthy();
         });
 
-        it('should initialize with correct default values', () => {
-            expect(component.selectedTask()).toBeNull();
-            expect(component.showTaskDialog()).toBe(false);
-        });
-
-        it('should expose TaskStatus enum', () => {
-            expect(component.TaskStatus).toBe(TaskStatus);
-        });
-
-        it('should expose Workspace enum', () => {
-            expect(component.Workspace).toBe(Workspace);
-        });
-
         it('should call loadTasks on init', () => {
-            fixture.detectChanges();
-            expect(mockTaskStateService.loadTasks).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    describe('Computed Signals - Task Filtering', () => {
-        beforeEach(() => {
-            setMockTasks(mockTasks);
-            fixture.detectChanges();
+            expect(mockTaskState.loadTasks).toHaveBeenCalled();
         });
 
-        it('should compute todayTasks correctly', () => {
-            const todayTasks = component.todayTasks();
-            expect(todayTasks.length).toBe(2);
-            expect(todayTasks.every((t) => t.status === TaskStatus.TODAY)).toBe(true);
-            expect(todayTasks.map((t) => t.id)).toEqual([1, 4]);
+        it('should initialize with correct task lists', () => {
+            expect(component.todayTasks().length).toBe(1);
+            expect(component.inProgressTasks().length).toBe(1);
+            expect(component.doneTasks().length).toBe(1);
         });
 
-        it('should compute inProgressTasks correctly', () => {
-            const inProgressTasks = component.inProgressTasks();
-            expect(inProgressTasks.length).toBe(1);
-            expect(inProgressTasks[0].status).toBe(TaskStatus.IN_PROGRESS);
-            expect(inProgressTasks[0].id).toBe(2);
-        });
-
-        it('should compute doneTasks correctly', () => {
-            const doneTasks = component.doneTasks();
-            expect(doneTasks.length).toBe(1);
-            expect(doneTasks[0].status).toBe(TaskStatus.DONE);
-            expect(doneTasks[0].id).toBe(3);
-        });
-
-        it('should update computed signals when tasks change', () => {
-            expect(component.todayTasks().length).toBe(2);
-
-            // Add another TODAY task
-            const newTasks = [
-                ...mockTasks,
-                {
-                    id: 5,
-                    title: 'New Today Task',
-                    description: null,
-                    workspace: Workspace.WORK,
-                    channelId: null,
-                    status: TaskStatus.TODAY,
-                    dueDate: null,
-                    isRoutine: false,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                },
-            ];
-            setMockTasks(newTasks);
-            fixture.detectChanges();
-
-            expect(component.todayTasks().length).toBe(3);
-        });
-
-        it('should handle empty task lists', () => {
-            setMockTasks([]);
-            fixture.detectChanges();
-
-            expect(component.todayTasks().length).toBe(0);
-            expect(component.inProgressTasks().length).toBe(0);
-            expect(component.doneTasks().length).toBe(0);
+        it('should initialize sort mode to manual', () => {
+            expect(component.currentSortMode()).toBe('manual');
         });
     });
 
     describe('Progress Calculation', () => {
-        it('should calculate dailyProgress correctly with all statuses', () => {
-            setMockTasks(mockTasks);
-            fixture.detectChanges();
-
-            // 2 today, 1 in progress, 1 done = 4 total, 1 done = 25%
+        it('should calculate daily progress correctly', () => {
             const progress = component.dailyProgress();
-            expect(progress).toBe(25);
+            // 1 done out of 3 total tasks = 33%
+            expect(progress).toBe(33);
         });
 
-        it('should calculate 100% when all tasks are done', () => {
-            const allDoneTasks = mockTasks.map((t) => ({
-                ...t,
-                status: TaskStatus.DONE,
-            }));
-            setMockTasks(allDoneTasks);
-            fixture.detectChanges();
+        it('should return 0 progress when no tasks', () => {
+            (mockTaskState.currentWorkspaceTodayTasks as any).set([]);
+            (mockTaskState.currentWorkspaceInProgressTasks as any).set([]);
+            (mockTaskState.currentWorkspaceDoneTasks as any).set([]);
 
-            expect(component.dailyProgress()).toBe(100);
-        });
-
-        it('should calculate 0% when no tasks are done', () => {
-            const noDoneTasks = mockTasks.map((t) => ({
-                ...t,
-                status: t.status === TaskStatus.DONE ? TaskStatus.TODAY : t.status,
-            }));
-            setMockTasks(noDoneTasks);
-            fixture.detectChanges();
+            fixture = TestBed.createComponent(KanbanBoardComponent);
+            component = fixture.componentInstance;
 
             expect(component.dailyProgress()).toBe(0);
-        });
-
-        it('should return 0 when there are no tasks', () => {
-            setMockTasks([]);
-            fixture.detectChanges();
-
-            expect(component.dailyProgress()).toBe(0);
-        });
-
-        it('should round progress to nearest integer', () => {
-            // 2 done, 1 today = 3 total = 66.666...% should round to 67%
-            const tasks: Task[] = [
-                { ...mockTasks[0], status: TaskStatus.DONE },
-                { ...mockTasks[1], status: TaskStatus.DONE },
-                { ...mockTasks[2], status: TaskStatus.TODAY },
-            ];
-            setMockTasks(tasks);
-            fixture.detectChanges();
-
-            expect(component.dailyProgress()).toBe(67);
         });
     });
 
-    describe('Task Detail Dialog', () => {
-        it('should open task dialog with selected task', () => {
+    describe('Dialog Management', () => {
+        it('should show add task dialog', () => {
+            expect(component.createTaskDialogVisible()).toBe(false);
+            component.showAddTaskDialog();
+            expect(component.createTaskDialogVisible()).toBe(true);
+        });
+
+        it('should hide create task dialog', () => {
+            component.showAddTaskDialog();
+            component.hideCreateTaskDialog();
+            expect(component.createTaskDialogVisible()).toBe(false);
+        });
+
+        it('should open task details dialog', () => {
             const task = mockTasks[0];
             component.openTaskDetails(task);
 
@@ -255,368 +158,202 @@ describe('KanbanBoardComponent', () => {
             expect(component.showTaskDialog()).toBe(true);
         });
 
-        it('should close task dialog and clear selected task', () => {
-            const task = mockTasks[0];
-            component.openTaskDetails(task);
-            expect(component.selectedTask()).toBe(task);
-            expect(component.showTaskDialog()).toBe(true);
-
+        it('should close task dialog', () => {
+            component.openTaskDetails(mockTasks[0]);
             component.closeTaskDialog();
 
             expect(component.showTaskDialog()).toBe(false);
             expect(component.selectedTask()).toBeNull();
         });
-
-        it('should handle opening dialog multiple times', () => {
-            component.openTaskDetails(mockTasks[0]);
-            expect(component.selectedTask()?.id).toBe(1);
-
-            component.openTaskDetails(mockTasks[1]);
-            expect(component.selectedTask()?.id).toBe(2);
-            expect(component.showTaskDialog()).toBe(true);
-        });
     });
 
-    describe('Task Status Updates', () => {
-        it('should update task status to IN_PROGRESS', () => {
-            const taskId = 1;
-            const newStatus = TaskStatus.IN_PROGRESS;
+    describe('Task Operations', () => {
+        it('should handle task submitted', () => {
+            const createDto: CreateTaskDto = {
+                title: 'New Task',
+                workspace: Workspace.WORK,
+                status: TaskStatus.TODAY,
+                description: null,
+                channelId: null,
+                dueDate: null,
+                isRoutine: false
+            };
 
-            component.moveToStatus(taskId, newStatus);
-
-            expect(mockTaskStateService.updateTask).toHaveBeenCalledWith(taskId, {
-                status: newStatus,
-            });
+            component.handleTaskSubmitted(createDto);
+            expect(mockTaskState.addTask).toHaveBeenCalledWith(createDto);
         });
 
-        it('should update task status to DONE', () => {
-            const taskId = 2;
+        it('should move task to status', () => {
+            const taskId = 1;
             const newStatus = TaskStatus.DONE;
 
             component.moveToStatus(taskId, newStatus);
 
-            expect(mockTaskStateService.updateTask).toHaveBeenCalledWith(taskId, {
-                status: newStatus,
-            });
-        });
-
-        it('should close dialog after moving task', () => {
-            component.openTaskDetails(mockTasks[0]);
-            expect(component.showTaskDialog()).toBe(true);
-
-            component.moveToStatus(1, TaskStatus.DONE);
-
+            expect(mockTaskState.updateTask).toHaveBeenCalledWith(taskId, { status: newStatus });
             expect(component.showTaskDialog()).toBe(false);
-            expect(component.selectedTask()).toBeNull();
         });
 
-        it('should handle moving task to same status', () => {
-            const task = mockTasks[0]; // Already TODAY
-            component.openTaskDetails(task);
-
-            component.moveToStatus(task.id, TaskStatus.TODAY);
-
-            expect(mockTaskStateService.updateTask).toHaveBeenCalledWith(task.id, {
-                status: TaskStatus.TODAY,
-            });
-        });
-    });
-
-    describe('Task Deletion', () => {
-        let confirmSpy: jest.SpyInstance;
-
-        beforeEach(() => {
-            confirmSpy = jest.spyOn(window, 'confirm');
-        });
-
-        afterEach(() => {
-            confirmSpy.mockRestore();
-        });
-
-        it('should delete task when user confirms', () => {
-            confirmSpy.mockReturnValue(true);
+        it('should delete task after confirmation', () => {
+            global.confirm = jest.fn(() => true);
             const taskId = 1;
 
             component.deleteTask(taskId);
 
-            expect(window.confirm).toHaveBeenCalledWith(
-                'Are you sure you want to delete this task?'
-            );
-            expect(mockTaskStateService.removeTask).toHaveBeenCalledWith(taskId);
+            expect(mockTaskState.removeTask).toHaveBeenCalledWith(taskId);
+            expect(component.showTaskDialog()).toBe(false);
         });
 
-        it('should not delete task when user cancels', () => {
-            confirmSpy.mockReturnValue(false);
+        it('should not delete task if not confirmed', () => {
+            global.confirm = jest.fn(() => false);
             const taskId = 1;
 
             component.deleteTask(taskId);
 
-            expect(window.confirm).toHaveBeenCalledWith(
-                'Are you sure you want to delete this task?'
-            );
-            expect(mockTaskStateService.removeTask).not.toHaveBeenCalled();
-        });
-
-        it('should close dialog after deleting task', () => {
-            confirmSpy.mockReturnValue(true);
-            component.openTaskDetails(mockTasks[0]);
-
-            component.deleteTask(1);
-
-            expect(component.showTaskDialog()).toBe(false);
-            expect(component.selectedTask()).toBeNull();
-        });
-
-        it('should not close dialog if deletion cancelled', () => {
-            confirmSpy.mockReturnValue(false);
-            component.openTaskDetails(mockTasks[0]);
-            expect(component.showTaskDialog()).toBe(true);
-
-            component.deleteTask(1);
-
-            // Dialog should still be open since user cancelled
-            expect(component.showTaskDialog()).toBe(true);
-            expect(component.selectedTask()).not.toBeNull();
+            expect(mockTaskState.removeTask).not.toHaveBeenCalled();
         });
     });
 
-    describe('Workspace Methods', () => {
-        it('should return correct color for WORK workspace', () => {
-            const color = component.getWorkspaceColor(Workspace.WORK);
-            expect(color).toBe('#F97316');
+    describe('Board Layout', () => {
+        it('should toggle board layout', () => {
+            component.toggleBoardLayout();
+            expect(mockBoardPreferences.toggleLayout).toHaveBeenCalled();
         });
 
-        it('should return correct color for PERSONAL workspace', () => {
-            const color = component.getWorkspaceColor(Workspace.PERSONAL);
-            expect(color).toBe('#14B8A6');
+        it('should access current layout', () => {
+            expect(component.currentLayout()).toBe(BoardLayout.TRADITIONAL);
+        });
+    });
+
+    describe('Sort Functionality', () => {
+        it('should cycle through sort modes', () => {
+            expect(component.currentSortMode()).toBe('manual');
+
+            component.toggleSort();
+            expect(component.currentSortMode()).toBe('time');
+
+            component.toggleSort();
+            expect(component.currentSortMode()).toBe('priority');
+
+            component.toggleSort();
+            expect(component.currentSortMode()).toBe('alphabetical');
+
+            component.toggleSort();
+            expect(component.currentSortMode()).toBe('manual');
         });
 
-        it('should return "success" severity for WORK workspace', () => {
+        it('should return correct sort label for time mode', () => {
+            component.currentSortMode.set('time');
+            const label = component.getSortLabel();
+            expect(label).toMatch(/\d{1,2}:\d{2}/); // Matches time format
+        });
+
+        it('should return correct sort label for priority mode', () => {
+            component.currentSortMode.set('priority');
+            expect(component.getSortLabel()).toBe('Priority');
+        });
+
+        it('should return correct sort label for alphabetical mode', () => {
+            component.currentSortMode.set('alphabetical');
+            expect(component.getSortLabel()).toBe('A-Z');
+        });
+
+        it('should return correct sort label for manual mode', () => {
+            component.currentSortMode.set('manual');
+            expect(component.getSortLabel()).toBe('Manual');
+        });
+    });
+
+    describe('Drag and Drop', () => {
+        it('should update task status on drop to different container', () => {
+            const task = mockTasks[0];
+            const event: any = {
+                item: { data: task },
+                previousContainer: { id: 'today-list' },
+                container: { id: 'in-progress-list' }
+            };
+
+            component.onDrop(event, TaskStatus.IN_PROGRESS);
+
+            expect(mockTaskState.updateTask).toHaveBeenCalledWith(
+                task.id,
+                { status: TaskStatus.IN_PROGRESS }
+            );
+        });
+
+        it('should not update status when dropping in same container', () => {
+            const task = mockTasks[0];
+            const container = { id: 'today-list' };
+            const event: any = {
+                item: { data: task },
+                previousContainer: container,
+                container: container
+            };
+
+            component.onDrop(event, TaskStatus.TODAY);
+
+            expect(mockTaskState.updateTask).not.toHaveBeenCalled();
+        });
+
+        it('should enforce WIP=1 in Focus mode', () => {
+            mockBoardPreferences.layout.set(BoardLayout.FOCUS);
+            (mockTaskState.currentWorkspaceInProgressTasks as any).set([mockTasks[1]]);
+
+            fixture = TestBed.createComponent(KanbanBoardComponent);
+            component = fixture.componentInstance;
+
+            const task = mockTasks[0];
+            const event: any = {
+                item: { data: task },
+                previousContainer: { id: 'today-list' },
+                container: { id: 'in-progress-list' }
+            };
+
+            component.onDrop(event, TaskStatus.IN_PROGRESS);
+
+            // Should move existing task back to TODAY
+            expect(mockTaskState.updateTask).toHaveBeenCalledWith(
+                mockTasks[1].id,
+                { status: TaskStatus.TODAY }
+            );
+
+            // Should move new task to IN_PROGRESS
+            expect(mockTaskState.updateTask).toHaveBeenCalledWith(
+                task.id,
+                { status: TaskStatus.IN_PROGRESS }
+            );
+        });
+
+        it('should not swap tasks in Traditional mode', () => {
+            const task = mockTasks[0];
+            const event: any = {
+                item: { data: task },
+                previousContainer: { id: 'today-list' },
+                container: { id: 'in-progress-list' }
+            };
+
+            component.onDrop(event, TaskStatus.IN_PROGRESS);
+
+            // Should only update the dropped task
+            expect(mockTaskState.updateTask).toHaveBeenCalledTimes(1);
+            expect(mockTaskState.updateTask).toHaveBeenCalledWith(
+                task.id,
+                { status: TaskStatus.IN_PROGRESS }
+            );
+        });
+    });
+
+    describe('Utility Delegation', () => {
+        it('should delegate getWorkspaceSeverity to utils service', () => {
             const severity = component.getWorkspaceSeverity(Workspace.WORK);
+            expect(mockTaskUtils.getWorkspaceSeverity).toHaveBeenCalledWith(Workspace.WORK);
             expect(severity).toBe('success');
         });
 
-        it('should return "info" severity for PERSONAL workspace', () => {
-            const severity = component.getWorkspaceSeverity(Workspace.PERSONAL);
-            expect(severity).toBe('info');
-        });
-    });
-
-    describe('Date Formatting', () => {
-        beforeEach(() => {
-            // Mock current date to 2025-11-13 local time for consistent testing
-            jest.useFakeTimers();
-            // Use local time (not UTC) to match formatDate logic
-            const mockDate = new Date(2025, 10, 13, 12, 0, 0); // Month is 0-indexed (10 = November)
-            jest.setSystemTime(mockDate);
-        });
-
-        afterEach(() => {
-            jest.useRealTimers();
-        });
-
-        it('should format today date as "Today"', () => {
-            const todayDate = new Date(2025, 10, 13); // Same as mocked date
-            const formatted = component.formatDate(todayDate);
-            expect(formatted).toBe('Today');
-        });
-
-        it('should format tomorrow date as "Tomorrow"', () => {
-            const tomorrowDate = new Date(2025, 10, 14); // One day after mocked date
-            const formatted = component.formatDate(tomorrowDate);
-            expect(formatted).toBe('Tomorrow');
-        });
-
-        it('should format other dates as "Mon Day" format', () => {
-            const futureDate = new Date('2025-11-20');
-            const formatted = component.formatDate(futureDate);
-            expect(formatted).toMatch(/^[A-Za-z]{3} \d{1,2}$/); // e.g., "Nov 20"
-        });
-
-        it('should handle string date input', () => {
-            // Use the same date format as mocked date (local time)
-            const dateString = new Date(2025, 10, 13).toISOString();
-            const formatted = component.formatDate(dateString);
-            expect(formatted).toBe('Today');
-        });
-
-        it('should handle null date', () => {
-            const formatted = component.formatDate(null);
-            expect(formatted).toBe('');
-        });
-
-        it('should handle undefined date', () => {
-            const formatted = component.formatDate(undefined);
-            expect(formatted).toBe('');
-        });
-
-        it('should format past dates correctly', () => {
-            const pastDate = new Date('2025-11-10');
-            const formatted = component.formatDate(pastDate);
-            expect(formatted).toMatch(/^[A-Za-z]{3} \d{1,2}$/); // e.g., "Nov 10"
-        });
-    });
-
-    describe('Component DOM Rendering', () => {
-        beforeEach(() => {
-            setMockTasks(mockTasks);
-            fixture.detectChanges();
-        });
-
-        it('should render three kanban columns', () => {
-            const compiled = fixture.nativeElement;
-            const panels = compiled.querySelectorAll('p-panel');
-            expect(panels.length).toBeGreaterThanOrEqual(3);
-        });
-
-        it('should display correct task counts in badges', () => {
-            const compiled = fixture.nativeElement;
-            const badges = compiled.querySelectorAll('p-badge');
-
-            // Should have badges for task counts
-            expect(badges.length).toBeGreaterThan(0);
-        });
-
-        it('should render task cards for each task', () => {
-            const compiled = fixture.nativeElement;
-            const cards = compiled.querySelectorAll('p-card');
-
-            // Should render cards for tasks (2 today + 1 in progress + 1 done = 4)
-            expect(cards.length).toBe(4);
-        });
-    });
-
-    describe('Edge Cases', () => {
-        it('should handle task with all null optional fields', () => {
-            const minimalTask: Task = {
-                id: 99,
-                title: 'Minimal Task',
-                description: null,
-                workspace: Workspace.PERSONAL,
-                channelId: null,
-                status: TaskStatus.TODAY,
-                dueDate: null,
-                isRoutine: false,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            };
-
-            setMockTasks([minimalTask]);
-            fixture.detectChanges();
-
-            expect(component.todayTasks().length).toBe(1);
-            expect(component.formatDate(minimalTask.dueDate)).toBe('');
-        });
-
-        it('should handle rapid task status changes', () => {
-            component.moveToStatus(1, TaskStatus.IN_PROGRESS);
-            component.moveToStatus(1, TaskStatus.DONE);
-            component.moveToStatus(1, TaskStatus.TODAY);
-
-            expect(mockTaskStateService.updateTask).toHaveBeenCalledTimes(3);
-        });
-
-        it('should handle deleting non-existent task', () => {
-            const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
-
-            component.deleteTask(999);
-
-            expect(mockTaskStateService.removeTask).toHaveBeenCalledWith(999);
-            confirmSpy.mockRestore();
-        });
-
-        it('should maintain signal reactivity after multiple updates', () => {
-            setMockTasks(mockTasks);
-            fixture.detectChanges();
-            expect(component.todayTasks().length).toBe(2);
-
-            setMockTasks([mockTasks[0]]);
-            fixture.detectChanges();
-            expect(component.todayTasks().length).toBe(1);
-
-            setMockTasks([]);
-            fixture.detectChanges();
-            expect(component.todayTasks().length).toBe(0);
-        });
-    });
-
-    describe('Integration with TaskStateService', () => {
-        it('should use TaskStateService workspace-filtered computed signals', () => {
-            setMockTasks(mockTasks);
-            fixture.detectChanges();
-
-            // Verify component is using service's workspace-filtered computed signals
-            expect(component.todayTasks()).toBe(mockTaskStateService.currentWorkspaceTodayTasks!());
-            expect(component.inProgressTasks()).toBe(mockTaskStateService.currentWorkspaceInProgressTasks!());
-            expect(component.doneTasks()).toBe(mockTaskStateService.currentWorkspaceDoneTasks!());
-        });
-
-        it('should call loadTasks with no filters on init', () => {
-            fixture.detectChanges();
-
-            expect(mockTaskStateService.loadTasks).toHaveBeenCalledWith();
-        });
-
-        it('should properly delegate updateTask calls', () => {
-            const taskId = 1;
-            const update = { status: TaskStatus.DONE };
-
-            component.moveToStatus(taskId, TaskStatus.DONE);
-
-            expect(mockTaskStateService.updateTask).toHaveBeenCalledWith(
-                taskId,
-                update
-            );
-        });
-
-        it('should properly delegate removeTask calls', () => {
-            const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
-            const taskId = 1;
-
-            component.deleteTask(taskId);
-
-            expect(mockTaskStateService.removeTask).toHaveBeenCalledWith(taskId);
-            confirmSpy.mockRestore();
-        });
-    });
-
-    describe('Signal State Management', () => {
-        it('should maintain selectedTask signal state', () => {
-            expect(component.selectedTask()).toBeNull();
-
-            const task = mockTasks[0];
-            component.openTaskDetails(task);
-            expect(component.selectedTask()).toBe(task);
-
-            component.closeTaskDialog();
-            expect(component.selectedTask()).toBeNull();
-        });
-
-        it('should maintain showTaskDialog signal state', () => {
-            expect(component.showTaskDialog()).toBe(false);
-
-            component.openTaskDetails(mockTasks[0]);
-            expect(component.showTaskDialog()).toBe(true);
-
-            component.closeTaskDialog();
-            expect(component.showTaskDialog()).toBe(false);
-        });
-
-        it('should update dailyProgress signal reactively', () => {
-            setMockTasks([mockTasks[0], mockTasks[1]]);
-            fixture.detectChanges();
-            const initialProgress = component.dailyProgress();
-
-            // Move one task to DONE
-            const updatedTasks = [
-                { ...mockTasks[0], status: TaskStatus.DONE },
-                mockTasks[1],
-            ];
-            setMockTasks(updatedTasks);
-            fixture.detectChanges();
-
-            const newProgress = component.dailyProgress();
-            expect(newProgress).toBeGreaterThan(initialProgress);
+        it('should delegate formatDate to utils service', () => {
+            const date = new Date('2025-02-01');
+            const formatted = component.formatDate(date);
+            expect(mockTaskUtils.formatDate).toHaveBeenCalledWith(date);
+            expect(formatted).toBe('Feb 1, 2025');
         });
     });
 });
