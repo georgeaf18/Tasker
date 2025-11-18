@@ -10,7 +10,7 @@
 
 /* Progress Section */
 .progress-section {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
   background: var(--background-primary);
   border-radius: var(--border-radius);
@@ -438,14 +438,14 @@
 }
 
 /* PrimeNG Overrides for ADHD-friendly design */
-::ng-deep .p-progressbar {
-  height: 12px;
+::ng-deep .custom-progress-bar.p-progressbar {
+  height: 12px !important;
   border-radius: var(--border-radius);
   background: var(--border-default);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-::ng-deep .p-progressbar .p-progressbar-value {
+::ng-deep .custom-progress-bar.p-progressbar .p-progressbar-value {
   background: linear-gradient(
     90deg,
     var(--primary-purple) 0%,
@@ -457,7 +457,7 @@
   overflow: hidden;
 }
 
-::ng-deep .p-progressbar .p-progressbar-value::after {
+::ng-deep .custom-progress-bar.p-progressbar .p-progressbar-value::after {
   content: '';
   position: absolute;
   top: 0;
@@ -575,7 +575,7 @@
 .focus-board-layout {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   height: 100%;
   overflow: hidden;
 }
@@ -740,8 +740,8 @@
   border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
 }
 
-::ng-deep .up-next-progress-bar {
-  height: 4px;
+::ng-deep .up-next-progress-bar.p-progressbar {
+  height: 4px !important;
   border-radius: 2px;
   background: var(--border-default);
 }
