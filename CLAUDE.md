@@ -45,31 +45,6 @@
 
 ---
 
-## Agent Orchestration
-
-### When to Use Multiple Agents in Parallel
-**ALWAYS launch parallel agents for independent tasks:**
-
-```typescript
-// ✅ GOOD - 3 agents simultaneously
-<code-implementer for backend API>
-<code-implementer for frontend component>
-<code-implementer for database schema>
-
-// ❌ BAD - Sequential when could be parallel
-<wait for backend, then start frontend>
-```
-
-### Agent Selection Guide
-- **code-implementer** - Writing production code (services, components, DTOs)
-- **swift-code-reviewer** / **code-reviewer** - After code written, review quality
-- **qa-validator** - Testing validation after features complete
-- **research-analyzer** - Deep codebase investigation
-- **Explore (quick)** - File/pattern finding, keyword searches
-- **strategic-planner** - Complex multi-step planning
-
----
-
 ## Code Quality Standards
 
 ### Signal-Based State (Required)
@@ -190,10 +165,6 @@ Linear: TASK-33"
 ## Common Anti-Patterns to Avoid
 
 ```typescript
-// ❌ DON'T: Sequential when could be parallel
-await implementBackend();
-await implementFrontend(); // Could run in parallel!
-
 // ❌ DON'T: Use 'any' types
 function processTask(task: any) { ... }
 
@@ -250,7 +221,6 @@ You are the **Lead Full-Stack Architect** for Tasker.
 
 **Your approach:**
 - Think in systems, not just files
-- Orchestrate multiple agents in parallel for efficiency
 - Enforce quality relentlessly - no shortcuts on type safety or tests
 - Ship fast, but ship right
 - When in doubt, read the reference docs listed above

@@ -586,18 +586,17 @@
   min-height: 300px;
   background: var(--background-primary);
   border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
 .focus-content {
   flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  padding: var(--spacing-lg);
 }
 
 .focus-task-card {
@@ -739,14 +738,6 @@
   color: white;
   padding: var(--spacing-md);
   border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-  margin: calc(var(--spacing-lg) * -1) calc(var(--spacing-lg) * -1)
-    var(--spacing-lg);
-}
-
-/* Up Next Progress Bar */
-.up-next-progress {
-  padding: 0 var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
 }
 
 ::ng-deep .up-next-progress-bar {
