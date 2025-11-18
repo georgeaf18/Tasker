@@ -29,7 +29,11 @@
   color: var(--primary-purple);
   font-size: 28px; /* Increased from 18px for more prominent branding */
   font-weight: 700;
-  background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-blue) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-blue) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -138,7 +142,11 @@
 }
 
 .context-button.active {
-  background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-hover) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-purple-hover) 100%
+  );
   color: white;
   box-shadow: var(--shadow-md);
 }
@@ -172,7 +180,11 @@
 }
 
 .import-toggle-btn.active {
-  background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-hover) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-purple-hover) 100%
+  );
   color: white;
   border-color: transparent;
   box-shadow: var(--shadow-md);
@@ -243,7 +255,11 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-hover) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--primary-purple-hover) 100%
+  );
   color: white;
   border: none;
   border-radius: var(--border-radius);
@@ -264,7 +280,6 @@
 .sidebar-content {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-md);
 }
 
 /* Sidebar Toggle Button */
@@ -284,7 +299,10 @@
   align-items: center;
   justify-content: center;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
-  transition: left 0.3s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    left 0.3s ease-in-out,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .sidebar-container.sidebar-hidden .sidebar-toggle-btn {
@@ -339,7 +357,10 @@
   left: auto;
   right: calc(var(--sidebar-width) - 30px);
   box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.15);
-  transition: right 0.3s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    right 0.3s ease-in-out,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .right-sidebar-container.sidebar-hidden .sidebar-toggle-btn.right-toggle {
