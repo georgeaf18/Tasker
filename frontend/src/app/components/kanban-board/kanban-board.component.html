@@ -73,68 +73,13 @@
               </p-message>
             } @else {
               @for (task of todayTasks(); track task.id) {
-                <p-card
-                  styleClass="task-card"
-                  cdkDrag
-                  [cdkDragData]="task"
-                  (click)="openTaskDetails(task)"
-                >
-                  <ng-template pTemplate="header">
-                    <div class="task-card-header">
-                      @if (task.channel) {
-                        <p-chip
-                          [label]="task.channel.name"
-                          styleClass="channel-chip"
-                        >
-                        </p-chip>
-                      }
-                      @if (task.isRoutine) {
-                        <i
-                          class="pi pi-refresh routine-icon"
-                          pTooltip="Routine Task"
-                          tooltipPosition="top"
-                        >
-                        </i>
-                      }
-                    </div>
-                  </ng-template>
-
-                  <div class="task-card-body">
-                    <h3 class="task-title">{{ task.title }}</h3>
-
-                    @if (task.taskTags && task.taskTags.length > 0) {
-                      <div class="task-tags">
-                        @for (taskTag of task.taskTags; track taskTag.tag.id) {
-                          <span
-                            class="task-tag-chip"
-                            [style.background-color]="taskTag.tag.color"
-                          >
-                            {{ taskTag.tag.name }}
-                          </span>
-                        }
-                      </div>
-                    }
-
-                    <div class="task-meta">
-                      <p-tag
-                        [value]="task.workspace"
-                        [severity]="getWorkspaceSeverity(task.workspace)"
-                        styleClass="workspace-tag"
-                      >
-                      </p-tag>
-
-                      @if (task.dueDate) {
-                        <span class="due-date">
-                          <i class="pi pi-calendar"></i>
-                          {{ formatDate(task.dueDate) }}
-                        </span>
-                      }
-                    </div>
-
-                    <!-- Subtasks Section -->
-                    <app-subtask-list [taskId]="task.id"></app-subtask-list>
-                  </div>
-                </p-card>
+                <div cdkDrag [cdkDragData]="task">
+                  <app-task-card
+                    [task]="task"
+                    variant="full"
+                    (taskClick)="openTaskDetails($event)"
+                  />
+                </div>
               }
             }
           </div>
@@ -180,68 +125,13 @@
               </p-message>
             } @else {
               @for (task of inProgressTasks(); track task.id) {
-                <p-card
-                  styleClass="task-card"
-                  cdkDrag
-                  [cdkDragData]="task"
-                  (click)="openTaskDetails(task)"
-                >
-                  <ng-template pTemplate="header">
-                    <div class="task-card-header">
-                      @if (task.channel) {
-                        <p-chip
-                          [label]="task.channel.name"
-                          styleClass="channel-chip"
-                        >
-                        </p-chip>
-                      }
-                      @if (task.isRoutine) {
-                        <i
-                          class="pi pi-refresh routine-icon"
-                          pTooltip="Routine Task"
-                          tooltipPosition="top"
-                        >
-                        </i>
-                      }
-                    </div>
-                  </ng-template>
-
-                  <div class="task-card-body">
-                    <h3 class="task-title">{{ task.title }}</h3>
-
-                    @if (task.taskTags && task.taskTags.length > 0) {
-                      <div class="task-tags">
-                        @for (taskTag of task.taskTags; track taskTag.tag.id) {
-                          <span
-                            class="task-tag-chip"
-                            [style.background-color]="taskTag.tag.color"
-                          >
-                            {{ taskTag.tag.name }}
-                          </span>
-                        }
-                      </div>
-                    }
-
-                    <div class="task-meta">
-                      <p-tag
-                        [value]="task.workspace"
-                        [severity]="getWorkspaceSeverity(task.workspace)"
-                        styleClass="workspace-tag"
-                      >
-                      </p-tag>
-
-                      @if (task.dueDate) {
-                        <span class="due-date">
-                          <i class="pi pi-calendar"></i>
-                          {{ formatDate(task.dueDate) }}
-                        </span>
-                      }
-                    </div>
-
-                    <!-- Subtasks Section -->
-                    <app-subtask-list [taskId]="task.id"></app-subtask-list>
-                  </div>
-                </p-card>
+                <div cdkDrag [cdkDragData]="task">
+                  <app-task-card
+                    [task]="task"
+                    variant="full"
+                    (taskClick)="openTaskDetails($event)"
+                  />
+                </div>
               }
             }
           </div>
@@ -287,68 +177,13 @@
               </p-message>
             } @else {
               @for (task of doneTasks(); track task.id) {
-                <p-card
-                  styleClass="task-card"
-                  cdkDrag
-                  [cdkDragData]="task"
-                  (click)="openTaskDetails(task)"
-                >
-                  <ng-template pTemplate="header">
-                    <div class="task-card-header">
-                      @if (task.channel) {
-                        <p-chip
-                          [label]="task.channel.name"
-                          styleClass="channel-chip"
-                        >
-                        </p-chip>
-                      }
-                      @if (task.isRoutine) {
-                        <i
-                          class="pi pi-refresh routine-icon"
-                          pTooltip="Routine Task"
-                          tooltipPosition="top"
-                        >
-                        </i>
-                      }
-                    </div>
-                  </ng-template>
-
-                  <div class="task-card-body">
-                    <h3 class="task-title">{{ task.title }}</h3>
-
-                    @if (task.taskTags && task.taskTags.length > 0) {
-                      <div class="task-tags">
-                        @for (taskTag of task.taskTags; track taskTag.tag.id) {
-                          <span
-                            class="task-tag-chip"
-                            [style.background-color]="taskTag.tag.color"
-                          >
-                            {{ taskTag.tag.name }}
-                          </span>
-                        }
-                      </div>
-                    }
-
-                    <div class="task-meta">
-                      <p-tag
-                        [value]="task.workspace"
-                        [severity]="getWorkspaceSeverity(task.workspace)"
-                        styleClass="workspace-tag"
-                      >
-                      </p-tag>
-
-                      @if (task.dueDate) {
-                        <span class="due-date">
-                          <i class="pi pi-calendar"></i>
-                          {{ formatDate(task.dueDate) }}
-                        </span>
-                      }
-                    </div>
-
-                    <!-- Subtasks Section -->
-                    <app-subtask-list [taskId]="task.id"></app-subtask-list>
-                  </div>
-                </p-card>
+                <div cdkDrag [cdkDragData]="task">
+                  <app-task-card
+                    [task]="task"
+                    variant="full"
+                    (taskClick)="openTaskDetails($event)"
+                  />
+                </div>
               }
             }
           </div>
@@ -687,138 +522,10 @@
     </p-dialog>
   }
 
-  <!-- Create Task Dialog - Sleek Design -->
-  <p-dialog
+  <!-- Create Task Dialog -->
+  <app-task-form-dialog
     [(visible)]="createTaskDialogVisible"
-    [modal]="true"
-    [style]="{ width: '700px' }"
-    [draggable]="false"
-    [resizable]="false"
-    [showHeader]="false"
-    [dismissableMask]="true"
-    styleClass="sleek-task-dialog"
-  >
-    <form
-      [formGroup]="createTaskForm"
-      (ngSubmit)="submitCreateTask()"
-      class="sleek-form"
-    >
-      <!-- Main Input -->
-      <div class="task-input-container">
-        <input
-          id="title"
-          type="text"
-          formControlName="title"
-          placeholder="Task description..."
-          class="sleek-task-input"
-          autocomplete="off"
-        />
-      </div>
-
-      <!-- Metadata Row -->
-      <div class="metadata-row">
-        <!-- Status Button -->
-        <button type="button" class="metadata-btn" (click)="op1.toggle($event)">
-          <i class="pi pi-calendar"></i>
-          <span>{{
-            createTaskForm.get('status')?.value === 'TODAY'
-              ? 'Today'
-              : 'Backlog'
-          }}</span>
-        </button>
-        <p-popover #op1>
-          <div class="metadata-popover">
-            @for (option of statusOptions; track option.value) {
-              <div
-                class="popover-option"
-                (click)="
-                  createTaskForm.patchValue({ status: option.value });
-                  op1.hide()
-                "
-              >
-                <i class="pi pi-calendar"></i>
-                <span>{{ option.label }}</span>
-              </div>
-            }
-          </div>
-        </p-popover>
-
-        <!-- Channel Button -->
-        <button type="button" class="metadata-btn" (click)="op2.toggle($event)">
-          <i class="pi pi-hashtag"></i>
-          <span>{{
-            getChannelName(createTaskForm.get('channelId')?.value) ||
-              'No channel'
-          }}</span>
-        </button>
-        <p-popover #op2>
-          <div class="metadata-popover">
-            @for (channel of filteredChannels(); track channel.id) {
-              <div
-                class="popover-option"
-                (click)="
-                  createTaskForm.patchValue({ channelId: channel.id });
-                  op2.hide()
-                "
-              >
-                <i class="pi pi-hashtag"></i>
-                <span>{{ channel.name }}</span>
-              </div>
-            }
-          </div>
-        </p-popover>
-
-        <!-- Workspace Button -->
-        <button type="button" class="metadata-btn" (click)="op3.toggle($event)">
-          <i
-            class="pi pi-{{
-              createTaskForm.get('workspace')?.value === 'WORK'
-                ? 'briefcase'
-                : 'home'
-            }}"
-          ></i>
-        </button>
-        <p-popover #op3>
-          <div class="metadata-popover">
-            @for (workspace of workspaceOptions; track workspace.value) {
-              <div
-                class="popover-option"
-                (click)="
-                  createTaskForm.patchValue({ workspace: workspace.value });
-                  op3.hide()
-                "
-              >
-                <i
-                  class="pi pi-{{
-                    workspace.value === 'WORK' ? 'briefcase' : 'home'
-                  }}"
-                ></i>
-                <span>{{ workspace.label }}</span>
-              </div>
-            }
-          </div>
-        </p-popover>
-      </div>
-
-      <!-- Bottom Actions -->
-      <div class="dialog-bottom-actions">
-        <button
-          type="button"
-          class="cancel-btn"
-          (click)="hideCreateTaskDialog()"
-        >
-          <span>Cancel</span>
-        </button>
-        <button
-          type="button"
-          class="add-task-btn"
-          (click)="submitCreateTask()"
-          [disabled]="createTaskForm.invalid"
-        >
-          <i class="pi pi-user-plus"></i>
-          <span>Add task</span>
-        </button>
-      </div>
-    </form>
-  </p-dialog>
+    [defaultStatus]="TaskStatus.TODAY"
+    (taskSubmitted)="handleTaskSubmitted($event)"
+  />
 </div>

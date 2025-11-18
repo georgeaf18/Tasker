@@ -1,26 +1,22 @@
 import { Component, OnInit, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { PanelModule } from 'primeng/panel';
-import { CardModule } from 'primeng/card';
 import { BadgeModule } from 'primeng/badge';
-import { ChipModule } from 'primeng/chip';
-import { TagModule } from 'primeng/tag';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DataViewModule } from 'primeng/dataview';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
 import { MessageModule } from 'primeng/message';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { Popover } from 'primeng/popover';
+import { DialogModule } from 'primeng/dialog';
+import { TagModule } from 'primeng/tag';
+import { ChipModule } from 'primeng/chip';
 import { TaskStateService } from '../../services/task-state.service';
 import { BoardPreferencesService } from '../../services/board-preferences.service';
-import { ChannelApiService } from '../../services/channel-api.service';
-import { Task, TaskStatus, Workspace, CreateTaskDto, Channel } from '../../models';
+import { TaskUtilsService } from '../../shared/services/task-utils.service';
+import { Task, TaskStatus, Workspace, CreateTaskDto, UpdateTaskDto } from '../../models';
 import { BoardLayout } from '../../models/board-layout.enum';
+import { TaskFormDialogComponent } from '../../shared/components/task-form-dialog/task-form-dialog.component';
+import { TaskCardComponent } from '../../shared/components/task-card/task-card.component';
 import { SubtaskListComponent } from '../subtasks/subtask-list/subtask-list.component';
 
 /**
@@ -34,22 +30,18 @@ import { SubtaskListComponent } from '../subtasks/subtask-list/subtask-list.comp
   selector: 'app-kanban-board',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     DragDropModule,
     PanelModule,
-    CardModule,
     BadgeModule,
-    ChipModule,
-    TagModule,
     ProgressBarModule,
     DataViewModule,
-    DialogModule,
     ButtonModule,
-    TooltipModule,
     MessageModule,
-    InputTextModule,
-    SelectModule,
-    Popover,
+    DialogModule,
+    TagModule,
+    ChipModule,
+    TaskFormDialogComponent,
+    TaskCardComponent,
     SubtaskListComponent,
   ],
   templateUrl: './kanban-board.component.html',
@@ -62,11 +54,7 @@ export class KanbanBoardComponent implements OnInit {
 
   private readonly taskState = inject(TaskStateService);
   private readonly boardPreferences = inject(BoardPreferencesService);
-  private readonly channelApiService = inject(ChannelApiService);
-  private readonly fb = inject(FormBuilder);
-
-  private channelsSignal = signal<Channel[]>([]);
-  readonly channels = this.channelsSignal.asReadonly();
+  private readonly taskUtils = inject(TaskUtilsService);
 
   selectedTask = signal<Task | null>(null);
   showTaskDialog = signal<boolean>(false);
@@ -104,55 +92,11 @@ export class KanbanBoardComponent implements OnInit {
     return 0; // For now, since all tasks in todayTasks are by definition not complete
   });
 
-  // Task creation form
-  createTaskForm: FormGroup;
-
-  readonly filteredChannels = computed(() => {
-    const workspace = this.createTaskForm?.get('workspace')?.value;
-    if (!workspace) return [];
-    return this.channelsSignal().filter(c => c.workspace === workspace);
-  });
-
-  statusOptions = [
-    { label: 'Backlog', value: TaskStatus.BACKLOG },
-    { label: 'Today', value: TaskStatus.TODAY }
-  ];
-
-  workspaceOptions = [
-    { label: 'Work', value: Workspace.WORK },
-    { label: 'Personal', value: Workspace.PERSONAL }
-  ];
-
-  constructor() {
-    this.createTaskForm = this.fb.group({
-      title: ['', Validators.required],
-      description: [''],
-      status: [TaskStatus.TODAY, Validators.required],
-      workspace: [Workspace.PERSONAL, Validators.required],
-      channelId: [null],
-      dueDate: [null],
-      isRoutine: [false]
-    });
-  }
-
   ngOnInit(): void {
     this.taskState.loadTasks();
-    this.loadChannels();
-  }
-
-  loadChannels(): void {
-    this.channelApiService.getChannels().subscribe({
-      next: (channels) => this.channelsSignal.set(channels),
-      error: (error) => console.error('Error loading channels:', error)
-    });
   }
 
   showAddTaskDialog(): void {
-    this.createTaskForm.reset({
-      status: TaskStatus.TODAY,
-      workspace: this.taskState.selectedWorkspace(),
-      isRoutine: false
-    });
     this.createTaskDialogVisible.set(true);
   }
 
@@ -160,16 +104,9 @@ export class KanbanBoardComponent implements OnInit {
     this.createTaskDialogVisible.set(false);
   }
 
-  submitCreateTask(): void {
-    if (this.createTaskForm.valid) {
-      const dto: CreateTaskDto = {
-        ...this.createTaskForm.value
-      };
-      this.taskState.addTask(dto);
-      this.hideCreateTaskDialog();
-    } else {
-      this.hideCreateTaskDialog();
-    }
+  handleTaskSubmitted(dto: CreateTaskDto | UpdateTaskDto): void {
+    // Only CreateTaskDto is used when creating new tasks (no 'id' field on create)
+    this.taskState.addTask(dto as CreateTaskDto);
   }
 
   toggleSort(): void {
@@ -199,12 +136,6 @@ export class KanbanBoardComponent implements OnInit {
     }
   }
 
-  getChannelName(channelId: number | null | undefined): string | null {
-    if (!channelId) return null;
-    const channel = this.channelsSignal().find(c => c.id === channelId);
-    return channel?.name || null;
-  }
-
   openTaskDetails(task: Task): void {
     this.selectedTask.set(task);
     this.showTaskDialog.set(true);
@@ -224,30 +155,6 @@ export class KanbanBoardComponent implements OnInit {
     if (confirm('Are you sure you want to delete this task?')) {
       this.taskState.removeTask(taskId);
       this.closeTaskDialog();
-    }
-  }
-
-  getWorkspaceColor(workspace: Workspace): string {
-    return workspace === Workspace.WORK ? '#F97316' : '#14B8A6';
-  }
-
-  getWorkspaceSeverity(workspace: Workspace): 'success' | 'info' {
-    return workspace === Workspace.WORK ? 'success' : 'info';
-  }
-
-  formatDate(dateStr: string | Date | null | undefined): string {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return 'Today';
-    } else if (date.toDateString() === tomorrow.toDateString()) {
-      return 'Tomorrow';
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
   }
 
@@ -291,5 +198,16 @@ export class KanbanBoardComponent implements OnInit {
       // Move new task to target status
       this.taskState.updateTask(task.id, { status: newStatus });
     }
+  }
+
+  /**
+   * Utility methods delegating to TaskUtilsService
+   */
+  getWorkspaceSeverity(workspace: Workspace): 'success' | 'info' {
+    return this.taskUtils.getWorkspaceSeverity(workspace);
+  }
+
+  formatDate(dateStr: string | Date | null | undefined): string {
+    return this.taskUtils.formatDate(dateStr);
   }
 }

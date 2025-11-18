@@ -1,0 +1,134 @@
+<p-dialog
+  [(visible)]="visible"
+  (visibleChange)="visibleChange.emit($event)"
+  [modal]="true"
+  [style]="{ width: '700px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [showHeader]="false"
+  [dismissableMask]="true"
+  styleClass="sleek-task-dialog"
+>
+  <form
+    [formGroup]="taskForm"
+    (ngSubmit)="submitForm()"
+    class="sleek-form"
+  >
+    <!-- Main Input -->
+    <div class="task-input-container">
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Task description..."
+        class="sleek-task-input"
+        autocomplete="off"
+      />
+    </div>
+
+    <!-- Metadata Row -->
+    <div class="metadata-row">
+      <!-- Status Button -->
+      <button type="button" class="metadata-btn" (click)="op1.toggle($event)">
+        <i class="pi pi-calendar"></i>
+        <span>{{
+          taskForm.get('status')?.value === 'TODAY'
+            ? 'Today'
+            : 'Backlog'
+        }}</span>
+      </button>
+      <p-popover #op1>
+        <div class="metadata-popover">
+          @for (option of statusOptions; track option.value) {
+            <div
+              class="popover-option"
+              (click)="
+                taskForm.patchValue({ status: option.value });
+                op1.hide()
+              "
+            >
+              <i class="pi pi-calendar"></i>
+              <span>{{ option.label }}</span>
+            </div>
+          }
+        </div>
+      </p-popover>
+
+      <!-- Channel Button -->
+      <button type="button" class="metadata-btn" (click)="op2.toggle($event)">
+        <i class="pi pi-hashtag"></i>
+        <span>{{
+          getChannelName(taskForm.get('channelId')?.value) ||
+            'No channel'
+        }}</span>
+      </button>
+      <p-popover #op2>
+        <div class="metadata-popover">
+          @for (channel of filteredChannels(); track channel.id) {
+            <div
+              class="popover-option"
+              (click)="
+                taskForm.patchValue({ channelId: channel.id });
+                op2.hide()
+              "
+            >
+              <i class="pi pi-hashtag"></i>
+              <span>{{ channel.name }}</span>
+            </div>
+          }
+        </div>
+      </p-popover>
+
+      <!-- Workspace Button -->
+      <button type="button" class="metadata-btn" (click)="op3.toggle($event)">
+        <i
+          class="pi pi-{{
+            taskForm.get('workspace')?.value === 'WORK'
+              ? 'briefcase'
+              : 'home'
+          }}"
+        ></i>
+      </button>
+      <p-popover #op3>
+        <div class="metadata-popover">
+          @for (workspace of workspaceOptions; track workspace.value) {
+            <div
+              class="popover-option"
+              (click)="
+                taskForm.patchValue({ workspace: workspace.value });
+                op3.hide()
+              "
+            >
+              <i
+                class="pi pi-{{
+                  workspace.value === 'WORK' ? 'briefcase' : 'home'
+                }}"
+              ></i>
+              <span>{{ workspace.label }}</span>
+            </div>
+          }
+        </div>
+      </p-popover>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="dialog-bottom-actions">
+      <button
+        type="button"
+        class="cancel-btn"
+        (click)="hideDialog()"
+      >
+        <span>Cancel</span>
+      </button>
+      <button
+        type="button"
+        class="add-task-btn"
+        (click)="submitForm()"
+        [disabled]="taskForm.invalid"
+      >
+        <i class="pi pi-user-plus"></i>
+        <span>{{ task ? 'Update task' : 'Add task' }}</span>
+      </button>
+    </div>
+  </form>
+</p-dialog>
