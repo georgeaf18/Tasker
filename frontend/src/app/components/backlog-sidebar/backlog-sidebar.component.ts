@@ -19,10 +19,8 @@ import {
 import { DataViewModule } from 'primeng/dataview';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BadgeModule } from 'primeng/badge';
 import { ChipModule } from 'primeng/chip';
-import { ConfirmationService } from 'primeng/api';
 import { TaskStateService } from '../../services/task-state.service';
 import { TaskFormDialogComponent } from '../../shared/components/task-form-dialog/task-form-dialog.component';
 import { TaskCardComponent } from '../../shared/components/task-card/task-card.component';
@@ -44,20 +42,16 @@ import { TaskStatus } from '../../models/task-status.enum';
     DataViewModule,
     ButtonModule,
     MessageModule,
-    ConfirmDialogModule,
     BadgeModule,
     ChipModule,
     TaskFormDialogComponent,
     TaskCardComponent,
   ],
-  providers: [ConfirmationService],
   templateUrl: './backlog-sidebar.component.html',
   styleUrl: './backlog-sidebar.component.css',
 })
 export class BacklogSidebarComponent implements OnInit {
   TaskStatus = TaskStatus;
-
-  private confirmationService = inject(ConfirmationService);
 
   readonly taskStateService = inject(TaskStateService);
 
@@ -149,16 +143,9 @@ export class BacklogSidebarComponent implements OnInit {
 
   confirmDeleteTask(): void {
     const task = this.selectedTask();
-    if (task) {
-      this.confirmationService.confirm({
-        message: `Are you sure you want to delete "${task.title}"?`,
-        header: 'Confirm Delete',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.taskStateService.removeTask(task.id);
-          this.hideTaskDetailsDialog();
-        },
-      });
+    if (task && confirm(`Are you sure you want to delete "${task.title}"?`)) {
+      this.taskStateService.removeTask(task.id);
+      this.hideTaskDetailsDialog();
     }
   }
 

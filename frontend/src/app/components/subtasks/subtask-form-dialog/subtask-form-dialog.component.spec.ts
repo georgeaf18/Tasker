@@ -247,28 +247,26 @@ describe('SubtaskFormDialogComponent', () => {
 
             component.onSubmit();
 
+            // Create mode only sends title - backend sets defaults for description and status
             const expectedDto: CreateSubtaskDto = {
-                title: 'New Subtask',
-                description: 'New Description',
-                status: SubtaskStatus.TODO
+                title: 'New Subtask'
             };
 
             expect(mockSubtaskStateService.addSubtask).toHaveBeenCalledWith(100, expectedDto);
         });
 
-        it('should convert empty description to undefined in create DTO', () => {
+        it('should only send title in create mode regardless of other form values', () => {
             component.subtaskForm.patchValue({
                 title: 'New Subtask',
-                description: '',
+                description: 'Some description',
                 status: SubtaskStatus.DOING
             });
 
             component.onSubmit();
 
+            // Create mode only sends title - backend sets defaults
             const expectedDto: CreateSubtaskDto = {
-                title: 'New Subtask',
-                description: undefined,
-                status: SubtaskStatus.DOING
+                title: 'New Subtask'
             };
 
             expect(mockSubtaskStateService.addSubtask).toHaveBeenCalledWith(100, expectedDto);

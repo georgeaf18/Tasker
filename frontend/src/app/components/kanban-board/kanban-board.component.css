@@ -123,19 +123,19 @@
 
 /* Column-specific colors - Subtle solid colors */
 .today-column ::ng-deep .p-panel-header {
-  background: #3b82f6;
+  background: var(--status-today);
   color: white;
   border-bottom: none;
 }
 
 .in-progress-column ::ng-deep .p-panel-header {
-  background: #8b5cf6;
+  background: var(--status-in-progress);
   color: white;
   border-bottom: none;
 }
 
 .done-column ::ng-deep .p-panel-header {
-  background: #10b981;
+  background: var(--status-done);
   color: white;
   border-bottom: none;
 }
@@ -655,6 +655,17 @@
   margin: 0;
 }
 
+/* Clickable task cards in focus mode */
+.clickable-task-card {
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clickable-task-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
 /* Task Tags */
 .task-tags {
   display: flex;
@@ -710,21 +721,21 @@
 
 /* Focus Mode Column Headers - Consistent Styling */
 .bottom-columns .today-column .column-header {
-  background: #3b82f6;
+  background: var(--status-today);
   color: white;
   padding: var(--spacing-md);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .bottom-columns .done-column .column-header {
-  background: #10b981;
+  background: var(--status-done);
   color: white;
   padding: var(--spacing-md);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .focus-area .column-header {
-  background: #8b5cf6;
+  background: var(--status-in-progress);
   color: white;
   padding: var(--spacing-md);
   border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
@@ -741,11 +752,11 @@
 ::ng-deep .up-next-progress-bar {
   height: 4px;
   border-radius: 2px;
-  background: #e5e7eb;
+  background: var(--border-default);
 }
 
 ::ng-deep .up-next-progress-bar .p-progressbar-value {
-  background: #10b981;
+  background: var(--status-done);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
