@@ -224,35 +224,45 @@
                 cdkDrag
                 [cdkDragData]="task"
               >
-                <div class="task-header">
-                  <h3>{{ task.title }}</h3>
-                </div>
+                <div class="focus-card-split">
+                  <!-- Left Side: Task Info (40-60%) -->
+                  <div class="focus-card-main">
+                    <div class="task-header">
+                      <h3>{{ task.title }}</h3>
+                    </div>
 
-                @if (task.taskTags && task.taskTags.length > 0) {
-                  <div class="task-tags">
-                    @for (taskTag of task.taskTags; track taskTag.tag.id) {
-                      <span
-                        class="task-tag-chip"
-                        [style.background-color]="taskTag.tag.color"
-                      >
-                        {{ taskTag.tag.name }}
-                      </span>
+                    @if (task.taskTags && task.taskTags.length > 0) {
+                      <div class="task-tags">
+                        @for (taskTag of task.taskTags; track taskTag.tag.id) {
+                          <span
+                            class="task-tag-chip"
+                            [style.background-color]="taskTag.tag.color"
+                          >
+                            {{ taskTag.tag.name }}
+                          </span>
+                        }
+                      </div>
+                    }
+
+                    @if (task.channel) {
+                      <div class="task-channel">
+                        <span
+                          class="channel-indicator"
+                          [style.background-color]="task.channel.color"
+                        ></span>
+                        <span>{{ task.channel.name }}</span>
+                      </div>
                     }
                   </div>
-                }
 
-                @if (task.channel) {
-                  <div class="task-channel">
-                    <span
-                      class="channel-indicator"
-                      [style.background-color]="task.channel.color"
-                    ></span>
-                    <span>{{ task.channel.name }}</span>
+                  <!-- Right Side: Subtasks Checklist (40-60%) -->
+                  <div class="focus-card-subtasks">
+                    <app-subtask-list
+                      [taskId]="task.id"
+                      [focusMode]="true"
+                    ></app-subtask-list>
                   </div>
-                }
-
-                <!-- Subtasks Section -->
-                <app-subtask-list [taskId]="task.id"></app-subtask-list>
+                </div>
               </div>
             }
           }

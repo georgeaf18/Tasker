@@ -1,3 +1,143 @@
 /* SubtaskListComponent Styles */
 
 /* Minimal custom CSS - using Tailwind utilities in template */
+
+/* Focus Mode Styles */
+.subtask-focus-mode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  height: 100%;
+}
+
+.subtask-focus-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.subtask-count {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.subtask-focus-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.subtask-focus-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xs) 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.subtask-focus-item:hover {
+  opacity: 0.8;
+}
+
+.subtask-focus-item.checked {
+  opacity: 0.5;
+}
+
+.subtask-focus-item.checked .subtask-text {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+.subtask-number {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 24px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.subtask-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.subtask-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.subtask-text {
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  flex: 1;
+  word-break: break-word;
+}
+
+.subtask-add-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.subtask-add-trigger:hover {
+  opacity: 0.7;
+}
+
+.add-task-text {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.subtask-add-inline {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+}
+
+.subtask-input {
+  flex: 1;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-default);
+  padding: var(--spacing-xs) 0;
+  outline: none;
+  line-height: 1.5;
+}
+
+.subtask-input:focus {
+  border-bottom-color: var(--color-primary);
+}
+
+.subtask-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* Thin progress bar for focus mode */
+:host ::ng-deep .subtask-progress-bar .p-progressbar {
+  height: 4px;
+  border-radius: 2px;
+}
+
+:host ::ng-deep .subtask-progress-bar .p-progressbar-value {
+  border-radius: 2px;
+}

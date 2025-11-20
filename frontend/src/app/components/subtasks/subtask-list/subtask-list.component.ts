@@ -1,5 +1,6 @@
-import { Component, Input, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, Input, signal, computed, inject, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -7,6 +8,7 @@ import { SubtaskStateService } from '../../../services/subtask-state.service';
 import { SubtaskItemComponent } from '../subtask-item/subtask-item.component';
 import { SubtaskFormDialogComponent } from '../subtask-form-dialog/subtask-form-dialog.component';
 import type { Subtask } from '../../../models/subtask.model';
+import { SubtaskStatus } from '../../../models/subtask.model';
 
 /**
  * SubtaskListComponent
@@ -29,6 +31,7 @@ import type { Subtask } from '../../../models/subtask.model';
     selector: 'app-subtask-list',
     imports: [
         CommonModule,
+        FormsModule,
         ButtonModule,
         TagModule,
         ProgressBarModule,
@@ -38,13 +41,18 @@ import type { Subtask } from '../../../models/subtask.model';
     templateUrl: './subtask-list.component.html',
     styleUrl: './subtask-list.component.css'
 })
-export class SubtaskListComponent implements OnInit {
+export class SubtaskListComponent implements OnInit, AfterViewChecked {
     private readonly subtaskState = inject(SubtaskStateService);
 
     /**
      * Required: Parent task ID
      */
     @Input({ required: true }) taskId!: number;
+
+    /**
+     * Optional: Enable focus mode (checkbox view instead of dropdown)
+     */
+    @Input() focusMode: boolean = false;
 
     /**
      * Whether the subtask list is expanded
@@ -60,6 +68,26 @@ export class SubtaskListComponent implements OnInit {
      * Subtask being edited (null for create mode)
      */
     readonly editingSubtask = signal<Subtask | null>(null);
+
+    /**
+     * Inline add mode state
+     */
+    readonly isAddingSubtask = signal<boolean>(false);
+
+    /**
+     * New subtask title for inline adding
+     */
+    newSubtaskTitle = '';
+
+    /**
+     * ViewChild reference to the input element for auto-focus
+     */
+    @ViewChild('newSubtaskInput') newSubtaskInput?: ElementRef<HTMLInputElement>;
+
+    /**
+     * Flag to track if we need to focus the input
+     */
+    private needsFocus = false;
 
     /**
      * All subtasks for this task (reactive)
@@ -152,5 +180,58 @@ export class SubtaskListComponent implements OnInit {
      */
     trackBySubtaskId(index: number, subtask: Subtask): number {
         return subtask.id;
+    }
+
+    /**
+     * Toggle subtask between TODO and DONE (focus mode)
+     */
+    toggleSubtask(subtask: Subtask): void {
+        const newStatus = subtask.status === SubtaskStatus.DONE ? SubtaskStatus.TODO : SubtaskStatus.DONE;
+        this.subtaskState.updateSubtaskStatus(this.taskId, subtask.id, newStatus);
+    }
+
+    /**
+     * Start inline adding mode
+     */
+    startAddingSubtask(): void {
+        this.isAddingSubtask.set(true);
+        this.newSubtaskTitle = '';
+        this.needsFocus = true;
+    }
+
+    /**
+     * Cancel inline adding mode
+     */
+    cancelAddingSubtask(): void {
+        this.isAddingSubtask.set(false);
+        this.newSubtaskTitle = '';
+        this.needsFocus = false;
+    }
+
+    /**
+     * Save the new subtask
+     */
+    saveNewSubtask(): void {
+        const title = this.newSubtaskTitle.trim();
+        if (!title) {
+            this.cancelAddingSubtask();
+            return;
+        }
+
+        this.subtaskState.addSubtask(this.taskId, {
+            title
+        });
+
+        this.cancelAddingSubtask();
+    }
+
+    /**
+     * AfterViewChecked lifecycle hook to focus the input when needed
+     */
+    ngAfterViewChecked(): void {
+        if (this.needsFocus && this.newSubtaskInput) {
+            this.newSubtaskInput.nativeElement.focus();
+            this.needsFocus = false;
+        }
     }
 }

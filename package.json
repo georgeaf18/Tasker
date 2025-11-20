@@ -108,6 +108,19 @@
     "seed": "ts-node --project backend/tsconfig.app.json backend/prisma/seed.ts",
     "build": "nx run-many -t build",
     "build:affected": "nx affected -t build",
-    "build:production": "nx run-many -t build --configuration=production"
+    "build:production": "nx run-many -t build --configuration=production",
+    "env:local": "cp backend/.env.development backend/.env && echo '✓ Switched to LOCAL development database'",
+    "env:staging": "cp backend/.env.staging.local backend/.env && echo '✓ Switched to STAGING database'",
+    "env:production": "cp backend/.env.production.local backend/.env && echo '⚠️  Switched to PRODUCTION database (USE WITH CAUTION)'",
+    "env:status": "node -e \"const fs = require('fs'); const env = fs.readFileSync('backend/.env', 'utf8'); const match = env.match(/NODE_ENV=(\\w+)/); console.log('Current environment:', match ? match[1] : 'unknown');\"",
+    "dev:local": "npm run env:local && npm run dev:all",
+    "dev:staging": "npm run env:staging && npm run dev:all",
+    "prisma:migrate:local": "npm run env:local && npx prisma migrate dev --schema=backend/prisma/schema.prisma",
+    "prisma:migrate:staging": "npm run env:staging && npx prisma migrate deploy --schema=backend/prisma/schema.prisma",
+    "prisma:migrate:production": "npm run env:production && npx prisma migrate deploy --schema=backend/prisma/schema.prisma",
+    "prisma:studio:local": "npm run env:local && npx prisma studio --schema=backend/prisma/schema.prisma",
+    "prisma:studio:staging": "npm run env:staging && npx prisma studio --schema=backend/prisma/schema.prisma",
+    "seed:local": "npm run env:local && npm run seed",
+    "seed:staging": "npm run env:staging && npm run seed"
   }
 }
