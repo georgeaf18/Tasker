@@ -3,6 +3,17 @@
  * This is only a minimal backend to get started.
  */
 
+// Load environment variables from .env.local (then .env as fallback)
+// This MUST be before any other imports
+import { config } from 'dotenv';
+import { join } from 'path';
+
+// Nx runs from workspace root, so env files are in backend/ subdirectory
+// Load .env.local first (highest priority), then .env as fallback
+// override: true is required because Nx pre-loads .env.development
+config({ path: join(process.cwd(), 'backend', '.env.local'), override: true });
+config({ path: join(process.cwd(), 'backend', '.env'), override: true });
+
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
