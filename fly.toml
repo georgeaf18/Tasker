@@ -1,0 +1,54 @@
+# fly.toml app configuration file generated for tasker-backend
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = 'tasker-backend'
+primary_region = 'iad'  # US East (closest to Neon database)
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'off'  # Keep machines always on (no cold starts)
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+  [[http_service.ports]]
+    port = 80
+    handlers = ['http']
+
+  [[http_service.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 25
+    soft_limit = 20
+
+[[vm]]
+  memory = '256mb'  # Start small, can scale up if needed
+  cpu_kind = 'shared'
+  cpus = 1
+
+[env]
+  PORT = '3000'
+  NODE_ENV = 'production'
+
+# Health check to ensure app is running
+[[services.tcp_checks]]
+  interval = '15s'
+  timeout = '2s'
+  grace_period = '10s'
+  restart_limit = 0
+
+# HTTP health check (if you add a /health endpoint)
+[[services.http_checks]]
+  interval = '15s'
+  timeout = '2s'
+  grace_period = '5s'
+  method = 'get'
+  path = '/api'  # Using your global prefix
+  protocol = 'http'
