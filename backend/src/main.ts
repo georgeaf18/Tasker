@@ -21,11 +21,17 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS for frontend (localhost:4200)
+  // Enable CORS for frontend
+  // ALLOWED_ORIGINS should be comma-separated list in production (e.g., "https://app.example.com,https://www.example.com")
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+    : ['http://localhost:4200'];
+
   app.enableCors({
-    origin: ['http://localhost:4200'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   // Enable global validation pipes for DTOs
