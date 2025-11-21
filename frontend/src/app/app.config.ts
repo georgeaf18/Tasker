@@ -4,13 +4,14 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
 import { ConfirmationService } from 'primeng/api';
 import Aura from '@primeng/themes/aura';
 import { definePreset } from '@primeng/themes';
 import { appRoutes } from './app.routes';
+import { apiKeyInterceptor } from './core/interceptors/api-key.interceptor';
 
 const TaskerPreset = definePreset(Aura, {
   semantic: {
@@ -59,7 +60,10 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
-    provideHttpClient(withFetch()),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([apiKeyInterceptor])
+    ),
     provideAnimations(),
     providePrimeNG({
       theme: {
