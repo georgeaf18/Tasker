@@ -1,0 +1,33 @@
+# Ignore backend directory - not needed for frontend deployment
+backend/
+backend/**/*
+
+# Ignore e2e tests
+frontend-e2e/
+*-e2e/
+
+# Ignore documentation
+docs/
+*.md
+!README.md
+
+# Ignore Docker files
+Dockerfile
+docker-compose.yml
+fly.toml
+.dockerignore
+
+# Ignore GitHub workflows
+.github/
+
+# Ignore development files
+.husky/
+playwright-report/
+test-results/
+
+# Keep only what's needed for frontend build
+# frontend/ ✓
+# package.json ✓
+# package-lock.json ✓
+# nx.json ✓
+# tsconfig.*.json ✓
